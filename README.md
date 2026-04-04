@@ -1,0 +1,31 @@
+# Improvs Wiki
+
+Work smarter, not harder. AI is the default starting point for every task. Manual work is the fallback, not the default.
+
+This wiki is the single source of truth for how we work at Improvs.com.
+
+## Sections
+
+| Section | What's inside | Audience |
+|---------|---------------|----------|
+| [AI Playbook](ai-playbook/) | How to use Claude Code, setup, prompts, best practices | Developers, QA |
+| [Engineering](engineering/) | Tech stack, git workflow, coding standards, CI/CD, code review | Developers, QA |
+| [Developer Rules](developer-rules/) | Commit rules, small tasks, plan before code, review AI output | Developers |
+| [Processes](processes/) | Onboarding, sprint workflow, definition of done, incidents | Everyone |
+| [Design](design/) | Figma structure, design system, handoff to developers | Designers, Developers |
+
+## Quick links
+
+- **New to Improvs?** Start with [Onboarding](processes/onboarding.md)
+- **New to Claude Code?** Start with [Getting Started](ai-playbook/getting-started.md)
+- **Writing code?** Check [Git Workflow](engineering/git-workflow.md) and [Developer Rules](developer-rules/)
+- **Designing?** Check [Figma Structure](design/figma-structure.md) and [Handoff Process](design/handoff-process.md)
+
+## How to contribute
+
+1. Clone the repo or edit on GitHub
+2. Create a branch with a descriptive name
+3. Add or update the relevant markdown file
+4. Open a PR -- leads review and merge
+
+All content is plain markdown. No build tools, no dependencies. Keep files concise and up to date.
