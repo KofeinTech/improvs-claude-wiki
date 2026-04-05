@@ -6,16 +6,15 @@ This system only works if it stays current. These are the rules for keeping ever
 
 | Owner | What they maintain |
 |-------|-------------------|
-| **PM (Darya)** | projects/ pages, processes/, Jira boards, sprint reports |
-| **Product Manager (Aleksey S.)** | Jira roadmaps, feature specs, client requirements |
-| **HR (Alina)** | company/contacts.md, company/org-chart.md, onboarding/offboarding |
-| **Developers** | engineering/ standards, ai-playbook/ skills, project CLAUDE.md files |
-| **CEO** | Private repo (skills, hooks, settings), monthly + quarterly reviews |
+| **PM (Darya)** | processes/, Jira boards, sprint reports |
+| **HR (Alina)** | onboarding/offboarding execution |
+| **Developers** | engineering/ standards, ai-playbook/ content, project CLAUDE.md files |
+| **CEO** | Private repo (skills, hooks, settings), monthly + quarterly reviews, wiki overall |
 
 ## Weekly review (PM, 15 min)
 
 - Jira: orphan tickets? stale sprints?
-- Contacts: anyone joined/left? Update contacts.md same day
+- Team changes: anyone joined/left? Notify HR
 - GitHub: PRs open > 3 days? Abandoned branches?
 
 ## Monthly review (CEO, 1 hour)
@@ -37,12 +36,11 @@ This system only works if it stays current. These are the rules for keeping ever
 
 ## Enforcement
 
-1. Contacts must be current -- onboarding/offboarding tickets include "update contacts.md" subtask
-2. Sprint cannot close without project page update
-3. New skill = catalog entry in same PR
-4. Process changes require wiki PR approved by CEO
-5. Monthly CEO review is a recurring Jira ticket (auto-created 1st of each month)
-6. Quarterly retrospective is a calendar event with agenda sent 2 days before
+1. Onboarding/offboarding tickets include access provisioning/revocation subtasks
+2. New skill = documented in same PR
+3. Process changes require wiki PR approved by CEO
+4. Monthly CEO review is a recurring Jira ticket (auto-created 1st of each month)
+5. Quarterly retrospective is a calendar event with agenda sent 2 days before
 
 ## If rules are not followed
 

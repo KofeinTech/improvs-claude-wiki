@@ -13,13 +13,12 @@ All 20 team members: developers, designers, PM, HR, CEO.
 ## Structure
 
 ```
-company/          -- org chart, contacts, communication guidelines
-engineering/      -- tech stack, git workflow, coding standards, CI/CD
-ai-playbook/      -- Claude Code setup, skills catalog, best practices, prompts
-projects/         -- overview and knowledge base per project
-design/           -- Figma rules, design system, handoff process
-processes/        -- onboarding, sprint workflow, definition of done
+ai-playbook/      -- Claude Code setup, best practices, prompts, figma-to-code
+engineering/      -- tech stack, git workflow, coding standards, code review
 developer-rules/  -- commit rules, small tasks, plan before code, etc.
+processes/        -- onboarding, sprint workflow, Jira workflow, PM guide, incidents
+design/           -- Figma rules, design system, handoff process
+company/          -- communication guidelines
 ```
 
 ## Rules for this repository
@@ -44,5 +43,5 @@ When working in any Improvs project, Claude Code can reference this wiki for:
 - Coding standards and conventions (engineering/)
 - Git workflow and branching rules (engineering/git-workflow.md)
 - Developer rules and checklists (developer-rules/)
-- Project-specific context (projects/)
-- Available shared skills (ai-playbook/skills-catalog.md)
+- AI playbook and best practices (ai-playbook/)
+- Design handoff process (design/)

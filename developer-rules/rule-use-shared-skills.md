@@ -8,18 +8,21 @@ Shared skills are tested, refined prompts that produce consistent results across
 
 ## Available skills
 
-Check the skills catalog: `ai-playbook/skills-catalog.md`
+Skills are being built out. Currently available:
+- `/client-report` -- generate branded weekly client progress report
 
-Common ones:
+Planned (coming soon):
 - `/feature` -- plan and implement a feature from a Jira ticket
 - `/test` -- generate tests for existing code
 - `/review` -- review code for quality and issues
-- `/debug` -- systematic debugging workflow
 - `/start` and `/finish` -- start/stop work on a Jira ticket with time logging
 - `/figma` -- read Figma designs and implement UI
 
+Check the [Prompt Library](../ai-playbook/prompt-library.md) for ready-to-use prompts that cover similar use cases until skills are available.
+
 ## What to do
 
-1. Check the skills catalog before starting any task
+1. Check if a shared skill exists before writing a custom prompt
 2. If a skill exists, use it
-3. If no skill exists and you think one should, mention it in Telegram or create an `ai-gap` ticket
+3. If no skill exists, check the [Prompt Library](../ai-playbook/prompt-library.md) for a ready-made prompt
+4. If you solve something new and reusable, create an `ai-gap` ticket so it can become a skill
