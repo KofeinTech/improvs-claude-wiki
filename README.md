@@ -11,7 +11,7 @@ This wiki is the single source of truth for how we work at Improvs.com.
 | [AI Playbook](ai-playbook/) | How to use Claude Code, setup, prompts, best practices | Developers, QA |
 | [Engineering](engineering/) | Tech stack, git workflow, coding standards, CI/CD, code review | Developers, QA |
 | [Developer Rules](developer-rules/) | Commit rules, small tasks, plan before code, review AI output | Developers |
-| [Processes](processes/) | Onboarding, sprint workflow, definition of done, incidents | Everyone |
+| [Processes](processes/) | Onboarding, sprints, Jira workflow, PM guide, incidents | Everyone |
 | [Design](design/) | Figma structure, design system, handoff to developers | Designers, Developers |
 
 ## Quick links
@@ -19,6 +19,8 @@ This wiki is the single source of truth for how we work at Improvs.com.
 - **New to Improvs?** Start with [Onboarding](processes/onboarding.md)
 - **New to Claude Code?** Start with [Getting Started](ai-playbook/getting-started.md)
 - **Writing code?** Check [Git Workflow](engineering/git-workflow.md) and [Developer Rules](developer-rules/)
+- **Using Jira?** Check [Jira Workflow](processes/jira-workflow.md)
+- **PM?** Check [PM Guide](processes/pm-guide.md)
 - **Designing?** Check [Figma Structure](design/figma-structure.md) and [Handoff Process](design/handoff-process.md)
 
 ## How to contribute
