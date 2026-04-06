@@ -13,7 +13,6 @@ Non-negotiable rules for every developer at Improvs. Read all of these before yo
 | [Separate Claude Contexts](rule-separate-claude-contexts.md) | Fresh session for each task. |
 | [Review AI Critically](rule-review-ai-critically.md) | AI generates plausible code that may be wrong. |
 | [Test Before PR](rule-test-before-pr.md) | Run tests and analyze before opening a PR. |
-| [Log Time](rule-log-time.md) | Track time on every Jira ticket. |
 | [Use Shared Skills](rule-use-shared-skills.md) | Check for existing skills before writing custom prompts. |
 | [Document Surprises](rule-document-surprises.md) | Write down non-obvious project knowledge. |
 | [Report AI Gaps](rule-report-ai-gaps.md) | Report AI failures so they become shared skills. |

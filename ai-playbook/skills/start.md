@@ -39,7 +39,7 @@ Every developer starting work on a Jira ticket.
 
 - Never starts coding without reading the Jira ticket first
 - Refuses to proceed without acceptance criteria on the ticket
-- Records start timestamp in Jira -- `/finish` uses this for time logging
+- Records task start in Jira comment with complexity classification
 - If you're already on a matching branch, asks whether to continue
 
 ## After /start

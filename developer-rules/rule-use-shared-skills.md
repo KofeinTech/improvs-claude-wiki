@@ -8,17 +8,7 @@ Shared skills are tested, refined prompts that produce consistent results across
 
 ## Available skills
 
-Skills are being built out. Currently available:
-- `/client-report` -- generate branded weekly client progress report
-
-Planned (coming soon):
-- `/feature` -- plan and implement a feature from a Jira ticket
-- `/test` -- generate tests for existing code
-- `/review` -- review code for quality and issues
-- `/start` and `/finish` -- start/stop work on a Jira ticket with time logging
-- `/figma` -- read Figma designs and implement UI
-
-Check the [Prompt Library](../ai-playbook/prompt-library.md) for ready-to-use prompts that cover similar use cases until skills are available.
+See the full [Skills Reference](../ai-playbook/skills.md) for all available /slash-commands.
 
 ## What to do
 

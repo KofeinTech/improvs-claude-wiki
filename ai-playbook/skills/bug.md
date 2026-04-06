@@ -27,7 +27,7 @@ Developers assigned to fix a bug.
 
 ## What you do after
 
-Run `/finish` to push, create a PR, update Jira, and log time.
+Run `/finish` to push, create a PR, and update Jira.
 
 ## What Claude will ask you
 

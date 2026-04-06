@@ -1,6 +1,6 @@
 # /finish -- Complete a Task
 
-Push your code, create a PR, update Jira status, and log time. Run this after you're done coding.
+Push your code, create a PR, and update Jira status. Run this after you're done coding.
 
 ## Usage
 
@@ -22,7 +22,6 @@ Every developer who has finished coding and is ready for review.
 4. **Pushes to remote** -- `git push -u origin <branch>`
 5. **Creates PR** via GitHub MCP -- with Jira link, change summary, AC checklist, test status
 6. **Updates Jira** -- moves ticket to "In Review", adds PR link
-7. **Logs time** -- reads start timestamp from /start comment, calculates duration, logs worklog
 
 ## What the PR body looks like
 
@@ -46,17 +45,16 @@ Every developer who has finished coding and is ready for review.
 
 ## Behavior by task complexity
 
-| Complexity | Review | Test verification | Time logging |
-|-----------|--------|-------------------|-------------|
-| Trivial | Skipped | Skipped | Yes |
-| Simple | Required | Required | Yes |
-| Complex | Required | Required | Yes |
+| Complexity | Review | Test verification |
+|-----------|--------|-------------------|
+| Trivial | Skipped | Skipped |
+| Simple | Required | Required |
+| Complex | Required | Required |
 
 ## Important rules
 
 - Never commits code -- you must commit before running /finish
 - Never force pushes
-- If start time is missing (didn't use /start), asks you how long you worked
 - If any AC is not addressed, asks for confirmation before creating PR
 
 ## Related

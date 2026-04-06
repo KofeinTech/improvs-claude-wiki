@@ -14,7 +14,6 @@ Quick reference for working with Claude Code at Improvs.
 | Run `flutter test` and `flutter analyze` before PRs | Hooks enforce this, but run manually too -- don't waste CI time |
 | Report AI failures as ai-gap tickets | Your struggle today prevents someone else's struggle tomorrow |
 | Use shared skills before writing custom prompts | Check the skills catalog -- someone may have solved this already |
-| Log time on every Jira ticket | Essential for estimation accuracy and client billing |
 | Commit only yourself, never auto-commit | You are responsible for every line in your commits |
 
 ## Don't

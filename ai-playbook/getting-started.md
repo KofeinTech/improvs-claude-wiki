@@ -43,16 +43,15 @@ Claude reads the codebase, creates a plan, and implements the code. You review e
 ## The workflow
 
 ```
-1. Pick a Jira ticket
-2. Create a branch: PROJ-42-short-description
-3. Open Claude Code in the project directory
-4. Describe the task or use /start PROJ-42
-5. Review Claude's plan, approve or adjust
-6. Claude implements -- review every file as it works
-7. Run tests: flutter test, flutter analyze
-8. YOU commit (never auto-commit)
-9. Create PR, log time
+1. Open Claude Code in the project directory
+2. /start PROJ-42          -- reads Jira ticket, creates branch, makes a plan
+3. Review the plan, approve or adjust
+4. Claude implements -- review every file as it works
+5. YOU commit (never auto-commit)
+6. /finish                 -- pushes, creates PR, updates Jira
 ```
+
+All the manual steps (branch naming, running tests, creating PRs, updating Jira) are handled by the `/start` and `/finish` skills. You focus on reviewing the code.
 
 ## Key principles
 

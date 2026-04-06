@@ -278,7 +278,7 @@ setup_github_mcp() {
 setup_atlassian_mcp() {
     step "Step 5/6: Atlassian (Jira) MCP Server"
 
-    echo "  Jira MCP lets Claude read tickets, update status, and log time."
+    echo "  Jira MCP lets Claude read tickets and update status."
     echo "  Uses the official Atlassian Rovo MCP server with OAuth."
     echo ""
     echo "  When you first use it in Claude Code, a browser window will"

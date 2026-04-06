@@ -75,21 +75,6 @@ CUE-108-fix-chat-scroll
 
 A Claude Code hook validates this before every commit. If your branch name doesn't contain a Jira key, the commit is blocked.
 
-## Time tracking
-
-Log time on every ticket you work on. Two methods:
-
-**Method 1: Via /start and /finish skills (recommended)**
-- `/start PROJ-42` records start time
-- `/finish` calculates duration and logs it automatically via Jira API
-
-**Method 2: Manual**
-- Open the ticket in Jira
-- Click "Log work"
-- Enter the time spent
-
-Time data is essential for estimation accuracy and client billing. We cannot estimate future projects without historical data.
-
 ## Sprint board
 
 Each project board shows the current sprint:

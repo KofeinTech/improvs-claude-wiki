@@ -27,7 +27,7 @@ Developers fixing something that is broken in production right now.
 
 1. **Reads the Jira ticket** (or creates one if no ticket exists)
 2. **Branches from main** -- `hotfix/PINK-99-description` (never from develop)
-3. **Moves ticket to In Progress** + adds "hotfix" label + starts time tracking
+3. **Moves ticket to In Progress** + adds "hotfix" label
 4. **Fast investigation** -- finds root cause, shows a 2-line plan
 5. **Fixes the bug** -- absolute minimum change, still writes a test
 6. **Creates two PRs**:

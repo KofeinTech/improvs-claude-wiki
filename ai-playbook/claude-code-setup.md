@@ -65,7 +65,7 @@ All `claude mcp` and `claude plugin` commands below are run in your **regular te
 claude mcp add-json github '{"type":"http","url":"https://api.githubcopilot.com/mcp","headers":{"Authorization":"Bearer YOUR_TOKEN_HERE"}}' --scope user
 ```
 
-**Atlassian (Jira) MCP** -- lets Claude read/update tickets, log time:
+**Atlassian (Jira) MCP** -- lets Claude read/update tickets:
 
 Run in your terminal:
 ```bash

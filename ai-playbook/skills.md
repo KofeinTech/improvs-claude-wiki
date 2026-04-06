@@ -11,7 +11,7 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
 | [/start](skills/start.md) | Begin a Jira task -- read ticket, Figma, create branch, evaluate complexity | Starting any new task |
-| [/finish](skills/finish.md) | Complete a task -- review, push, create PR, update Jira, log time | Done coding, ready for PR |
+| [/finish](skills/finish.md) | Complete a task -- review, push, create PR, update Jira | Done coding, ready for PR |
 | [/bug](skills/bug.md) | Investigate and fix a bug from Jira | You're assigned a bug ticket |
 | [/hotfix](skills/hotfix.md) | Emergency fix for production | Something is broken in prod right now |
 | [/quickfix](skills/quickfix.md) | Lightweight start for trivial tasks | Typo fix, config change, one-liner |
@@ -82,7 +82,7 @@ Subagents are AI assistants that run as background helpers. They're invoked by s
 - Skills respect all loaded rules (flutter-rules, security-rules, etc.) automatically
 - Quality hooks still fire during skill execution -- tests must pass, code must be formatted
 - `/start` classifies tasks as trivial/simple/complex and adjusts the workflow accordingly
-- After `/bug` or `/start`, always finish with `/finish` to create the PR and log time
+- After `/bug` or `/start`, always finish with `/finish` to create the PR and update Jira
 - `/hotfix` has its own built-in finish step -- no separate `/finish` needed
 
 ## Related
