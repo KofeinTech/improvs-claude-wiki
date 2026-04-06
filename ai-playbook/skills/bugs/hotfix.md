@@ -44,7 +44,6 @@ Developers fixing something that is broken in production right now.
 | Planning | Short investigation plan | 2-line plan -- just fix + test |
 | PRs created | None (use /finish) | **Two: main + develop** |
 | Jira update | Manual via /finish | **Automatic, built-in** |
-| Time logging | Via /finish | **Automatic, built-in** |
 
 ## Safety guardrails
 

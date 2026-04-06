@@ -23,7 +23,6 @@ PMs preparing the weekly update for a client.
    - Tickets completed (moved to Done)
    - Tickets in progress with estimates
    - Blockers and stale tickets (>3 days no update)
-   - Time logged per ticket
    - Upcoming sprint items
 2. **Reads GitHub data**:
    - PRs merged (count and summary)
@@ -31,7 +30,7 @@ PMs preparing the weekly update for a client.
 3. **Generates a branded HTML report**:
    - Improvs.com branding (logo, colors, fonts)
    - Sections: Completed, In Progress, Blockers, Next Week, Summary
-   - Total hours and sprint progress percentage
+   - Sprint progress percentage
 4. **Outputs the HTML file** for you to review, adjust, and send
 
 ## Report sections
@@ -39,16 +38,15 @@ PMs preparing the weekly update for a client.
 | Section | What's in it |
 |---------|-------------|
 | Header | Project name, date range, prepared by |
-| Completed This Week | Each done ticket with hours spent |
+| Completed This Week | Each done ticket |
 | In Progress | Active tickets with progress and ETA |
 | Blockers | Anything blocking progress, who needs to act |
-| Next Week Plan | Planned tickets with hour estimates |
-| Summary | Total hours, sprint progress, health status (On Track / At Risk / Blocked) |
+| Next Week Plan | Planned tickets |
+| Summary | Sprint progress, health status (On Track / At Risk / Blocked) |
 
 ## Important rules
 
 - Language is professional and client-friendly. No internal jargon.
-- Hours are rounded to nearest 0.5h.
 - If no blockers, it says "No blockers this week" (section is never omitted).
 - **PM must review before sending** -- never send auto-generated reports directly to clients.
 
