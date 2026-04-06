@@ -18,6 +18,7 @@ This wiki is the single source of truth for how we work at Improvs.com.
 
 - **New to Improvs?** Start with [Onboarding](processes/onboarding.md)
 - **New to Claude Code?** Start with [Getting Started](ai-playbook/getting-started.md)
+- **Using skills?** Check [Skills Reference](ai-playbook/skills.md) for all /slash-commands
 - **Writing code?** Check [Git Workflow](engineering/git-workflow.md) and [Developer Rules](developer-rules/)
 - **Using Jira?** Check [Jira Workflow](processes/jira-workflow.md)
 - **PM?** Check [PM Guide](processes/pm-guide.md)
