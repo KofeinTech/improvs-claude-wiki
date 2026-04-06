@@ -43,6 +43,7 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 |-------|-------------|-------------|
 | [/create-feature](skills/create-feature.md) | Guided Jira feature ticket with AC and scope | New feature idea or requirement |
 | [/create-bug](skills/create-bug.md) | Structured Jira bug report with repro steps | Bug found, needs a ticket |
+| [/health-check](skills/health-check.md) | Audit Jira board + GitHub for stuck work, inconsistencies | Daily morning check or weekly review |
 | [/client-report](skills/client-report.md) | Weekly progress report from Jira + GitHub data | End of week, before client update |
 | [/onboard](skills/onboard.md) | Project briefing (PM mode -- team, client, deadlines) | First time managing a project |
 
@@ -57,6 +58,7 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 | Review a PR | `/review 47` |
 | PM creates work | `/create-feature PINK` or `/create-bug PINK` |
 | New on a project | `/onboard PINK` |
+| Morning health check | `/health-check PINK` |
 
 ## How to use
 

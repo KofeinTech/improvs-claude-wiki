@@ -6,6 +6,7 @@ How designers prepare Figma files for AI-powered Flutter development.
 
 | Guide | Description |
 |-------|-------------|
+| [Designer Guide](designer-guide.md) | Your role in the workflow, how your Figma files become code |
 | [Figma Structure](figma-structure.md) | Auto-layout, naming, components, tokens, file organization |
 | [Design System](design-system.md) | Design tokens, themes, component library |
 | [Handoff Process](handoff-process.md) | Step-by-step designer-to-developer handoff |
