@@ -34,6 +34,12 @@ Quick reference for working with Claude Code at Improvs.
 
 ## When in doubt
 
-- **Not sure about the approach?** Use plan mode: `/plan`
+- **Not sure about the approach?** Use plan mode: `Shift+Tab`
 - **AI can't do it?** Solve manually, then file an ai-gap ticket
 - **Need help?** Ask in the project Telegram chat, then document the answer in Jira or wiki
+
+## Related
+
+- [Best Practices](best-practices.md) -- detailed guidance on working with Claude Code
+- [Tips and Tricks](tips-and-tricks.md) -- plan mode, permissions, power-user tips
+- [Developer Rules](../developer-rules/) -- commit and review standards

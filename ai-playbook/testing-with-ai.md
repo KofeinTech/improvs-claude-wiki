@@ -95,3 +95,9 @@ Tests mirror the `lib/features/` structure. One test file per source file.
 - Performance tests -- require real measurement, not AI estimation
 
 For these cases, use AI to scaffold the test structure, then fill in the specifics yourself.
+
+## Related
+
+- [/test](skills/test.md) -- independent test generation skill
+- [Skills Reference](skills.md) -- all available /slash-commands
+- [Developer Rules](../developer-rules/) -- commit and review standards

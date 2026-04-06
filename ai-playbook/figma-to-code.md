@@ -92,3 +92,10 @@ AI struggles with:
 - Designs that break auto-layout rules
 
 If you hit a wall, solve manually and create an [ai-gap ticket](../processes/ai-gap-pipeline.md).
+
+## Related
+
+- [Figma Structure](../design/figma-structure.md) -- how designers should set up Figma files
+- [Design Handoff](../design/handoff-process.md) -- the full designer-to-developer process
+- [/figma-check](skills/figma-check.md) -- verify your implementation matches the design
+- [Best Practices](best-practices.md) -- general Claude Code tips

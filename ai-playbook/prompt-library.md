@@ -128,3 +128,9 @@ Response model: [describe response]
 Use Pydantic v2 models, async handler, SQLAlchemy for DB access.
 Add pytest tests with httpx AsyncClient.
 ```
+
+## Related
+
+- [Best Practices](best-practices.md) -- how to prompt effectively
+- [Tips and Tricks](tips-and-tricks.md) -- efficient prompting section
+- [Skills Reference](skills.md) -- shared skills may already cover your use case

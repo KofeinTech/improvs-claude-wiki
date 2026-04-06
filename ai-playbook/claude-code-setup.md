@@ -4,8 +4,16 @@ How to install and configure Claude Code for Improvs development.
 
 ## Quick setup (recommended)
 
-Ask your manager for access to the setup script. It handles everything:
+Run the setup script. It handles everything in one go:
 
+```bash
+# Download and run
+curl -sO https://raw.githubusercontent.com/KofeinTech/improvs-claude-wiki/main/setup-developer.sh
+chmod +x setup-developer.sh
+./setup-developer.sh
+```
+
+What the script does:
 1. Installs Node.js (if missing)
 2. Installs Claude Code CLI
 3. Logs you into the Improvs Claude organization
@@ -13,7 +21,7 @@ Ask your manager for access to the setup script. It handles everything:
 5. Sets up Atlassian/Jira MCP (OAuth login in browser)
 6. Installs Figma MCP plugin (authenticate later via `/mcp`)
 
-The script guides you through each step and opens the right browser pages.
+The script guides you through each step interactively -- it opens browser windows and waits for you to complete each action before moving on. Works on macOS, Linux, and Windows (WSL).
 
 ## Manual setup
 
@@ -130,3 +138,9 @@ Each project also has its own `CLAUDE.md` in the repo root with:
 - Project-specific conventions
 
 This is loaded automatically when you open Claude Code in that directory.
+
+## Related
+
+- [Getting Started](getting-started.md) -- your first Claude Code session
+- [Skills Reference](skills.md) -- all /slash-commands available after setup
+- [Tips and Tricks](tips-and-tricks.md) -- plan mode, permissions, power-user features

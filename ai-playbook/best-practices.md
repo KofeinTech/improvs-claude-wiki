@@ -73,3 +73,10 @@ If Claude can't solve something after 2-3 attempts:
 - Don't skip reading generated tests -- they may test the wrong thing
 - Don't use Claude for tasks you don't understand -- you can't review what you don't understand
 - Don't paste secrets or API keys into prompts
+
+## Related
+
+- [Getting Started](getting-started.md) -- first steps with Claude Code
+- [Tips and Tricks](tips-and-tricks.md) -- plan mode, permissions, context management
+- [Dos and Don'ts](dos-and-donts.md) -- quick reference table
+- [Developer Rules](../developer-rules/) -- commit and review standards

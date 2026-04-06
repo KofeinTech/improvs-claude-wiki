@@ -84,3 +84,8 @@ Subagents are AI assistants that run as background helpers. They're invoked by s
 - `/start` classifies tasks as trivial/simple/complex and adjusts the workflow accordingly
 - After `/bug` or `/start`, always finish with `/finish` to create the PR and log time
 - `/hotfix` has its own built-in finish step -- no separate `/finish` needed
+
+## Related
+
+- [Best Practices](best-practices.md) -- how to work effectively with Claude Code
+- [Tips and Tricks](tips-and-tricks.md) -- plan mode, permissions, power-user features

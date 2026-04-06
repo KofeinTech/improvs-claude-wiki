@@ -2,6 +2,21 @@
 
 Claude Code is an AI coding assistant that runs in your terminal. It reads your codebase, writes code, runs tests, and creates commits -- all through natural language conversation.
 
+## Step 0: Set up your machine
+
+Before anything else, run the setup script. It installs Claude Code, connects Jira, GitHub, and Figma, and logs you into the Improvs organization.
+
+```bash
+# Download and run the setup script
+curl -sO https://raw.githubusercontent.com/KofeinTech/improvs-claude-wiki/main/setup-developer.sh
+chmod +x setup-developer.sh
+./setup-developer.sh
+```
+
+The script guides you through each step interactively -- it opens browser windows for login/token creation and waits for you at each step.
+
+If you prefer to set up manually, see the [Setup Guide](claude-code-setup.md) for step-by-step instructions.
+
 ## Why we use it
 
 Improvs is an AI-first company. Every task starts with AI. Manual coding is the fallback, not the default. Claude Code is our primary development tool because:
@@ -13,10 +28,9 @@ Improvs is an AI-first company. Every task starts with AI. Manual coding is the 
 
 ## Your first session
 
-1. Install Claude Code (see [Setup Guide](claude-code-setup.md))
-2. Open your terminal in a project directory
-3. Type `claude` to start a session
-4. Describe what you want to build
+1. Open your terminal in a project directory
+2. Type `claude` to start a session
+3. Describe what you want to build
 
 ```
 cd ~/code/your-project
@@ -50,7 +64,14 @@ Claude reads the codebase, creates a plan, and implements the code. You review e
 
 ## Next steps
 
-- [Set up Claude Code](claude-code-setup.md) on your machine
 - Learn [best practices](best-practices.md) for effective prompting
 - Browse the [prompt library](prompt-library.md) for ready-to-use prompts
+- Check the [skills reference](skills.md) for all available /slash-commands
 - Read the [developer rules](../developer-rules/) for commit and review standards
+
+## Related
+
+- [Setup Guide](claude-code-setup.md) -- detailed manual setup and MCP configuration
+- [Best Practices](best-practices.md) -- how to prompt effectively
+- [Skills Reference](skills.md) -- all available /slash-commands
+- [Tips and Tricks](tips-and-tricks.md) -- plan mode, permissions, power-user tips

@@ -96,3 +96,9 @@ Claude Code has a context window. When it fills up, older messages get compresse
 
 **Stack commands:**
 - "read the Jira ticket, check the Figma design, then create a plan" (Claude does all three)
+
+## Related
+
+- [Best Practices](best-practices.md) -- foundational guidance for working with Claude Code
+- [Skills Reference](skills.md) -- all /slash-commands
+- [Prompt Library](prompt-library.md) -- ready-to-use prompts for common tasks
