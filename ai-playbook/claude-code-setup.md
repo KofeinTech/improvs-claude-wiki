@@ -46,17 +46,20 @@ This opens a browser window. Log in with the account that was invited to the Imp
 
 MCP servers connect Claude Code to Jira, GitHub, and Figma. Each developer must set these up on their own machine.
 
+All `claude mcp` and `claude plugin` commands below are run in your **regular terminal** (not inside a Claude Code session).
+
 **GitHub MCP** -- lets Claude read repos, create PRs, manage issues:
 
 1. Go to https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP
 2. Generate a Personal Access Token (classic) with scopes: `repo`, `read:org`, `read:user`
-3. Copy the token and run:
+3. Copy the token and run in your terminal:
 ```bash
 claude mcp add-json github '{"type":"http","url":"https://api.githubcopilot.com/mcp","headers":{"Authorization":"Bearer YOUR_TOKEN_HERE"}}' --scope user
 ```
 
 **Atlassian (Jira) MCP** -- lets Claude read/update tickets, log time:
 
+Run in your terminal:
 ```bash
 claude mcp add --transport http --scope user atlassian https://mcp.atlassian.com/v1/mcp
 ```
@@ -65,15 +68,16 @@ When you first use it in Claude Code, a browser window opens for Atlassian OAuth
 
 **Figma MCP** -- lets Claude read designs and verify UI implementation:
 
+Run in your terminal:
 ```bash
 claude plugin install figma@claude-plugins-official
 ```
 
-After installing, authenticate in Claude Code:
-1. Open Claude Code in any project
+After installing, authenticate inside Claude Code:
+1. Open Claude Code in any project: `claude`
 2. Type `/mcp`
 3. Select `figma` > Authenticate
-4. Log in with your Figma account
+4. Log in with your Figma account in the browser
 
 ## What happens automatically (from the org)
 
