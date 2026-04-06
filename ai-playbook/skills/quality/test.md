@@ -2,6 +2,8 @@
 
 Generate tests from Jira acceptance criteria, not from implementation knowledge. Finds edge cases and potential bugs that the developer might have missed.
 
+`/test` is a thin wrapper that dispatches the **`test` subagent** -- a fresh-context Sonnet agent with no visibility into your implementation conversation. The independence is the entire point: the subagent cannot be biased by what you just built, so it tests what the AC says the code *should* do, not what the code *actually* does.
+
 ## Usage
 
 ```

@@ -29,14 +29,20 @@ Technologies and tools used across Improvs projects.
 
 ## Backend (Python)
 
+Both FastAPI and Django are acceptable -- pick whichever fits the project. Greenfield async APIs lean FastAPI; projects that want Django's batteries-included ecosystem (admin, auth, ORM out of the box) use Django.
+
 | Tool | Purpose |
 |------|---------|
-| FastAPI | Async web framework |
-| SQLAlchemy 2.0 | ORM with async support |
-| Pydantic v2 | Data validation and serialization |
-| Alembic | Database migrations |
+| uv | Package manager (never pip, never poetry) |
+| FastAPI | Async web framework (option A) |
+| Django + DRF or Django Ninja | Batteries-included framework (option B) |
+| SQLAlchemy 2.0 | ORM with async support (FastAPI) |
+| Pydantic v2 | Data validation and serialization (FastAPI) |
+| Alembic | Database migrations (FastAPI) |
+| Django ORM + migrations | Built-in (Django) |
+| Celery + Redis | Background tasks |
 | Ruff | Linting and formatting |
-| pytest | Testing framework |
+| pytest (+ pytest-django for Django) | Testing framework |
 
 ## Frontend (landings)
 

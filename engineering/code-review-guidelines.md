@@ -17,7 +17,7 @@ AI-generated code can increase issue counts by 1.7x without governance. Human re
 
 ### Important (should fix)
 
-- **Conventions:** Follows [coding standards](coding-standards/flutter-dart.md) for the stack
+- **Conventions:** Follows the coding standards for the project's stack ([Flutter](coding-standards/flutter-dart.md), [.NET](coding-standards/backend-csharp.md), or [Python](coding-standards/backend-python.md))
 - **Architecture:** Feature in the right directory, correct layer separation, no circular dependencies
 - **Naming:** Variables, functions, and files have clear, descriptive names
 - **Complexity:** No unnecessary abstractions, no over-engineering
@@ -38,13 +38,13 @@ Projects with one developer (Fantabase, TradingSim) cannot have peer review. Ins
 
 ## AI-assisted review
 
-Use Claude Code to review changes:
+Run `/review` to get a structured review of the current branch:
 
 ```
-> Review all changes in the current branch.
-> Check for security issues, missing tests, and convention violations.
-> List issues by severity.
+> /review
 ```
+
+The skill hard-blocks any hardcoded secrets, dispatches the superpowers code reviewer with the Jira AC + project rules as the spec, then verifies the diff actually covers every AC item. Output is in your terminal -- nothing is posted to GitHub. See [/review skill](../ai-playbook/skills/quality/review.md) for full details.
 
 AI review supplements human review. It does not replace it. AI catches patterns humans miss (security, convention violations). Humans catch logic errors AI misses (wrong business rules, unnecessary complexity).
 

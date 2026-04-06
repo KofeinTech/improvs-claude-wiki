@@ -15,7 +15,7 @@ CUE-108-fix-chat-scroll
 SOL-7-setup-riverpod
 ```
 
-A hook validates this before every commit. Commits on branches without a Jira key are blocked.
+A hook validates this when you create the branch (`git checkout -b` or `git switch -c`). Branches that don't match the pattern are refused at creation time. Once you're on a valid branch, commits run a separate set of hooks (analyze + tests).
 
 ## Commit messages
 
@@ -52,7 +52,7 @@ Every repo includes `.github/pull_request_template.md`:
 <!-- For UI changes -->
 
 ## Testing
-- [ ] flutter analyze passes
+- [ ] Project's analyze/lint command passes (`fvm flutter analyze` / `dotnet build` / `ruff check`)
 - [ ] All tests pass
 - [ ] New tests added for new functionality
 - [ ] Manual testing completed

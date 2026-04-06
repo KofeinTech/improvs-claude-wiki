@@ -102,7 +102,7 @@ detect_os() {
 # Step 1: Node.js
 # ---------------------------------------------------------------------------
 setup_node() {
-    step "Step 1/6: Node.js"
+    step "Step 1/7: Node.js"
 
     if command -v node &>/dev/null; then
         success "Node.js already installed: $(node -v)"
@@ -159,7 +159,7 @@ setup_node() {
 # Step 2: Claude Code CLI + Login
 # ---------------------------------------------------------------------------
 setup_claude() {
-    step "Step 2/6: Claude Code CLI"
+    step "Step 2/7: Claude Code CLI"
 
     if command -v claude &>/dev/null; then
         success "Claude Code already installed: $(claude --version 2>/dev/null || echo 'installed')"
@@ -190,7 +190,7 @@ setup_claude() {
 # Step 3: Atlassian account check
 # ---------------------------------------------------------------------------
 setup_atlassian_account() {
-    step "Step 3/6: Atlassian (Jira) Account"
+    step "Step 3/7: Atlassian (Jira) Account"
 
     echo "  You need an Atlassian account with access to improvs.atlassian.net"
     echo ""
@@ -226,7 +226,7 @@ setup_atlassian_account() {
 # Step 4: GitHub MCP
 # ---------------------------------------------------------------------------
 setup_github_mcp() {
-    step "Step 4/6: GitHub MCP Server"
+    step "Step 4/7: GitHub MCP Server"
 
     echo "  GitHub MCP lets Claude read repos, create PRs, and manage issues."
     echo ""
@@ -276,7 +276,7 @@ setup_github_mcp() {
 # Step 5: Atlassian (Jira) MCP
 # ---------------------------------------------------------------------------
 setup_atlassian_mcp() {
-    step "Step 5/6: Atlassian (Jira) MCP Server"
+    step "Step 5/7: Atlassian (Jira) MCP Server"
 
     echo "  Jira MCP lets Claude read tickets and update status."
     echo "  Uses the official Atlassian Rovo MCP server with OAuth."
@@ -299,7 +299,7 @@ setup_atlassian_mcp() {
 # Step 6: Figma MCP
 # ---------------------------------------------------------------------------
 setup_figma_mcp() {
-    step "Step 6/6: Figma MCP Server"
+    step "Step 6/7: Figma MCP Server"
 
     echo "  Figma MCP lets Claude read designs and verify UI implementation."
     echo "  The official Figma plugin includes MCP + design agent skills."
@@ -327,6 +327,32 @@ setup_figma_mcp() {
     }
 
     success "Figma plugin installed"
+}
+
+# ---------------------------------------------------------------------------
+# Step 7: Superpowers Plugin
+# ---------------------------------------------------------------------------
+setup_superpowers() {
+    step "Step 7/7: Superpowers Plugin"
+
+    echo "  Superpowers gives Claude TDD, structured planning, code review,"
+    echo "  and systematic debugging skills. Improvs /start invokes them"
+    echo "  automatically based on task complexity."
+    echo ""
+
+    if claude plugin list 2>/dev/null | grep -q "superpowers"; then
+        success "Superpowers already installed"
+        return
+    fi
+
+    info "Installing superpowers plugin..."
+    claude plugin install superpowers@claude-plugins-official || {
+        warn "Superpowers install failed. You can install later:"
+        echo "  claude plugin install superpowers@claude-plugins-official"
+        return
+    }
+
+    success "Superpowers installed"
 }
 
 # ---------------------------------------------------------------------------
@@ -374,7 +400,7 @@ verify_setup() {
     echo "     - atlassian should prompt OAuth on first use"
     echo "     - figma     authenticate via /mcp > figma > Authenticate"
     echo ""
-    echo "  3. Test a skill: type /bug or /review"
+    echo "  3. Test a skill: type /start <JIRA-KEY>"
     echo "     Skills are delivered via your Claude org automatically."
     echo ""
     echo "  Useful links:"
@@ -414,4 +440,5 @@ setup_atlassian_account
 setup_github_mcp
 setup_atlassian_mcp
 setup_figma_mcp
+setup_superpowers
 verify_setup

@@ -37,17 +37,15 @@ When you discover or are told about an incident:
 
 ### 3. Fix
 
-- Create a hotfix branch: `PROJ-XXX-hotfix-description`
-- Fix the issue with minimal changes -- don't refactor
-- Add a regression test that catches this specific bug
-- All quality hooks still apply (analyze, test, format)
+Use `/hotfix <JIRA-KEY>`. It branches from `main` (not `develop`), makes a minimum-viable fix with a regression test, runs all quality hooks, creates two PRs (one to `main`, one syncing back to `develop`), and updates Jira with PR links and time.
 
 ### 4. Deploy
 
-- Merge via PR (fast-track review for critical/high severity)
+- Get the `main` PR reviewed and merged ASAP (fast-track for critical/high severity)
 - Deploy to production
 - Verify the fix in production
 - Notify the client that the issue is resolved
+- Merge the `develop` sync PR after
 
 ### 5. Postmortem (for critical/high only)
 

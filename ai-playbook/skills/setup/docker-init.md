@@ -17,7 +17,7 @@ Developers setting up Docker for a new or existing project.
 ## What happens when you run it
 
 1. **Checks for existing Docker files** -- asks whether to overwrite or skip
-2. **Detects the stack** -- from pyproject.toml, package.json, *.csproj, pubspec.yaml
+2. **Detects the stack** -- from pyproject.toml, package.json, or *.csproj (Flutter projects are not Dockerized)
 3. **Detects required services** -- scans dependencies for databases, caches, queues:
    - PostgreSQL (always included)
    - Redis (if celery or redis dependency found)

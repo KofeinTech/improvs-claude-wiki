@@ -20,11 +20,11 @@ Developers who built a UI screen and want to verify it matches the design before
 
 1. **Reads the Figma design** via Figma MCP -- layout, spacing, colors, typography, borders, shadows
 2. **Reads the project's design tokens** -- theme file, color constants, spacing scale
-3. **Compares implementation vs design** -- checks each property
-4. **Reports differences** with severity:
-   - **Mismatch** -- wrong value that doesn't match any token
-   - **Close** -- within 1-2px, probably fine
-   - **Missing** -- element in design not found in code
+3. **Compares implementation vs design** -- checks each property, snapping both sides to the nearest design token before comparing
+4. **Reports findings** in three groups:
+   - **Matches** -- properties that match within tolerance (briefly listed for confirmation)
+   - **Mismatches** -- properties where the implementation differs from the design beyond tolerance, with the suggested fix
+   - **Designer inconsistencies** -- values in the Figma design that don't match any project design token. These are likely designer mistakes (e.g. font-size 15px when the scale only has 14 and 16). Claude flags them so you can ask the designer to confirm rather than blindly implementing the off-token value.
 
 ## What it checks
 

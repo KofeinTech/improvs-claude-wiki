@@ -13,12 +13,11 @@ Checklist for new team members at Improvs. CEO drives onboarding. HR creates acc
 
 ## Day 1: Tools setup
 
-- [ ] Install Flutter + FVM (developers)
-- [ ] Install Claude Code CLI: `npm install -g @anthropic-ai/claude-code`
-- [ ] Login to Claude Code with @improvs.com account
+- [ ] Run the [setup script](../setup-developer.sh) -- installs Claude Code, logs you into the org, sets up Jira/GitHub/Figma MCPs, and installs the superpowers plugin
+- [ ] Install Docker Desktop / OrbStack (backend projects only -- Python and .NET run in containers)
 - [ ] Clone assigned project repo(s)
-- [ ] Verify Claude Code hooks are active: open `claude` in project dir, ask "What hooks are active?"
-- [ ] Run `flutter test` and `flutter analyze` on the project to confirm environment works
+- [ ] Read the project's `CLAUDE.md` -- it lists the actual run/test/build commands for that stack
+- [ ] Open `claude` in the project dir and type `/mcp` to verify Jira / GitHub / Figma are connected
 
 ## Day 2: Read the wiki
 

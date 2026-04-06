@@ -9,9 +9,8 @@ Generate a branded weekly progress report for a client project from Jira and Git
 ```
 
 Examples:
-- `/client-report PINK` -- current week
-- `/client-report PINK last` -- last week
-- `/client-report PINK 2026-03-31` -- specific week
+- `/client-report PINK` -- defaults to **last week** (Mon-Sun)
+- `/client-report PINK 2026-03-31` -- the Mon-Sun week containing that date
 
 ## Who uses this
 

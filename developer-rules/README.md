@@ -18,7 +18,7 @@ Use `/start` to read the Jira ticket, create a plan, and get confirmation before
 
 ## 4. One branch per task
 
-Branch naming: `<JIRA-KEY>-<short-description>` (e.g., `PINK-42-add-auth`). Never mix multiple tickets in one branch. Hooks enforce this.
+Branch naming: `<JIRA-KEY>-<short-description>` (e.g., `PINK-42-add-auth`). Never mix multiple tickets in one branch. A hook enforces this when you create the branch -- bad names are refused at `git checkout -b` / `git switch -c`.
 
 ## 5. Fresh context per task
 

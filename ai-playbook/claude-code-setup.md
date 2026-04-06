@@ -96,11 +96,10 @@ Once you're in the org, these are deployed to your machine:
 - Force push is blocked
 - Bypass permissions mode is disabled
 
-**Quality hooks** (fire on every commit):
-- `flutter analyze` must pass before commit
-- `flutter test` must pass before commit
-- Branch name must contain a Jira key (e.g., `PINK-42-...`)
-- `dart format` runs automatically on every file edit
+**Quality hooks** (fire on commit, branch creation, and file edit):
+- Pre-commit checks run the project's stack-specific gates: `fvm flutter analyze + test` for Flutter, `dotnet build + test` for .NET, `ruff check + pytest` for Python
+- Branch creation (`git checkout -b` / `git switch -c`) is blocked if the name doesn't contain a Jira key
+- Auto-format on save: `dart format` for `.dart` files, `ruff format` for `.py` files
 
 **Rules** (loaded based on project type):
 - Global rules (git workflow, behavior, security)

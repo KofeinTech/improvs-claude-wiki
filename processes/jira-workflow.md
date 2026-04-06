@@ -73,7 +73,7 @@ PINK-42-add-user-auth
 CUE-108-fix-chat-scroll
 ```
 
-A Claude Code hook validates this before every commit. If your branch name doesn't contain a Jira key, the commit is blocked.
+A Claude Code hook validates this when you create the branch (`git checkout -b` or `git switch -c`). If your branch name doesn't contain a Jira key, the branch creation is blocked.
 
 ## Sprint board
 

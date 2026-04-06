@@ -98,11 +98,11 @@ Critical bug -- added to current sprint
 - Every bug must have reproduction steps. If unknown, marked as "needs investigation"
 - Every bug must have expected vs actual behavior
 - If you report multiple bugs at once, Claude asks to create separate tickets
-- No technical speculation about root cause -- that's the developer's job during `/bug`
+- No technical speculation about root cause -- that's the developer's job during `/start` (which runs a bug investigation step automatically when the ticket type is Bug)
 - Language is neutral and factual
 
 ## Related
 
 - [/create-feature](create-feature.md) -- for features instead of bugs
-- [/bug](../bugs/bug.md) -- what developers use to fix this bug
-- [/hotfix](../bugs/hotfix.md) -- if the bug is critical and needs an emergency fix
+- [/start](../workflow/start.md) -- what developers use to fix this bug (auto-investigates when ticket type is Bug)
+- [/hotfix](../workflow/hotfix.md) -- if the bug is critical and needs an emergency fix from main

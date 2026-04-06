@@ -28,16 +28,19 @@ Tests:
 
 ### 2. Hooks enforce testing
 
-Before any commit goes through, these hooks fire automatically:
+Before any commit goes through, hooks run the project's stack-specific gates:
 
-| Hook | What it checks |
-|------|---------------|
-| `flutter analyze` | Static analysis -- 0 warnings required |
-| `flutter test` | All tests must pass |
-| `dart format` | Code must be formatted (auto-fixed on every edit) |
-| Branch name | Must contain Jira key |
+| Stack (detected by) | Pre-commit hooks |
+|---|---|
+| Flutter (`pubspec.yaml`) | `fvm flutter analyze`, `fvm flutter test` |
+| .NET (`*.csproj`) | `dotnet build --no-restore`, `dotnet test --no-build` |
+| Python (`pyproject.toml`) | `ruff check`, `pytest` |
 
-If any hook fails, the commit is blocked. Claude sees the error and attempts to fix it.
+Plus, after every file edit (regardless of stack):
+- `dart format` for `.dart` files
+- `ruff format` for `.py` files
+
+If a pre-commit hook fails, the commit is blocked. Claude sees the error and tries to fix it.
 
 ### 3. Generating tests for existing code
 

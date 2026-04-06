@@ -10,24 +10,17 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/start](skills/workflow/start.md) | Read Jira ticket, create branch, evaluate complexity, make a plan | Starting any new task |
-| [/finish](skills/workflow/finish.md) | Review, push, create PR, update Jira | Done coding, ready for PR |
-| [/quickfix](skills/workflow/quickfix.md) | Lightweight /start for trivial tasks (typo, config) | One-liner fixes |
-
-### Bug fixing
-
-| Skill | What it does | When to use |
-|-------|-------------|-------------|
-| [/bug](skills/bugs/bug.md) | Investigate root cause, failing test first, fix | Assigned a bug ticket |
-| [/hotfix](skills/bugs/hotfix.md) | Emergency fix -- branch from main, PRs to main + develop | Prod is broken right now |
+| [/start](skills/workflow/start.md) | Read Jira ticket, evaluate complexity, create branch, route to TDD or full pipeline. For Bug tickets, also runs an investigation step before classifying. | Starting any new task -- features, bugs, refactors, everything |
+| [/finish](skills/workflow/finish.md) | Auto-runs /review and /test, push, create PR, update Jira | Done coding, ready for PR |
+| [/hotfix](skills/workflow/hotfix.md) | Emergency fix -- branch from main, PRs to main + develop | Production is broken right now |
 
 ### Quality
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/review](skills/quality/review.md) | Review PR against rules, security, acceptance criteria | Before approving a PR |
-| [/test](skills/quality/test.md) | Generate tests from acceptance criteria (independent QA) | Before /finish |
-| [/figma-check](skills/quality/figma-check.md) | Verify UI matches Figma design | After building a screen |
+| [/review](skills/quality/review.md) | Hard-block secrets, dispatch superpowers reviewer with Jira AC + project rules, verify AC coverage | Before commit (also auto-run by /finish) |
+| [/test](skills/quality/test.md) | Dispatch independent test subagent that writes tests from AC, not from implementation | Before /finish (also auto-run by /finish) |
+| [/figma-check](skills/quality/figma-check.md) | Verify UI matches Figma design, snap to design tokens, flag designer inconsistencies | After building a screen |
 
 ### Project setup
 
@@ -52,10 +45,10 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 | Scenario | Skills |
 |----------|--------|
 | New feature | `/start PINK-42` -> code -> `/finish` |
-| Trivial fix | `/quickfix PINK-50` -> fix -> `/finish` |
-| Bug fix | `/bug PINK-55` -> fix -> `/finish` |
-| Production emergency | `/hotfix PINK-99` (all-in-one) |
-| Review a PR | `/review 47` |
+| Bug fix | `/start PINK-55` -> Claude investigates and routes to TDD -> `/finish` |
+| Trivial fix (typo, color, config) | `/start PINK-50` -> Claude classifies as trivial, auto-skips ceremony -> `/finish` |
+| Production emergency | `/hotfix PINK-99` (all-in-one, branches from main) |
+| Review your own work before commit | `/review` |
 | PM creates work | `/create-feature PINK` or `/create-bug PINK` |
 | New on a project | `/onboard PINK` |
 | Morning health check | `/health-check PINK` |
