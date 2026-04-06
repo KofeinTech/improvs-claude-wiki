@@ -28,21 +28,21 @@ The more context you provide, the better the output.
 
 ## Use plan mode for complex tasks
 
-For anything that touches multiple files or requires architectural decisions:
+For anything that touches multiple files or requires architectural decisions, press `Shift+Tab` to switch to plan mode. Claude explores the codebase, considers approaches, and presents a plan before writing any code. Press `Shift+Tab` again to switch back to code mode when you're ready to implement.
 
-```
-> /plan Add a caching layer for API responses
-```
+## Interrupt early, correct often
 
-Claude explores the codebase, considers approaches, and presents a plan before writing any code. This is especially useful when you're not sure about the best approach.
+Don't wait until Claude finishes if it's going the wrong direction. Interrupt and correct:
 
-## Review as Claude works
-
-Don't wait until Claude finishes. Read files as they're created. Catch mistakes early. If Claude is going in the wrong direction, interrupt and correct:
+- **Press `Escape`** to stop Claude mid-response
+- **Type your correction** and Claude adjusts immediately
+- Cheaper to interrupt and redirect than to let it finish and undo
 
 ```
 > Stop. Don't use SharedPreferences for this. Use Hive instead, we already have it as a dependency.
 ```
+
+Read files as they're created. Catch mistakes early.
 
 ## Use existing patterns
 
@@ -54,10 +54,19 @@ Point Claude to existing code to follow established patterns:
 
 ## Manage context
 
-- Start a fresh session for each task
-- Don't carry context from one task to another
-- If a session gets long and Claude seems confused, start fresh
-- Use `/compact` to summarize long sessions without losing context
+- Start a fresh session for each task -- don't carry context between tasks
+- If a session gets long and Claude seems confused, use `/compact` to summarize without losing context
+- Use `/clear` to wipe the conversation and start fresh within the same session
+- Point Claude to files instead of pasting code: "read lib/features/auth/auth_provider.dart"
+
+## Useful keyboard shortcuts
+
+| Shortcut | What it does |
+|----------|-------------|
+| `Escape` | Stop Claude mid-response |
+| `Shift+Tab` | Toggle plan mode (think before code) |
+| `Shift+Enter` | Accept and allow similar actions for the rest of the session |
+| `!` + command | Run a shell command directly (e.g., `! flutter pub get`) |
 
 ## When AI gets stuck
 
