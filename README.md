@@ -10,7 +10,7 @@ This wiki is the single source of truth for how we work at Improvs.com.
 |---------|---------------|----------|
 | [AI Playbook](ai-playbook/) | How to use Claude Code, setup, prompts, best practices | Developers, QA |
 | [Engineering](engineering/) | Tech stack, git workflow, coding standards, CI/CD, code review | Developers, QA |
-| [Developer Rules](developer-rules/) | Commit rules, small tasks, plan before code, review AI output | Developers |
+| [Developer Rules](developer-rules/) | 11 rules on one page -- commit, review, test, communicate | Developers |
 | [Processes](processes/) | Onboarding, sprints, Jira workflow, PM guide, incidents | Everyone |
 | [Design](design/) | Figma structure, design system, handoff to developers | Designers, Developers |
 

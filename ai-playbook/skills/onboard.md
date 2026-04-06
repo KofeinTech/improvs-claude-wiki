@@ -36,4 +36,3 @@ Developers or PMs working on a project for the first time.
 ## Related
 
 - [/start](start.md) -- after onboarding, start your first task
-- [PM agent](subagent-pm.md) -- ask project questions anytime

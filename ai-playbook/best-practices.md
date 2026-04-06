@@ -87,5 +87,4 @@ If Claude can't solve something after 2-3 attempts:
 
 - [Getting Started](getting-started.md) -- first steps with Claude Code
 - [Tips and Tricks](tips-and-tricks.md) -- plan mode, permissions, context management
-- [Dos and Don'ts](dos-and-donts.md) -- quick reference table
-- [Developer Rules](../developer-rules/) -- commit and review standards
+- [Developer Rules](../developer-rules/) -- all 11 rules on one page

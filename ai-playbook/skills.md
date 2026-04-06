@@ -40,15 +40,6 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 |-------|-------------|-------------|
 | [/client-report](skills/client-report.md) | Generate weekly progress report for a client | End of week, before sending update |
 
-### Subagents
-
-Subagents are AI assistants that run as background helpers. They're invoked by skills, not directly by you.
-
-| Subagent | Model | Used by |
-|----------|-------|---------|
-| [PM agent](skills/subagent-pm.md) | Sonnet | Answers project status questions from live Jira data |
-| [Test agent](skills/subagent-test.md) | Sonnet | Independent QA -- writes tests from AC, finds edge cases |
-
 ## How to use skills
 
 1. Open Claude Code in your project directory

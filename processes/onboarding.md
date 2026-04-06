@@ -23,9 +23,8 @@ Checklist for new team members at Improvs. CEO drives onboarding. HR creates acc
 ## Day 2: Read the wiki
 
 - [ ] Read [Getting Started with Claude Code](../ai-playbook/getting-started.md)
+- [ ] Read [Developer Rules](../developer-rules/) (single page, all 11 rules)
 - [ ] Read [Git Workflow](../engineering/git-workflow.md)
-- [ ] Read [Developer Rules](../developer-rules/) (all files)
-- [ ] Read [Dos and Don'ts](../ai-playbook/dos-and-donts.md)
 - [ ] Read coding standards for your stack ([Flutter](../engineering/coding-standards/flutter-dart.md), [C#](../engineering/coding-standards/backend-csharp.md), or [Python](../engineering/coding-standards/backend-python.md))
 
 ## Day 3-4: First task (paired)

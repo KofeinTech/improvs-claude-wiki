@@ -15,23 +15,21 @@ All 20 team members: developers, designers, PM, HR, CEO.
 ```
 setup-developer.sh  -- onboarding script (installs Claude Code + Jira/GitHub/Figma MCPs)
 
-ai-playbook/        -- Claude Code setup, best practices, prompts, skills reference, tips
+ai-playbook/        -- Claude Code guides and skills reference
   getting-started.md    -- first steps, setup script, workflow overview
   claude-code-setup.md  -- manual setup instructions, MCP configuration
-  best-practices.md     -- effective prompting, plan mode, context management
-  skills.md             -- full catalog of /slash-commands (15 skills + 2 subagents)
+  best-practices.md     -- effective prompting, plan mode, shortcuts
+  skills.md             -- full catalog of /slash-commands
   skills/               -- individual skill pages (bug, review, hotfix, start, finish, etc.)
   tips-and-tricks.md    -- plan mode, permissions, power-user features
   prompt-library.md     -- ready-to-use prompts for common tasks
   figma-to-code.md      -- generating Flutter code from Figma designs
   testing-with-ai.md    -- AI-generated tests and hook enforcement
-  dos-and-donts.md      -- quick reference table
 
+developer-rules/    -- all 11 rules on one page (single README.md)
 engineering/        -- tech stack, git workflow, coding standards, code review
-developer-rules/    -- commit rules, small tasks, plan before code, etc.
 processes/          -- onboarding, sprint workflow, Jira workflow, PM guide, incidents
 design/             -- Figma rules, design system, handoff process
-company/            -- communication guidelines
 ```
 
 ## Rules for this repository

@@ -15,4 +15,4 @@ How things work at Improvs -- from your first day to daily operations.
 | [AI Gap Pipeline](ai-gap-pipeline.md) | Developers | How to report and skill AI failures |
 | [Offboarding](offboarding.md) | HR, CEO | Access revocation when someone leaves |
 | [Maintenance Rules](maintenance-rules.md) | Leads | Who maintains what, review cadences |
-| [Communication](../company/communication-guidelines.md) | Everyone | Where to communicate what |
+| Communication | Everyone | See [Developer Rules](../developer-rules/) rule #11 |
