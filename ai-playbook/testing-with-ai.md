@@ -98,6 +98,6 @@ For these cases, use AI to scaffold the test structure, then fill in the specifi
 
 ## Related
 
-- [/test](skills/test.md) -- independent test generation skill
+- [/test](skills/quality/test.md) -- independent test generation skill
 - [Skills Reference](skills.md) -- all available /slash-commands
 - [Developer Rules](../developer-rules/) -- commit and review standards

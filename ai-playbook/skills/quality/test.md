@@ -43,5 +43,5 @@ If you skip /test, the PR will be flagged with a warning.
 
 ## Related
 
-- [/finish](finish.md) -- runs /test automatically if tests are missing
-- [/start](start.md) -- sets task complexity that determines if /test is required
+- [/finish](../workflow/finish.md) -- runs /test automatically if tests are missing
+- [/start](../workflow/start.md) -- sets task complexity that determines if /test is required

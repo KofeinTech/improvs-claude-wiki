@@ -70,4 +70,4 @@ Done. Run /finish to create PR and update Jira.
 ## Related
 
 - [/hotfix](hotfix.md) -- for production emergencies (branches from main)
-- [/start](../skills.md) -- for new features (includes Figma, planning)
+- [/start](../workflow/start.md) -- for new features (includes Figma, planning)

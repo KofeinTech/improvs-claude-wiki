@@ -59,9 +59,9 @@ Each issue includes a suggested action (ping reviewer, add AC, delete branch, et
 
 - This is read-only -- it never modifies tickets or PRs
 - Run daily as your morning check, or weekly for a full review
-- Pairs well with the JQL queries in the [PM Guide](../../processes/pm-guide.md)
+- Pairs well with the JQL queries in the [PM Guide](../../../processes/pm-guide.md)
 
 ## Related
 
 - [/client-report](client-report.md) -- weekly report for clients (uses similar data)
-- [/onboard](onboard.md) -- project briefing for new team members
+- [/onboard](../setup/onboard.md) -- project briefing for new team members

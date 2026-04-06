@@ -60,5 +60,5 @@ Every developer who has finished coding and is ready for review.
 ## Related
 
 - [/start](start.md) -- begin a task (run this first)
-- [/review](review.md) -- standalone PR review
-- [/test](test.md) -- generate tests independently
+- [/review](../quality/review.md) -- standalone PR review
+- [/test](../quality/test.md) -- generate tests independently

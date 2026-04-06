@@ -35,4 +35,4 @@ Developers or PMs working on a project for the first time.
 
 ## Related
 
-- [/start](start.md) -- after onboarding, start your first task
+- [/start](../workflow/start.md) -- after onboarding, start your first task

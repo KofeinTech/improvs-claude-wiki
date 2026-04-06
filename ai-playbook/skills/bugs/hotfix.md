@@ -60,4 +60,4 @@ Get the main PR reviewed and merged ASAP. The develop sync PR can be merged afte
 ## Related
 
 - [/bug](bug.md) -- for non-urgent bugs
-- [/review](review.md) -- to review the hotfix PR
+- [/review](../quality/review.md) -- to review the hotfix PR

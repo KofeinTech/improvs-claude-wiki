@@ -50,4 +50,4 @@ Code your task, then run `/finish` when done.
 
 - [/quickfix](quickfix.md) -- for trivial tasks that don't need full /start ceremony
 - [/finish](finish.md) -- complete the task after coding
-- [/bug](bug.md) -- for bug tickets specifically (investigation-first)
+- [/bug](../bugs/bug.md) -- for bug tickets specifically (investigation-first)

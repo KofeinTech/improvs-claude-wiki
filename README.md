@@ -8,7 +8,7 @@ This wiki is the single source of truth for how we work at Improvs.com.
 
 | Section | What's inside | Audience |
 |---------|---------------|----------|
-| [AI Playbook](ai-playbook/) | How to use Claude Code, setup, prompts, best practices | Developers, QA |
+| [AI Playbook](ai-playbook/) | How to use Claude Code, setup, skills, best practices | Everyone |
 | [Engineering](engineering/) | Tech stack, git workflow, coding standards, CI/CD, code review | Developers, QA |
 | [Developer Rules](developer-rules/) | 11 rules on one page -- commit, review, test, communicate | Developers |
 | [Processes](processes/) | Onboarding, sprints, Jira workflow, PM guide, incidents | Everyone |

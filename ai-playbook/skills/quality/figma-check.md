@@ -38,5 +38,5 @@ Developers who built a UI screen and want to verify it matches the design before
 
 ## Related
 
-- [/start](start.md) -- saves Figma URL during task setup
-- [/finish](finish.md) -- should run /figma-check before finishing UI tasks
+- [/start](../workflow/start.md) -- saves Figma URL during task setup
+- [/finish](../workflow/finish.md) -- should run /figma-check before finishing UI tasks

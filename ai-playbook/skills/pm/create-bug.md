@@ -104,5 +104,5 @@ Critical bug -- added to current sprint
 ## Related
 
 - [/create-feature](create-feature.md) -- for features instead of bugs
-- [/bug](bug.md) -- what developers use to fix this bug
-- [/hotfix](hotfix.md) -- if the bug is critical and needs an emergency fix
+- [/bug](../bugs/bug.md) -- what developers use to fix this bug
+- [/hotfix](../bugs/hotfix.md) -- if the bug is critical and needs an emergency fix

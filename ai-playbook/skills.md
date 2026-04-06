@@ -10,42 +10,42 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/start](skills/start.md) | Read Jira ticket, create branch, evaluate complexity, make a plan | Starting any new task |
-| [/finish](skills/finish.md) | Review, push, create PR, update Jira | Done coding, ready for PR |
-| [/quickfix](skills/quickfix.md) | Lightweight /start for trivial tasks (typo, config) | One-liner fixes |
+| [/start](skills/workflow/start.md) | Read Jira ticket, create branch, evaluate complexity, make a plan | Starting any new task |
+| [/finish](skills/workflow/finish.md) | Review, push, create PR, update Jira | Done coding, ready for PR |
+| [/quickfix](skills/workflow/quickfix.md) | Lightweight /start for trivial tasks (typo, config) | One-liner fixes |
 
 ### Bug fixing
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/bug](skills/bug.md) | Investigate root cause, failing test first, fix | Assigned a bug ticket |
-| [/hotfix](skills/hotfix.md) | Emergency fix -- branch from main, PRs to main + develop | Prod is broken right now |
+| [/bug](skills/bugs/bug.md) | Investigate root cause, failing test first, fix | Assigned a bug ticket |
+| [/hotfix](skills/bugs/hotfix.md) | Emergency fix -- branch from main, PRs to main + develop | Prod is broken right now |
 
 ### Quality
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/review](skills/review.md) | Review PR against rules, security, acceptance criteria | Before approving a PR |
-| [/test](skills/test.md) | Generate tests from acceptance criteria (independent QA) | Before /finish |
-| [/figma-check](skills/figma-check.md) | Verify UI matches Figma design | After building a screen |
+| [/review](skills/quality/review.md) | Review PR against rules, security, acceptance criteria | Before approving a PR |
+| [/test](skills/quality/test.md) | Generate tests from acceptance criteria (independent QA) | Before /finish |
+| [/figma-check](skills/quality/figma-check.md) | Verify UI matches Figma design | After building a screen |
 
 ### Project setup
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/onboard](skills/onboard.md) | Project briefing -- codebase, sprint, team | First time on a project |
-| [/docker-init](skills/docker-init.md) | Generate Dockerfile + docker-compose | Setting up Docker |
-| [/docs](skills/docs.md) | Generate README, API docs, architecture docs | Docs needed |
+| [/onboard](skills/setup/onboard.md) | Project briefing -- codebase, sprint, team | First time on a project |
+| [/docker-init](skills/setup/docker-init.md) | Generate Dockerfile + docker-compose | Setting up Docker |
+| [/docs](skills/setup/docs.md) | Generate README, API docs, architecture docs | Docs needed |
 
 ## For PMs
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/create-feature](skills/create-feature.md) | Guided Jira feature ticket with AC and scope | New feature idea or requirement |
-| [/create-bug](skills/create-bug.md) | Structured Jira bug report with repro steps | Bug found, needs a ticket |
-| [/health-check](skills/health-check.md) | Audit Jira board + GitHub for stuck work, inconsistencies | Daily morning check or weekly review |
-| [/client-report](skills/client-report.md) | Weekly progress report from Jira + GitHub data | End of week, before client update |
-| [/onboard](skills/onboard.md) | Project briefing (PM mode -- team, client, deadlines) | First time managing a project |
+| [/create-feature](skills/pm/create-feature.md) | Guided Jira feature ticket with AC and scope | New feature idea or requirement |
+| [/create-bug](skills/pm/create-bug.md) | Structured Jira bug report with repro steps | Bug found, needs a ticket |
+| [/health-check](skills/pm/health-check.md) | Audit Jira board + GitHub for stuck work, inconsistencies | Daily morning check or weekly review |
+| [/client-report](skills/pm/client-report.md) | Weekly progress report from Jira + GitHub data | End of week, before client update |
+| [/onboard](skills/setup/onboard.md) | Project briefing (PM mode -- team, client, deadlines) | First time managing a project |
 
 ## Common flows
 

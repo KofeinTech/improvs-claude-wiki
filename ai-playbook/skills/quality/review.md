@@ -73,5 +73,5 @@ AC coverage: 2/3
 
 ## Related
 
-- [/bug](bug.md) -- fix a bug before it becomes a PR
-- [/hotfix](hotfix.md) -- hotfix PRs get lighter reviews automatically
+- [/bug](../bugs/bug.md) -- fix a bug before it becomes a PR
+- [/hotfix](../bugs/hotfix.md) -- hotfix PRs get lighter reviews automatically
