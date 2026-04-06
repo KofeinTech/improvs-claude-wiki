@@ -13,6 +13,7 @@ Everything you need to start working with Claude Code at Improvs.
 | [Figma to Code](figma-to-code.md) | Generate Flutter code from Figma designs |
 | [Testing with AI](testing-with-ai.md) | How AI generates tests and hooks enforce them |
 | [Dos and Don'ts](dos-and-donts.md) | Quick reference of what to do and what to avoid |
+| [Tips and Tricks](tips-and-tricks.md) | Plan mode, permissions, context management, power-user tips |
 | [Skills Reference](skills.md) | All available /slash-command skills and how to use them |
 
 ## The golden rule
