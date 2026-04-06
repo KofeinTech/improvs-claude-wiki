@@ -33,7 +33,6 @@ A task is "done" when all items on this checklist are true. No exceptions.
 ## Jira
 
 - [ ] Ticket moved to "Done" (auto via merge, but verify)
-- [ ] Time logged on the ticket
 - [ ] Any unexpected findings documented (in Jira comment or wiki)
 
 ## Why this matters
