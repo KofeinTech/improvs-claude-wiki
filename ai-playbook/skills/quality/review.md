@@ -17,14 +17,14 @@ No arguments. Reviews the current branch against its base.
 
 ## What happens when you run it
 
-1. **Determines target** -- current branch, base branch read from project's CLAUDE.md (default `develop`; for `hotfix/*` branches, base is `main`). Refuses to run on `main`/`develop` directly.
+1. **Determines target** -- current branch, base branch read from project's CLAUDE.md (default `develop`; if Jira ticket has `hotfix` label, base is `main`). Refuses to run on `main`/`develop` directly.
 2. **Extracts the Jira key** from the branch name (must match `<KEY>-<number>-...`). Refuses if missing.
 3. **Reads the Jira ticket** via Jira MCP -- title, type, priority, full acceptance criteria, description.
 4. **Hard-blocks on hardcoded secrets** -- scans the diff for password literals, API key literals, AWS access keys, private key file contents, bearer tokens. **If anything matches, /review aborts immediately** with the file:line and refuses to invoke the reviewer. The fix is removing the secret, not arguing with /review.
 5. **Builds a requirements spec** for the reviewer that includes:
    - Jira AC verbatim
    - Instruction to read all `.claude/rules/*.md` files in the project (global rules + stack-specific rules)
-   - Hotfix mode flag if the branch starts with `hotfix/` (tells the reviewer to focus on correctness/safety and skip style nitpicks)
+   - Hotfix mode flag if the Jira ticket has `hotfix` label (tells the reviewer to focus on correctness/safety and skip style nitpicks)
 6. **Dispatches `superpowers:requesting-code-review`** via the Skill tool. This in turn dispatches a fresh `superpowers:code-reviewer` subagent with no visibility into your conversation -- the reviewer cannot be biased by the implementation discussion.
 7. **Acceptance criteria coverage post-pass** -- after the reviewer returns, /review explicitly checks each AC item against the diff and classifies it as Covered / Partial / Not addressed.
 8. **Combined output** -- secret scan result, the superpowers review (Strengths / Issues by severity / Recommendations), the AC coverage table, and a combined verdict.
@@ -85,7 +85,7 @@ CHANGES REQUESTED — 1 important issue + 1 AC missing
 ## Important notes
 
 - This is a **local review** -- nothing is posted to GitHub. You read it in your terminal.
-- For hotfix branches, the reviewer is told to focus on correctness/safety and skip style nitpicks. You don't need to do anything to enable this; /review detects `hotfix/*` automatically.
+- For hotfix tickets (Jira label `hotfix`), the reviewer focuses on correctness/safety and skips style nitpicks. This is detected automatically.
 - The fresh-context subagent **cannot see your implementation conversation**, so you cannot accidentally bias it by talking about the code beforehand.
 - If you disagree with a finding, fix it manually and re-run /review. Do not argue with the reviewer in the same turn -- the next /review run starts fresh.
 
@@ -100,4 +100,3 @@ For trivial tasks, /finish skips /review entirely (no AC to compare against, no 
 - [/test](test.md) -- independent test generation (also auto-invoked by /finish)
 - [/start](../workflow/start.md) -- begins the task whose review this is
 - [/finish](../workflow/finish.md) -- runs /review automatically
-- [/hotfix](../workflow/hotfix.md) -- hotfix branches automatically get the lighter review mode

@@ -104,5 +104,4 @@ Critical bug -- added to current sprint
 ## Related
 
 - [/create-feature](create-feature.md) -- for features instead of bugs
-- [/start](../workflow/start.md) -- what developers use to fix this bug (auto-investigates when ticket type is Bug)
-- [/hotfix](../workflow/hotfix.md) -- if the bug is critical and needs an emergency fix from main
+- [/start](../workflow/start.md) -- what developers use to fix this bug (auto-investigates bugs, auto-detects hotfixes)

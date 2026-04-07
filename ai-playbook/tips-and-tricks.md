@@ -75,7 +75,7 @@ Claude Code has a context window. When it fills up, older messages get compresse
 - Type `/` to see all available skills
 - Skills accept arguments: `/start PINK-42`, `/review 47`
 - Skills chain together: `/start` -> code -> `/finish`
-- `/hotfix` is self-contained -- no need for separate `/finish`
+- For production emergencies, `/start` auto-detects Critical priority and branches from main
 - If a skill asks you a question, be specific. "I don't know" is better than a vague answer.
 - See [Skills Reference](skills.md) for the full list
 

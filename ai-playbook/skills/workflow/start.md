@@ -1,6 +1,6 @@
 # /start -- Begin a Task
 
-Read a Jira ticket, evaluate complexity, create a branch, and begin working. This is the standard entry point for **any** task -- features, bugs, refactors, everything except production hotfixes.
+Read a Jira ticket, evaluate complexity, create a branch, and begin working. This is the **single entry point** for every task -- features, bugs, hotfixes, refactors, everything.
 
 ## Usage
 
@@ -87,6 +87,5 @@ Code your task, then run `/finish` when done. For simple/complex tasks, `/finish
 ## Related
 
 - [/finish](finish.md) -- complete the task after coding
-- [/hotfix](hotfix.md) -- for production fires (branches from main, dual PR)
 - [/review](../quality/review.md) -- standalone code review (also auto-invoked by /finish)
 - [/test](../quality/test.md) -- independent test generation

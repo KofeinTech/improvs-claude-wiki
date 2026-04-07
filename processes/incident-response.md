@@ -37,7 +37,7 @@ When you discover or are told about an incident:
 
 ### 3. Fix
 
-Use `/hotfix <JIRA-KEY>`. It branches from `main` (not `develop`), makes a minimum-viable fix with a regression test, runs all quality hooks, creates two PRs (one to `main`, one syncing back to `develop`), and updates Jira with PR links and time.
+Use `/start <JIRA-KEY>` on the Critical/Blocker ticket. `/start` auto-detects the emergency, branches from `main` (not `develop`), and routes to TDD mode. After fixing, `/finish` creates two PRs (one to `main`, one syncing back to `develop`) and updates Jira.
 
 ### 4. Deploy
 

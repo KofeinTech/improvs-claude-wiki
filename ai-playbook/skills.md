@@ -10,9 +10,8 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/start](skills/workflow/start.md) | Read Jira ticket, evaluate complexity, create branch, route to TDD or full pipeline. For Bug tickets, also runs an investigation step before classifying. | Starting any new task -- features, bugs, refactors, everything |
-| [/finish](skills/workflow/finish.md) | Auto-runs /review and /test, push, create PR, update Jira | Done coding, ready for PR |
-| [/hotfix](skills/workflow/hotfix.md) | Emergency fix -- branch from main, PRs to main + develop | Production is broken right now |
+| [/start](skills/workflow/start.md) | Read Jira ticket, evaluate complexity, create branch, route to TDD or full pipeline. Handles bugs (investigation), hotfixes (branches from main), and features. | Starting any task -- features, bugs, hotfixes, everything |
+| [/finish](skills/workflow/finish.md) | Auto-runs /review and /test, push, create PR, update Jira. For hotfixes: dual PRs to main + develop. | Done coding, ready for PR |
 
 ### Quality
 
@@ -47,7 +46,7 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 | New feature | `/start PINK-42` -> code -> `/finish` |
 | Bug fix | `/start PINK-55` -> Claude investigates and routes to TDD -> `/finish` |
 | Trivial fix (typo, color, config) | `/start PINK-50` -> Claude classifies as trivial, auto-skips ceremony -> `/finish` |
-| Production emergency | `/hotfix PINK-99` (all-in-one, branches from main) |
+| Production emergency | `/start PINK-99` -> auto-detects Critical priority, branches from main -> `/finish` creates dual PRs |
 | Review your own work before commit | `/review` |
 | PM creates work | `/create-feature PINK` or `/create-bug PINK` |
 | New on a project | `/onboard PINK` |
