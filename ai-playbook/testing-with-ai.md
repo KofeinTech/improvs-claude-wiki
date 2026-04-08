@@ -49,7 +49,7 @@ For code that already exists without tests:
 ```
 > Write tests for lib/features/profile/providers/profile_provider.dart.
 > Cover: happy path, error states, edge cases.
-> Use mocktail for mocking dependencies.
+> Use mockito for mocking dependencies.
 > Follow patterns in test/features/auth/ as reference.
 ```
 
@@ -79,17 +79,22 @@ AI-generated tests can look correct but test the wrong thing. Always check:
 test/
   features/
     auth/
-      providers/
-        auth_provider_test.dart
-      screens/
-        login_screen_test.dart
+      presentation/
+        providers/
+          auth_controller_test.dart
+      domain/
+        use_cases/
+          sign_in_use_case_test.dart
+      data/
+        repositories/
+          auth_repository_impl_test.dart
     profile/
       ...
-  helpers/
-    test_helpers.dart    -- shared mocks and utilities
+integration_test/
+  auth_integration_test.dart
 ```
 
-Tests mirror the `lib/features/` structure. One test file per source file.
+Tests mirror the `lib/features/` structure (including `presentation/domain/data/` layers). One test file per source file.
 
 ## When AI-generated tests aren't enough
 
