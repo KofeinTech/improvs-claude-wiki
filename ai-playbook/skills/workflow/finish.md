@@ -43,18 +43,29 @@ Every developer who has finished coding and is ready for review.
 - [x] All tests passing
 ```
 
-## Behavior by task complexity
+## Behavior by task type
 
-| Complexity | Review | Test verification |
-|-----------|--------|-------------------|
-| Trivial | Skipped | Skipped |
-| Simple | Required | Required |
-| Complex | Required | Required |
+| Type | Review | Test verification | PR target |
+|------|--------|-------------------|-----------|
+| Trivial | Skipped | Skipped | `develop` |
+| Simple | Required | Required | `develop` |
+| Complex | Required | Required | `develop` |
+| Hotfix | Lightweight (correctness only) | Skipped | `main` + `develop` sync |
+
+### Hotfix flow
+
+When `/start` detects a production emergency (Critical/Blocker priority or `hotfix` label), it records `Hotfix: true` in the Jira comment. `/finish` reads this flag and:
+
+1. Runs `/review` in **hotfix mode** -- focuses on correctness and safety, skips style nitpicks
+2. Skips `/test` verification entirely -- hotfixes ship fast
+3. Creates **two PRs**: one targeting `main` (the urgent fix) and one targeting `develop` (sync back)
+4. The `main` PR should be reviewed and merged ASAP. The `develop` sync PR is merged after
 
 ## Important rules
 
 - Never commits code -- you must commit before running /finish
 - Never force pushes
+- Never creates PR to `main` unless it is a hotfix
 - If any AC is not addressed, asks for confirmation before creating PR
 
 ## Related

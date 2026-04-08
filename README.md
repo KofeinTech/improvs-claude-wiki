@@ -13,6 +13,7 @@ This wiki is the single source of truth for how we work at Improvs.com.
 | [Developer Rules](developer-rules/) | 11 rules on one page -- commit, review, test, communicate | Developers |
 | [Processes](processes/) | Onboarding, sprints, Jira workflow, PM guide, incidents | Everyone |
 | [Design](design/) | Figma structure, design system, handoff to developers | Designers, Developers |
+| [Projects](projects/) | Project docs -- tech stack, team, repos, environments | Everyone |
 
 ## Quick links
 

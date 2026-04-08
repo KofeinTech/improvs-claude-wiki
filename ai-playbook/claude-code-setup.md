@@ -129,14 +129,79 @@ Check MCP connections:
 
 All three servers (github, atlassian, figma) should show as connected. If anything is missing, contact your manager.
 
-## Project-level config
+## Project-level config (CLAUDE.md)
 
-Each project also has its own `CLAUDE.md` in the repo root with:
-- Project stack and commands
-- Directory structure
+Every Improvs project must have a `CLAUDE.md` file in the repo root. Claude Code reads it automatically when you open a project directory. Without it, skills like /start, /review, and /finish may not detect the correct base branch or stack.
+
+**What CLAUDE.md contains:**
+- Project name and Jira key
+- Tech stack and framework versions
+- Run, test, lint, and format commands
+- Base branch (usually `develop`)
+- Directory structure overview
 - Project-specific conventions
 
-This is loaded automatically when you open Claude Code in that directory.
+**Templates for new projects:**
+
+| Stack | Template repo | What's included |
+|-------|--------------|-----------------|
+| Flutter | `improvs/flutter-template` | FVM, Riverpod, GoRouter, Freezed, Dio |
+| .NET | `improvs/dotnet-template` | ASP.NET Core, EF Core, MediatR, xUnit |
+| Python | `improvs/python-template` | FastAPI, SQLAlchemy, Pydantic, pytest, Ruff |
+
+When creating a new project, copy the CLAUDE.md from the matching template repo and fill in the project-specific values (name, Jira key, any custom conventions).
+
+**For existing projects missing CLAUDE.md:** create one from the closest template. At minimum include: project name, stack, run/test/lint commands, Jira key, and base branch.
+
+## Troubleshooting
+
+### Skills not showing up
+
+If `/` doesn't list shared skills (like /start, /finish, /review):
+
+1. Re-login to the org: `claude logout && claude login`
+2. Verify you're in the Improvs organization (check with your manager if unsure)
+3. Update the CLI: `npm update -g @anthropic-ai/claude-code`
+4. Restart Claude Code
+
+### MCP server not connecting
+
+If `/mcp` shows a server as disconnected or a skill says "Jira MCP failed":
+
+1. Open `/mcp` in Claude Code and re-authenticate the failing server
+2. For GitHub: your Personal Access Token may have expired -- generate a new one and re-add the server
+3. For Atlassian: re-run the OAuth flow by removing and re-adding:
+   ```bash
+   claude mcp remove atlassian
+   claude mcp add --transport http --scope user atlassian https://mcp.atlassian.com/v1/mcp
+   ```
+4. For Figma: re-authenticate via `/mcp` > figma > Authenticate
+
+### Hooks not firing
+
+If pre-commit checks or branch validation aren't running:
+
+1. Ask Claude: "What hooks and rules are active in this session?"
+2. If none listed, managed settings may not be deployed -- contact your manager
+3. Restart Claude Code (hooks load on startup)
+
+### Superpowers plugin issues
+
+If /review reports that superpowers is unavailable:
+
+1. Check if installed: `claude plugin list`
+2. Reinstall manually: `claude plugin install superpowers@claude-plugins-official`
+3. Note: /review has an inline fallback and will still produce a structured review without superpowers
+
+### Common errors
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| "Branch must follow JIRA-KEY-description" | Branch name missing Jira key | Use format: `PINK-42-add-feature` |
+| "flutter analyze must pass" | Dart analysis errors | Fix the errors shown, then re-commit |
+| "Force push is not allowed" | Hook blocks `git push --force` | Use regular push. If needed, ask a lead for `--force-with-lease` approval |
+| "Branch has no Jira key" | /review can't extract ticket key | Rename branch to include the key: `git branch -m PINK-42-description` |
+| "Cannot /review from main" | Running /review on a protected branch | Switch to your feature branch first |
 
 ## Related
 

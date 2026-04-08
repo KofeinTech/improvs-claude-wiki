@@ -25,7 +25,7 @@ No arguments. Reviews the current branch against its base.
    - Jira AC verbatim
    - Instruction to read all `.claude/rules/*.md` files in the project (global rules + stack-specific rules)
    - Hotfix mode flag if the Jira ticket has `hotfix` label (tells the reviewer to focus on correctness/safety and skip style nitpicks)
-6. **Dispatches `superpowers:requesting-code-review`** via the Skill tool. This in turn dispatches a fresh `superpowers:code-reviewer` subagent with no visibility into your conversation -- the reviewer cannot be biased by the implementation discussion.
+6. **Dispatches `superpowers:requesting-code-review`** via the Skill tool. This in turn dispatches a fresh `superpowers:code-reviewer` subagent with no visibility into your conversation -- the reviewer cannot be biased by the implementation discussion. If the superpowers plugin is unavailable, /review falls back to an inline review using the project's `.claude/rules/*.md` files (same output format, same severity levels).
 7. **Acceptance criteria coverage post-pass** -- after the reviewer returns, /review explicitly checks each AC item against the diff and classifies it as Covered / Partial / Not addressed.
 8. **Combined output** -- secret scan result, the superpowers review (Strengths / Issues by severity / Recommendations), the AC coverage table, and a combined verdict.
 
@@ -40,7 +40,7 @@ Mode:   standard
 --- SECRET SCAN ---
 ✅ No secrets detected
 
---- SUPERPOWERS CODE REVIEW ---
+--- CODE REVIEW ---
 Strengths:
 - Clean separation of concerns (BiometricService isolated from UI)
 - Real tests with actual biometric mocks (not mock-of-mock)
@@ -88,6 +88,7 @@ CHANGES REQUESTED — 1 important issue + 1 AC missing
 - For hotfix tickets (Jira label `hotfix`), the reviewer focuses on correctness/safety and skips style nitpicks. This is detected automatically.
 - The fresh-context subagent **cannot see your implementation conversation**, so you cannot accidentally bias it by talking about the code beforehand.
 - If you disagree with a finding, fix it manually and re-run /review. Do not argue with the reviewer in the same turn -- the next /review run starts fresh.
+- If superpowers is not installed or fails, /review automatically falls back to an inline review against the project's rules. The output format and verdict logic are identical -- you don't need to do anything different.
 
 ## How /review fits into /finish
 

@@ -47,12 +47,49 @@ Every piece of work needs a ticket before you start. No ticket = no branch = no 
 - Add Figma link if there are UI changes
 - Set priority and estimate
 
+Template:
+```
+Title: As a [user], I want [action] so that [benefit]
+
+Acceptance Criteria:
+- [ ] ...
+- [ ] ...
+- [ ] ...
+
+Figma Design: <paste Figma frame link, or "No UI changes">
+Priority: Critical / High / Medium / Low
+Estimate: <story points or hours>
+Notes: <additional context, edge cases, dependencies>
+```
+
 **Bug:**
 - Title: clear description of what's broken
 - Steps to reproduce
 - Expected vs actual behavior
 - Screenshots or screen recording
 - Device/OS info
+
+Template:
+```
+Title: [Bug] <short description of the issue>
+
+Steps to Reproduce:
+1.
+2.
+3.
+
+Expected Result: <what should happen>
+Actual Result: <what happens instead>
+Severity: Critical / High / Medium / Low
+
+Device / OS:
+- Device:
+- OS version:
+- App version:
+
+Screenshots / Screen Recording: <attach>
+Logs: <paste relevant error logs>
+```
 
 ### For internal requests (IMP project)
 
@@ -62,7 +99,7 @@ Use labels to trigger automation:
 - `change-request` -- requires tech lead + CEO approval
 - `offboarding` -- auto-creates subtasks for access revocation
 
-See [Jira Templates](https://github.com/KofeinTech/improvs-claude-private/blob/main/automation/jira-templates/all-templates.md) for the full template formats.
+Internal request templates (hiring, access, change) are managed by leads.
 
 ## Branch naming
 
@@ -89,15 +126,42 @@ Each project board shows the current sprint:
 - If a ticket is blocked, add a comment explaining why and flag it
 - If a ticket won't be finished this sprint, move it to the next sprint during planning
 
-## Linking tickets to code
+## GitHub for Jira integration
 
-GitHub for Jira integration shows development activity on each ticket:
-- Branches created
-- Commits made
-- PRs opened, reviewed, merged
-- Build status
+The GitHub for Jira app links development activity to Jira tickets automatically. It also drives the automatic status transitions described above (branch created, PR opened, PR merged).
 
-All of this appears automatically in the ticket's "Development" panel when you use the correct ticket key in your branch name.
+### What it shows
+
+Each ticket gets a "Development" panel showing:
+- Branches created with that ticket key
+- Commits containing the ticket key
+- PRs opened, reviewed, and merged
+- Build/deploy status
+
+### Setup (admin only)
+
+This is a one-time setup done by the org admin:
+
+1. Install the [GitHub for Jira](https://marketplace.atlassian.com/apps/1219592/github-for-jira) app from the Atlassian Marketplace (free)
+2. In Jira: go to **Settings** > **Apps** > **GitHub** > **Connect GitHub organization**
+3. Authorize with the GitHub org (`KofeinTech`)
+4. Select which repositories to sync (usually all project repos)
+
+Developers do not need to do anything -- the integration works automatically once the admin has set it up.
+
+### For developers
+
+The integration works when your branch name contains the Jira key in uppercase:
+- `PINK-42-add-user-auth` -- links to PINK-42
+- `CUE-108-fix-chat-scroll` -- links to CUE-108
+
+Commits and PR titles with the key also get linked. The Claude Code branch naming hook already enforces this format.
+
+### Troubleshooting
+
+- **Ticket shows no development activity:** check that your branch name includes the key in uppercase (e.g., `PINK-42`, not `pink-42`). Wait 1-5 minutes for the sync.
+- **Status not auto-transitioning:** verify the integration is connected in Jira Settings > Apps > GitHub. If the app shows disconnected, ask your manager to re-authorize.
+- **Commits not linking:** include the ticket key somewhere in the commit message or branch name.
 
 ## Filters and dashboards
 
