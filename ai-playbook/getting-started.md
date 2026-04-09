@@ -38,7 +38,7 @@ Together this means Claude isn't just "an AI in your terminal" -- it has the rea
 
 ## Your first task end-to-end
 
-Every Improvs task starts with a Jira ticket and ends with a PR linked back to that ticket. The `/start` and `/finish` skills handle everything in between -- branch naming, time tracking, PR creation, Jira status updates.
+Every Improvs task starts with a Jira ticket and ends with a PR linked back to that ticket. The `/improvs:start` and `/improvs:finish` skills handle everything in between -- branch naming, time tracking, PR creation, Jira status updates.
 
 A typical session:
 
@@ -57,7 +57,7 @@ claude
 
 Claude reads the Jira ticket via the Jira MCP, checks the type and acceptance criteria, classifies the task complexity (trivial / simple / complex), creates a branch named `PROJ-42-<short-description>`, moves the ticket to "In Progress", and shows you a `READY TO START` block with the classification.
 
-For non-trivial tasks, `/start` then automatically invokes the **superpowers** plugin -- TDD discipline for simple tasks, brainstorming + plan + execute for complex ones. See [Superpowers](superpowers.md) for what this looks like and what to expect.
+For non-trivial tasks, `/improvs:start` then automatically invokes the **superpowers** plugin -- TDD discipline for simple tasks, brainstorming + plan + execute for complex ones. See [Superpowers](superpowers.md) for what this looks like and what to expect.
 
 **3. Review and code with Claude**
 
@@ -87,7 +87,7 @@ If review finds issues or tests fail, `/improvs:finish` stops and tells you what
 
 ## Next steps
 
-- Read the [Superpowers guide](superpowers.md) -- understand what `/start` invokes for non-trivial tasks
+- Read the [Superpowers guide](superpowers.md) -- understand what `/improvs:start` invokes for non-trivial tasks
 - Learn [best practices](best-practices.md) for effective prompting
 - Browse the [prompt library](prompt-library.md) for ready-to-use prompts
 - Check the [skills reference](skills.md) for all available /slash-commands
