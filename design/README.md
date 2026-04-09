@@ -13,6 +13,6 @@ How designers prepare Figma files for AI-powered Flutter development.
 
 ## Key principle
 
-Structure your Figma files for AI. Claude Code reads designs via Figma MCP and generates Flutter code. The quality of generated code depends entirely on how well the Figma file is structured.
+Structure your Figma files for AI. Figma designs are exported to local JSON (`/improvs:figma-export`) and Claude Code generates Flutter code from them. The quality of generated code depends entirely on how well the Figma file is structured.
 
 Auto-layout, semantic naming, and design tokens are mandatory -- not optional.

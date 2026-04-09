@@ -8,7 +8,7 @@ How designers work within the Improvs AI-first workflow.
 Client request -> You design in Figma -> Developer builds with Claude Code -> You verify
 ```
 
-Designers don't use Claude Code directly. Your output (Figma files) is consumed by Claude Code via the Figma MCP server. The quality of your Figma file directly affects the quality of generated code.
+Designers don't use Claude Code directly. Your Figma files are exported to local JSON (`/improvs:figma-export`) and consumed by Claude Code from the project's `design/` folder. The quality of your Figma file directly affects the quality of generated code.
 
 ## What makes a good Figma file for AI
 

@@ -13,7 +13,7 @@ All 20 team members: developers, designers, PM, HR, CEO.
 ## Structure
 
 ```
-setup-developer.sh  -- onboarding script (installs Claude Code + Jira/GitHub/Figma MCPs)
+setup-developer.sh  -- onboarding script (installs Claude Code + Jira/GitHub MCPs + Superpowers)
 
 ai-playbook/        -- Claude Code guides and skills reference
   getting-started.md    -- first steps, setup script, workflow overview
