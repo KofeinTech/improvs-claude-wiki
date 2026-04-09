@@ -9,7 +9,7 @@ Everything you need to start working with Claude Code at Improvs.
 | [Getting Started](getting-started.md) | What Claude Code is, why we use it, your first steps |
 | [Setup Guide](claude-code-setup.md) | Install CLI, login, managed settings, MCP servers |
 | [Best Practices](best-practices.md) | Effective prompting, context management, plan mode |
-| [Superpowers](superpowers.md) | The third-party plugin /start invokes for non-trivial tasks (brainstorming, TDD, planning) |
+| [Superpowers](superpowers.md) | The third-party plugin /improvs:start invokes for non-trivial tasks (brainstorming, TDD, planning) |
 | [Prompt Library](prompt-library.md) | Ready-to-use prompts for common tasks |
 | [Figma to Code](figma-to-code.md) | Generate Flutter code from Figma designs |
 | [Testing with AI](testing-with-ai.md) | How AI generates tests and hooks enforce them |

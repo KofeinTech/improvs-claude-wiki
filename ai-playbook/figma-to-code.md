@@ -97,5 +97,5 @@ If you hit a wall, solve manually and create an [ai-gap ticket](../processes/ai-
 
 - [Figma Structure](../design/figma-structure.md) -- how designers should set up Figma files
 - [Design Handoff](../design/handoff-process.md) -- the full designer-to-developer process
-- [/figma-check](skills/quality/figma-check.md) -- verify your implementation matches the design
+- [/improvs:figma-check](skills/quality/figma-check.md) -- verify your implementation matches the design
 - [Best Practices](best-practices.md) -- general Claude Code tips

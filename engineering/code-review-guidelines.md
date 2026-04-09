@@ -32,19 +32,19 @@ AI-generated code can increase issue counts by 1.7x without governance. Human re
 
 Projects with one developer (Fantabase, TradingSim) cannot have peer review. Instead:
 
-1. **Run `/review` skill** before every PR -- AI checks security, performance, conventions, test coverage
+1. **Run `/improvs:review` skill** before every PR -- AI checks security, performance, conventions, test coverage
 2. **Self-review the entire diff** line by line -- read it as if someone else wrote it
 3. **CEO spot-checks** periodically
 
 ## AI-assisted review
 
-Run `/review` to get a structured review of the current branch:
+Run `/improvs:review` to get a structured review of the current branch:
 
 ```
-> /review
+> /improvs:review
 ```
 
-The skill hard-blocks any hardcoded secrets, dispatches the superpowers code reviewer with the Jira AC + project rules as the spec, then verifies the diff actually covers every AC item. Output is in your terminal -- nothing is posted to GitHub. See [/review skill](../ai-playbook/skills/quality/review.md) for full details.
+The skill hard-blocks any hardcoded secrets, dispatches the superpowers code reviewer with the Jira AC + project rules as the spec, then verifies the diff actually covers every AC item. Output is in your terminal -- nothing is posted to GitHub. See [/improvs:review skill](../ai-playbook/skills/quality/review.md) for full details.
 
 AI review supplements human review. It does not replace it. AI catches patterns humans miss (security, convention violations). Humans catch logic errors AI misses (wrong business rules, unnecessary complexity).
 

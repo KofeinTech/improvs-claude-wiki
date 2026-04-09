@@ -64,4 +64,4 @@ Each issue includes a suggested action (ping reviewer, add AC, delete branch, et
 ## Related
 
 - [/client-report](client-report.md) -- weekly report for clients (uses similar data)
-- [/onboard](../setup/onboard.md) -- project briefing for new team members
+- [/improvs:onboard](../setup/onboard.md) -- project briefing for new team members

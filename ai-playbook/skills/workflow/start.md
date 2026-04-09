@@ -1,14 +1,14 @@
-# /start -- Begin a Task
+# /improvs:start -- Begin a Task
 
 Read a Jira ticket, evaluate complexity, create a branch, and begin working. This is the **single entry point** for every task -- features, bugs, hotfixes, refactors, everything.
 
 ## Usage
 
 ```
-/start <JIRA_TICKET_KEY>
+/improvs:start <JIRA_TICKET_KEY>
 ```
 
-Example: `/start PINK-42`
+Example: `/improvs:start PINK-42`
 
 ## Who uses this
 
@@ -31,7 +31,7 @@ Every developer starting work on a Jira ticket.
 
 | Level | Signs | What happens next |
 |-------|-------|-------------------|
-| Trivial | 1 file, cosmetic/text/config change, 1 AC, no logic | Direct edit. No TDD, no /review, no /test. |
+| Trivial | 1 file, cosmetic/text/config change, 1 AC, no logic | Direct edit. No TDD, no /improvs:review, no /improvs:test. |
 | Simple | 1-2 files, single layer, 1-3 AC | `superpowers:test-driven-development` is invoked automatically (failing test first) |
 | Complex | 3+ files OR multi-layer OR 4+ AC OR new screen / state / integration / migration | `superpowers:brainstorming` is invoked automatically (brainstorm -> plan -> execute) |
 
@@ -44,7 +44,7 @@ When the Jira ticket type is `Bug`, Claude does an extra investigation step *bef
 ### Example session
 
 ```
-> /start PINK-55
+> /improvs:start PINK-55
 
 Reading PINK-55: "App crashes when user taps notifications on Android 14"
 Type: Bug | Priority: High
@@ -76,16 +76,16 @@ The `INVESTIGATION` block is a forced output checkpoint -- you read it before Cl
 
 - Refuses to start without acceptance criteria on the ticket
 - Refuses to start with uncommitted changes in the working tree
-- Records task start in a Jira comment with the complexity classification (used by `/finish` later)
+- Records task start in a Jira comment with the complexity classification (used by `/improvs:finish` later)
 - For trivial tasks: no Figma URL question, auto-generates the branch name
 - If you're already on a branch matching the ticket key, asks whether to continue on it
 
-## After /start
+## After /improvs:start
 
-Code your task, then run `/finish` when done. For simple/complex tasks, `/finish` will automatically run `/review` and check that test files were added before pushing.
+Code your task, then run `/improvs:finish` when done. For simple/complex tasks, `/improvs:finish` will automatically run `/improvs:review` and check that test files were added before pushing.
 
 ## Related
 
-- [/finish](finish.md) -- complete the task after coding
-- [/review](../quality/review.md) -- standalone code review (also auto-invoked by /finish)
-- [/test](../quality/test.md) -- independent test generation
+- [/improvs:finish](finish.md) -- complete the task after coding
+- [/improvs:review](../quality/review.md) -- standalone code review (also auto-invoked by /improvs:finish)
+- [/improvs:test](../quality/test.md) -- independent test generation

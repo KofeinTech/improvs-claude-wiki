@@ -19,7 +19,7 @@ Type `/` in Claude Code to see all available skills. The ones you'll use most:
 | `/create-feature PINK` | Walk you through creating a structured feature ticket | Describe the feature, Claude asks questions, creates in Jira |
 | `/create-bug PINK` | Walk you through creating a structured bug report | Describe the bug, Claude ensures repro steps + severity |
 | `/client-report PINK` | Generate a branded weekly report from Jira + GitHub data | Run at end of week, review before sending |
-| `/onboard PINK` | Get a full briefing on a project (PM mode) | First time managing a project |
+| `/improvs:onboard PINK` | Get a full briefing on a project (PM mode) | First time managing a project |
 
 ### Using /create-feature
 

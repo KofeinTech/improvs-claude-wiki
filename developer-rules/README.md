@@ -14,7 +14,7 @@ Break work into pieces that take 1-4 hours each. One Jira ticket = one branch = 
 
 ## 3. Plan before code
 
-Use `/start` to read the Jira ticket, create a plan, and get confirmation before implementing. For complex tasks, use plan mode (`Shift+Tab`). 15 minutes of planning saves hours of rework.
+Use `/improvs:start` to read the Jira ticket, create a plan, and get confirmation before implementing. For complex tasks, use plan mode (`Shift+Tab`). 15 minutes of planning saves hours of rework.
 
 ## 4. One branch per task
 

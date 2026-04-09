@@ -1,11 +1,11 @@
-# /review -- Code Review
+# /improvs:review -- Code Review
 
 Review the **current branch** against Improvs rules and the linked Jira ticket's acceptance criteria. Hard-blocks hardcoded secrets, dispatches the superpowers code reviewer with the AC + project rules as the spec, then verifies the diff actually covers every AC item.
 
 ## Usage
 
 ```
-/review
+/improvs:review
 ```
 
 No arguments. Reviews the current branch against its base.
@@ -13,19 +13,19 @@ No arguments. Reviews the current branch against its base.
 ## Who uses this
 
 - Developers, manually before commit, to sanity-check their work
-- `/finish`, automatically, for simple and complex tasks (skipped for trivial)
+- `/improvs:finish`, automatically, for simple and complex tasks (skipped for trivial)
 
 ## What happens when you run it
 
 1. **Determines target** -- current branch, base branch read from project's CLAUDE.md (default `develop`; if Jira ticket has `hotfix` label, base is `main`). Refuses to run on `main`/`develop` directly.
 2. **Extracts the Jira key** from the branch name (must match `<KEY>-<number>-...`). Refuses if missing.
 3. **Reads the Jira ticket** via Jira MCP -- title, type, priority, full acceptance criteria, description.
-4. **Hard-blocks on hardcoded secrets** -- scans the diff for password literals, API key literals, AWS access keys, private key file contents, bearer tokens. **If anything matches, /review aborts immediately** with the file:line and refuses to invoke the reviewer. The fix is removing the secret, not arguing with /review.
+4. **Hard-blocks on hardcoded secrets** -- scans the diff for password literals, API key literals, AWS access keys, private key file contents, bearer tokens. **If anything matches, /improvs:review aborts immediately** with the file:line and refuses to invoke the reviewer. The fix is removing the secret, not arguing with /improvs:review.
 5. **Builds a requirements spec** for the reviewer that includes:
    - Jira AC verbatim
    - Instruction to read all `.claude/rules/*.md` files in the project (global rules + stack-specific rules)
    - Hotfix mode flag if the Jira ticket has `hotfix` label (tells the reviewer to focus on correctness/safety and skip style nitpicks)
-6. **Dispatches `superpowers:requesting-code-review`** via the Skill tool. This in turn dispatches a fresh `superpowers:code-reviewer` subagent with no visibility into your conversation -- the reviewer cannot be biased by the implementation discussion. If the superpowers plugin is unavailable, /review falls back to an inline review using the project's `.claude/rules/*.md` files (same output format, same severity levels).
+6. **Dispatches `superpowers:requesting-code-review`** via the Skill tool. This in turn dispatches a fresh `superpowers:code-reviewer` subagent with no visibility into your conversation -- the reviewer cannot be biased by the implementation discussion. If the superpowers plugin is unavailable, /improvs:review falls back to an inline review using the project's `.claude/rules/*.md` files (same output format, same severity levels).
 7. **Acceptance criteria coverage post-pass** -- after the reviewer returns, /review explicitly checks each AC item against the diff and classifies it as Covered / Partial / Not addressed.
 8. **Combined output** -- secret scan result, the superpowers review (Strengths / Issues by severity / Recommendations), the AC coverage table, and a combined verdict.
 
@@ -78,26 +78,26 @@ CHANGES REQUESTED — 1 important issue + 1 AC missing
 
 | Verdict | What to do |
 |---------|-----------|
-| APPROVED | All AC covered, no critical/important issues. Proceed to /finish. |
+| APPROVED | All AC covered, no critical/important issues. Proceed to /improvs:finish. |
 | CHANGES REQUESTED | Either important issues from the reviewer OR missing AC coverage. Fix and re-run. |
-| BLOCKED | Hardcoded secret detected. Remove the secret, then re-run. /finish will not let the PR ship. |
+| BLOCKED | Hardcoded secret detected. Remove the secret, then re-run. /improvs:finish will not let the PR ship. |
 
 ## Important notes
 
 - This is a **local review** -- nothing is posted to GitHub. You read it in your terminal.
 - For hotfix tickets (Jira label `hotfix`), the reviewer focuses on correctness/safety and skips style nitpicks. This is detected automatically.
 - The fresh-context subagent **cannot see your implementation conversation**, so you cannot accidentally bias it by talking about the code beforehand.
-- If you disagree with a finding, fix it manually and re-run /review. Do not argue with the reviewer in the same turn -- the next /review run starts fresh.
-- If superpowers is not installed or fails, /review automatically falls back to an inline review against the project's rules. The output format and verdict logic are identical -- you don't need to do anything different.
+- If you disagree with a finding, fix it manually and re-run /improvs:review. Do not argue with the reviewer in the same turn -- the next /improvs:review run starts fresh.
+- If superpowers is not installed or fails, /improvs:review automatically falls back to an inline review against the project's rules. The output format and verdict logic are identical -- you don't need to do anything different.
 
-## How /review fits into /finish
+## How /improvs:review fits into /improvs:finish
 
-`/finish` invokes `/review` automatically for simple and complex tasks, before pushing or creating a PR. If /review returns CHANGES REQUESTED or BLOCKED, /finish stops and tells you what to fix. After you fix and re-run /finish, /review runs again from scratch.
+`/improvs:finish` invokes `/improvs:review` automatically for simple and complex tasks, before pushing or creating a PR. If /improvs:review returns CHANGES REQUESTED or BLOCKED, /improvs:finish stops and tells you what to fix. After you fix and re-run /improvs:finish, /improvs:review runs again from scratch.
 
-For trivial tasks, /finish skips /review entirely (no AC to compare against, no logic to review).
+For trivial tasks, /improvs:finish skips /improvs:review entirely (no AC to compare against, no logic to review).
 
 ## Related
 
-- [/test](test.md) -- independent test generation (also auto-invoked by /finish)
-- [/start](../workflow/start.md) -- begins the task whose review this is
-- [/finish](../workflow/finish.md) -- runs /review automatically
+- [/improvs:test](test.md) -- independent test generation (also auto-invoked by /improvs:finish)
+- [/improvs:start](../workflow/start.md) -- begins the task whose review this is
+- [/improvs:finish](../workflow/finish.md) -- runs /improvs:review automatically

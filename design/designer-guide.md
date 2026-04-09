@@ -30,7 +30,7 @@ See [Figma Structure](figma-structure.md) for the full rules and [Design System]
 2. Mark the frame as "Ready for development" in Figma
 3. Share the Figma link in the Jira ticket or Telegram
 4. Developer uses Claude Code to read your design and generate code
-5. Developer may run `/figma-check` to verify their implementation matches your design
+5. Developer may run `/improvs:figma-check` to verify their implementation matches your design
 
 ## When developers ask questions
 

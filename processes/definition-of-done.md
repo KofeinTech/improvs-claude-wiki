@@ -26,7 +26,7 @@ A task is "done" when all items on this checklist are true. No exceptions.
 
 ## Review
 
-- [ ] PR reviewed by another developer (or `/review` skill for solo projects)
+- [ ] PR reviewed by another developer (or `/improvs:review` skill for solo projects)
 - [ ] All review comments addressed
 - [ ] Squash merged to develop
 

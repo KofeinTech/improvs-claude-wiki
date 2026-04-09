@@ -1,19 +1,19 @@
-# /docs -- Project Documentation
+# /improvs:docs -- Project Documentation
 
 Generate or update project documentation. Covers README, API docs, architecture, deployment guide, environment variables, and database schema.
 
 ## Usage
 
 ```
-/docs [type]
+/improvs:docs [type]
 ```
 
 Types: `all`, `readme`, `api`, `architecture`, `deploy`, `env`, `schema`
 
 Example:
-- `/docs` -- generate all documentation
-- `/docs readme` -- just the README
-- `/docs api` -- just the API docs
+- `/improvs:docs` -- generate all documentation
+- `/improvs:docs readme` -- just the README
+- `/improvs:docs api` -- just the API docs
 
 ## Who uses this
 
@@ -32,5 +32,5 @@ Developers or leads who need to create or update project documentation.
 
 ## Related
 
-- [/docker-init](docker-init.md) -- set up Docker (referenced by deployment docs)
-- [/onboard](onboard.md) -- uses these docs to brief new team members
+- [/improvs:docker-init](docker-init.md) -- set up Docker (referenced by deployment docs)
+- [/improvs:onboard](onboard.md) -- uses these docs to brief new team members

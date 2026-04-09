@@ -66,7 +66,7 @@ Every repo includes `.github/pull_request_template.md`:
 ### Review process
 
 - **Teams with 2+ devs:** another developer reviews the PR
-- **Solo projects (Fantabase, TradingSim):** mandatory `/review` skill run + thorough self-review. CEO spot-checks periodically.
+- **Solo projects (Fantabase, TradingSim):** mandatory `/improvs:review` skill run + thorough self-review. CEO spot-checks periodically.
 
 ## Branch protection
 

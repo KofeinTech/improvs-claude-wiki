@@ -1,35 +1,40 @@
 # Skills Reference
 
-Skills are slash commands in Claude Code that automate common workflows. Type `/skill-name` in Claude Code to run them.
+Skills are slash commands that automate common workflows. Improvs skills are split across two surfaces:
 
-Skills are deployed to your Claude Code automatically via the Improvs organization. If a skill is missing, contact your manager.
+- **Claude Code CLI** (developers) -- delivered via the `improvs` plugin. Invoked as `/improvs:<skill>`. Auto-installed on every dev's machine via org managed settings.
+- **claude.ai web** (PMs, CEO) -- delivered via Organization Skills in the admin console. Invoked as `/create-feature`, `/create-bug`, etc.
 
-## For Developers
+## For Developers (Claude Code CLI)
+
+All developer skills are namespaced under the `improvs` plugin. Type `/improvs:` to see them.
 
 ### Daily workflow
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/start](skills/workflow/start.md) | Read Jira ticket, evaluate complexity, create branch, route to TDD or full pipeline. Handles bugs (investigation), hotfixes (branches from main), and features. | Starting any task -- features, bugs, hotfixes, everything |
-| [/finish](skills/workflow/finish.md) | Auto-runs /review and /test, push, create PR, update Jira. For hotfixes: dual PRs to main + develop. | Done coding, ready for PR |
+| [/improvs:start](skills/workflow/start.md) | Read Jira ticket, evaluate complexity, create branch, route to TDD or full pipeline. Handles bugs (investigation), hotfixes (branches from main), and features. | Starting any task -- features, bugs, hotfixes, everything |
+| [/improvs:finish](skills/workflow/finish.md) | Auto-runs /review and /test, push, create PR, update Jira. For hotfixes: dual PRs to main + develop. | Done coding, ready for PR |
 
 ### Quality
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/review](skills/quality/review.md) | Hard-block secrets, dispatch superpowers reviewer with Jira AC + project rules, verify AC coverage | Before commit (also auto-run by /finish) |
-| [/test](skills/quality/test.md) | Dispatch independent test subagent that writes tests from AC, not from implementation | Before /finish (also auto-run by /finish) |
-| [/figma-check](skills/quality/figma-check.md) | Verify UI matches Figma design, snap to design tokens, flag designer inconsistencies | After building a screen |
+| [/improvs:review](skills/quality/review.md) | Hard-block secrets, dispatch superpowers reviewer with Jira AC + project rules, verify AC coverage | Before commit (also auto-run by /finish) |
+| [/improvs:test](skills/quality/test.md) | Dispatch independent test subagent that writes tests from AC, not from implementation | Before /finish (also auto-run by /finish) |
+| [/improvs:figma-check](skills/quality/figma-check.md) | Verify UI matches Figma design, snap to design tokens, flag designer inconsistencies | After building a screen |
 
 ### Project setup
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/onboard](skills/setup/onboard.md) | Project briefing -- codebase, sprint, team | First time on a project |
-| [/docker-init](skills/setup/docker-init.md) | Generate Dockerfile + docker-compose | Setting up Docker |
-| [/docs](skills/setup/docs.md) | Generate README, API docs, architecture docs | Docs needed |
+| [/improvs:onboard](skills/setup/onboard.md) | Project briefing -- codebase, sprint, team | First time on a project |
+| [/improvs:docker-init](skills/setup/docker-init.md) | Generate Dockerfile + docker-compose | Setting up Docker |
+| [/improvs:docs](skills/setup/docs.md) | Generate README, API docs, architecture docs | Docs needed |
 
-## For PMs
+## For PMs (claude.ai web)
+
+These skills are available in the claude.ai web interface, not in Claude Code CLI.
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
@@ -37,26 +42,36 @@ Skills are deployed to your Claude Code automatically via the Improvs organizati
 | [/create-bug](skills/pm/create-bug.md) | Structured Jira bug report with repro steps | Bug found, needs a ticket |
 | [/health-check](skills/pm/health-check.md) | Audit Jira board + GitHub for stuck work, inconsistencies | Daily morning check or weekly review |
 | [/client-report](skills/pm/client-report.md) | Weekly progress report from Jira + GitHub data | End of week, before client update |
-| [/onboard](skills/setup/onboard.md) | Project briefing (PM mode -- team, client, deadlines) | First time managing a project |
+| [/improvs:onboard](skills/setup/onboard.md) | Project briefing (PM mode -- team, client, deadlines) | First time managing a project |
 
 ## Common flows
 
 | Scenario | Skills |
 |----------|--------|
-| New feature | `/start PINK-42` -> code -> `/finish` |
-| Bug fix | `/start PINK-55` -> Claude investigates and routes to TDD -> `/finish` |
-| Trivial fix (typo, color, config) | `/start PINK-50` -> Claude classifies as trivial, auto-skips ceremony -> `/finish` |
-| Production emergency | `/start PINK-99` -> auto-detects Critical priority, branches from main -> `/finish` creates dual PRs |
-| Review your own work before commit | `/review` |
-| PM creates work | `/create-feature PINK` or `/create-bug PINK` |
-| New on a project | `/onboard PINK` |
-| Morning health check | `/health-check PINK` |
+| New feature | `/improvs:start PINK-42` -> code -> `/improvs:finish` |
+| Bug fix | `/improvs:start PINK-55` -> Claude investigates and routes to TDD -> `/improvs:finish` |
+| Trivial fix (typo, color, config) | `/improvs:start PINK-50` -> Claude classifies as trivial, auto-skips ceremony -> `/improvs:finish` |
+| Production emergency | `/improvs:start PINK-99` -> auto-detects Critical priority, branches from main -> `/improvs:finish` creates dual PRs |
+| Review your own work before commit | `/improvs:review` |
+| PM creates work | `/create-feature PINK` or `/create-bug PINK` (on claude.ai web) |
+| New on a project | `/improvs:onboard PINK` |
+| Morning health check | `/health-check PINK` (on claude.ai web) |
+
+## How skills are deployed
+
+**CLI skills** are packaged as a plugin in the public repo [KofeinTech/claude-plugins](https://github.com/KofeinTech/claude-plugins). Org managed settings auto-register the marketplace and enable the plugin for every developer. Updates happen automatically when the plugin repo is updated.
+
+**Web skills** are uploaded as ZIPs to the claude.ai admin console (Organization Settings > Skills). Only admins can update them.
 
 ## How to use
 
 1. Open Claude Code in your project directory
-2. Type the skill command: `/start PINK-42`
+2. Type the skill command: `/improvs:start PINK-42`
 3. Follow the prompts -- Claude asks questions if anything is unclear
+
+## Troubleshooting
+
+If skills are missing, see the [setup troubleshooting](claude-code-setup.md#troubleshooting) section.
 
 ## Related
 

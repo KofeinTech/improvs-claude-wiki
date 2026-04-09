@@ -34,7 +34,7 @@ When you start Claude Code in a project directory, several layers of context loa
 | **Org-wide rules** | Improvs global rules (git workflow, security, behavior) deployed via Claude Organization settings. Loaded into every session. |
 | **Hooks** | Background safety checks that intercept dangerous commands and run quality gates before commits. |
 
-Together this means Claude isn't just "an AI in your terminal" -- it has the real-time state of your Jira board, your project's rules, and the conventions every developer at Improvs follows. That's why every task starts with `/start <JIRA-KEY>` (see below) -- the skill picks up all of this context automatically and routes the work without you having to brief Claude on any of it.
+Together this means Claude isn't just "an AI in your terminal" -- it has the real-time state of your Jira board, your project's rules, and the conventions every developer at Improvs follows. That's why every task starts with `/improvs:start <JIRA-KEY>` (see below) -- the skill picks up all of this context automatically and routes the work without you having to brief Claude on any of it.
 
 ## Your first task end-to-end
 
@@ -49,10 +49,10 @@ cd ~/code/your-project
 claude
 ```
 
-**2. Run `/start <JIRA-KEY>`**
+**2. Run `/improvs:start <JIRA-KEY>`**
 
 ```
-> /start PROJ-42
+> /improvs:start PROJ-42
 ```
 
 Claude reads the Jira ticket via the Jira MCP, checks the type and acceptance criteria, classifies the task complexity (trivial / simple / complex), creates a branch named `PROJ-42-<short-description>`, moves the ticket to "In Progress", and shows you a `READY TO START` block with the classification.
@@ -67,15 +67,15 @@ Claude reads the relevant files, proposes changes, and writes code. You see ever
 
 Claude never auto-commits. When the changes look right, you commit them. The pre-commit hooks run analyze + tests automatically -- if anything fails, fix it and commit again.
 
-**5. Run `/finish`**
+**5. Run `/improvs:finish`**
 
 ```
-> /finish
+> /improvs:finish
 ```
 
-`/finish` runs `/review` (which checks the diff against the Jira AC and hard-blocks any hardcoded secrets), runs `/test` (independent test generation if no test files were added), pushes the branch, creates the PR with a Jira link and AC checklist, moves the ticket to "In Review", and logs your time on the ticket.
+`/improvs:finish` runs `/improvs:review` (which checks the diff against the Jira AC and hard-blocks any hardcoded secrets), runs `/improvs:test` (independent test generation if no test files were added), pushes the branch, creates the PR with a Jira link and AC checklist, moves the ticket to "In Review", and logs your time on the ticket.
 
-If `/review` finds issues or `/test` fails, `/finish` stops and tells you what to fix. After fixing, re-run `/finish`.
+If review finds issues or tests fail, `/improvs:finish` stops and tells you what to fix. After fixing, re-run `/improvs:finish`.
 
 ## Key principles
 

@@ -1,11 +1,11 @@
-# /docker-init -- Docker Setup
+# /improvs:docker-init -- Docker Setup
 
 Generate Dockerfile, docker-compose.yml, docker-compose.prod.yml, and .dockerignore for a project. Auto-detects the stack and required services.
 
 ## Usage
 
 ```
-/docker-init
+/improvs:docker-init
 ```
 
 No arguments -- detects everything from project files.
@@ -30,4 +30,4 @@ Developers setting up Docker for a new or existing project.
 
 ## Related
 
-- [/docs](docs.md) -- generate project documentation including deployment guide
+- [/improvs:docs](docs.md) -- generate project documentation including deployment guide

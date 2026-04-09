@@ -109,7 +109,9 @@ Once you're in the org, these are deployed to your machine:
 - Docker rules (if `Dockerfile` detected)
 
 **Skills** (available as /slash-commands):
-- All [shared skills](skills.md) are provisioned via the org. Type `/` to see them.
+- Developer skills are delivered via the `improvs` plugin (auto-installed). Type `/improvs:` to see them.
+- PM/CEO skills are available on claude.ai web (Organization Skills).
+- See the [skills reference](skills.md) for the full list.
 
 ## Verify your setup
 
@@ -131,7 +133,7 @@ All three servers (github, atlassian, figma) should show as connected. If anythi
 
 ## Project-level config (CLAUDE.md)
 
-Every Improvs project must have a `CLAUDE.md` file in the repo root. Claude Code reads it automatically when you open a project directory. Without it, skills like /start, /review, and /finish may not detect the correct base branch or stack.
+Every Improvs project must have a `CLAUDE.md` file in the repo root. Claude Code reads it automatically when you open a project directory. Without it, skills like /improvs:start, /improvs:review, and /improvs:finish may not detect the correct base branch or stack.
 
 **What CLAUDE.md contains:**
 - Project name and Jira key
@@ -157,12 +159,13 @@ When creating a new project, copy the CLAUDE.md from the matching template repo 
 
 ### Skills not showing up
 
-If `/` doesn't list shared skills (like /start, /finish, /review):
+If `/improvs:` doesn't list skills (like /improvs:start, /improvs:finish, /improvs:review):
 
-1. Re-login to the org: `claude logout && claude login`
-2. Verify you're in the Improvs organization (check with your manager if unsure)
-3. Update the CLI: `npm update -g @anthropic-ai/claude-code`
-4. Restart Claude Code
+1. Check the plugin is installed: `claude plugin list` -- look for `improvs@improvs-marketplace`
+2. If missing, update marketplace: run `/plugin marketplace update` inside Claude Code
+3. Re-login to the org: `claude logout && claude login`
+4. Update the CLI: `npm update -g @anthropic-ai/claude-code`
+5. Restart Claude Code
 
 ### MCP server not connecting
 

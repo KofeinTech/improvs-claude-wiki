@@ -90,4 +90,4 @@ Created PINK-72: Add QR code profile sharing
 ## Related
 
 - [/create-bug](create-bug.md) -- for bug reports instead of features
-- [/start](../workflow/start.md) -- what developers use when they pick up the ticket (Story or Bug, /start handles both)
+- [/improvs:start](../workflow/start.md) -- what developers use when they pick up the ticket (Story or Bug, /improvs:start handles both)

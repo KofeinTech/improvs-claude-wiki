@@ -1,14 +1,14 @@
-# /onboard -- Project Briefing
+# /improvs:onboard -- Project Briefing
 
 Get a full briefing when joining a new project. Reads Jira project info, analyzes the codebase, and shows current sprint state.
 
 ## Usage
 
 ```
-/onboard <JIRA_PROJECT_KEY>
+/improvs:onboard <JIRA_PROJECT_KEY>
 ```
 
-Example: `/onboard PINK`
+Example: `/improvs:onboard PINK`
 
 ## Who uses this
 
@@ -35,4 +35,4 @@ Developers or PMs working on a project for the first time.
 
 ## Related
 
-- [/start](../workflow/start.md) -- after onboarding, start your first task
+- [/improvs:start](../workflow/start.md) -- after onboarding, start your first task

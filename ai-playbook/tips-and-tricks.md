@@ -73,9 +73,9 @@ Claude Code has a context window. When it fills up, older messages get compresse
 ## Working with skills
 
 - Type `/` to see all available skills
-- Skills accept arguments: `/start PINK-42`, `/review 47`
-- Skills chain together: `/start` -> code -> `/finish`
-- For production emergencies, `/start` auto-detects Critical priority and branches from main
+- Skills accept arguments: `/improvs:start PINK-42`, `/improvs:review 47`
+- Skills chain together: `/improvs:start` -> code -> `/improvs:finish`
+- For production emergencies, `/improvs:start` auto-detects Critical priority and branches from main
 - If a skill asks you a question, be specific. "I don't know" is better than a vague answer.
 - See [Skills Reference](skills.md) for the full list
 

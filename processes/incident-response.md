@@ -37,7 +37,7 @@ When you discover or are told about an incident:
 
 ### 3. Fix
 
-Use `/start <JIRA-KEY>` on the Critical/Blocker ticket. `/start` auto-detects the emergency, branches from `main` (not `develop`), and routes to TDD mode. After fixing, `/finish` creates two PRs (one to `main`, one syncing back to `develop`) and updates Jira.
+Use `/improvs:start <JIRA-KEY>` on the Critical/Blocker ticket. `/improvs:start` auto-detects the emergency, branches from `main` (not `develop`), and routes to TDD mode. After fixing, `/improvs:finish` creates two PRs (one to `main`, one syncing back to `develop`) and updates Jira.
 
 ### 4. Deploy
 

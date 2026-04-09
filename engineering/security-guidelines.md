@@ -54,7 +54,7 @@ If a secret is accidentally committed or any vulnerability is found:
 
 ## Code Security
 
-- Run `/review` before any commit that touches authentication, payments, or user data -- it hard-blocks hardcoded secrets, checks the diff against project rules, and verifies acceptance criteria are addressed
+- Run `/improvs:review` before any commit that touches authentication, payments, or user data -- it hard-blocks hardcoded secrets, checks the diff against project rules, and verifies acceptance criteria are addressed
 - Never disable SSL verification, even in development
 - Never hardcode URLs, tokens, or environment-specific values -- use config/constants
 - Dependencies: review new packages before adding. Prefer well-maintained libraries with active security updates
