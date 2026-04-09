@@ -87,6 +87,16 @@ After installing, authenticate inside Claude Code:
 3. Select `figma` > Authenticate
 4. Log in with your Figma account in the browser
 
+### 4. Verify MCP connections
+
+After setting up all three servers, open Claude Code and run:
+
+```
+/mcp
+```
+
+All three servers (github, atlassian, figma) should show as **connected** with a green status. If any server shows as disconnected or missing, re-run the setup step for that server before continuing.
+
 ## What happens automatically (from the org)
 
 Once you're in the org, these are deployed to your machine:
