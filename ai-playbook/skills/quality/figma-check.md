@@ -1,16 +1,18 @@
-# /improvs:figma-check -- Verify UI Against Figma
+# /improvs:figma-check -- Verify UI Against Design
 
 Compare your implemented UI against the Figma design. Checks spacing, colors, typography, and layout. Smart about rounding -- snaps to nearest design token and ignores 1-2px differences.
 
 ## Usage
 
 ```
-/improvs:figma-check [FIGMA_NODE_URL]
+/improvs:figma-check [DESIGN_SOURCE]
 ```
 
-Example: `/improvs:figma-check https://www.figma.com/file/abc123?node-id=42-1337`
+`DESIGN_SOURCE` can be:
+- A local design export: `/improvs:figma-check design/screens/login_screen.json` (recommended)
+- A Figma URL: `/improvs:figma-check https://www.figma.com/file/abc123?node-id=42-1337`
 
-If no URL provided, uses the Figma URL saved during `/improvs:start`.
+If no argument provided, checks `design/screens/` for available exports first, then falls back to any Figma URL saved during `/improvs:start`.
 
 ## Who uses this
 
@@ -18,7 +20,7 @@ Developers who built a UI screen and want to verify it matches the design before
 
 ## What happens when you run it
 
-1. **Reads the Figma design** via Figma MCP -- layout, spacing, colors, typography, borders, shadows
+1. **Reads the design** from local JSON export in `design/screens/` (created by `/improvs:figma-export`)
 2. **Reads the project's design tokens** -- theme file, color constants, spacing scale
 3. **Compares implementation vs design** -- checks each property, snapping both sides to the nearest design token before comparing
 4. **Reports findings** in three groups:
@@ -38,5 +40,7 @@ Developers who built a UI screen and want to verify it matches the design before
 
 ## Related
 
+- [/improvs:figma-export](figma-export.md) -- export Figma design to local JSON (run this first)
 - [/improvs:start](../workflow/start.md) -- saves Figma URL during task setup
 - [/improvs:finish](../workflow/finish.md) -- should run /improvs:figma-check before finishing UI tasks
+- [Figma to Code](../../figma-to-code.md) -- full workflow guide

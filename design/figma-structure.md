@@ -4,7 +4,7 @@ How to organize Figma files so AI can generate accurate Flutter code.
 
 ## Why structure matters
 
-Claude Code reads Figma designs via MCP and generates Flutter code. The quality of generated code depends entirely on how well the Figma file is structured. Bad structure = bad code = rework.
+Figma designs are exported to JSON (`/improvs:figma-export`) and Claude Code generates Flutter code from the local `design/` folder. The quality of generated code depends entirely on how well the Figma file is structured. Bad structure = bad code = rework.
 
 ## Frame size
 

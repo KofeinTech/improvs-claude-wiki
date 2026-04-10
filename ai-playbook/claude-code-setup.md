@@ -19,7 +19,7 @@ What the script does:
 3. Logs you into the Improvs Claude organization
 4. Sets up GitHub MCP (opens browser to create a Personal Access Token)
 5. Sets up Atlassian/Jira MCP (OAuth login in browser)
-6. Installs Figma MCP plugin (authenticate later via `/mcp`)
+6. Installs Superpowers plugin
 
 The script guides you through each step interactively -- it opens browser windows and waits for you to complete each action before moving on. Works on macOS, Linux, and Windows (WSL).
 
@@ -74,18 +74,22 @@ claude mcp add --transport http --scope user atlassian https://mcp.atlassian.com
 
 When you first use it in Claude Code, a browser window opens for Atlassian OAuth. Log in with your account that has access to improvs.atlassian.net. If you don't have access, ask your manager to invite you at https://improvs.atlassian.net/people.
 
-**Figma MCP** -- lets Claude read designs and verify UI implementation:
+**Figma API key** -- lets Claude export and read Figma designs via REST API:
 
-Run in your terminal:
+The team uses a shared Figma Personal Access Token from a designer who already has a Full seat. No extra cost per developer.
+
+1. Ask your lead for the shared `FIGMA_API_KEY` for your project
+2. Add it to your shell profile:
 ```bash
-claude plugin install figma@claude-plugins-official
+echo 'export FIGMA_API_KEY=figd_xxxxx' >> ~/.zshrc
+source ~/.zshrc
+```
+3. Test it works by running in Claude Code:
+```
+/improvs:figma-export https://www.figma.com/design/YOUR_PROJECT_FILE?node-id=1:2
 ```
 
-After installing, authenticate inside Claude Code:
-1. Open Claude Code in any project: `claude`
-2. Type `/mcp`
-3. Select `figma` > Authenticate
-4. Log in with your Figma account in the browser
+This exports the design to local `design/` folder as JSON + SVG assets. All other skills (`/improvs:start`, `/improvs:figma-check`) read from these local files automatically.
 
 ### 4. Verify MCP connections
 
@@ -95,7 +99,9 @@ After setting up all three servers, open Claude Code and run:
 /mcp
 ```
 
-All three servers (github, atlassian, figma) should show as **connected** with a green status. If any server shows as disconnected or missing, re-run the setup step for that server before continuing.
+Both servers (github, atlassian) should show as **connected** with a green status. If any server shows as disconnected or missing, re-run the setup step for that server.
+
+Figma uses `FIGMA_API_KEY` env var (provided by your lead). Verify it works by running `/improvs:figma-export` with any Figma URL.
 
 ## What happens automatically (from the org)
 
@@ -139,7 +145,7 @@ Check MCP connections:
 /mcp
 ```
 
-All three servers (github, atlassian, figma) should show as connected. If anything is missing, contact your manager.
+Both servers (github, atlassian) should show as connected. Figma uses `FIGMA_API_KEY` env var -- verify with `/improvs:figma-export`. If anything is missing, contact your manager.
 
 ## Project-level config (CLAUDE.md)
 
@@ -188,7 +194,10 @@ If `/mcp` shows a server as disconnected or a skill says "Jira MCP failed":
    claude mcp remove atlassian
    claude mcp add --transport http --scope user atlassian https://mcp.atlassian.com/v1/mcp
    ```
-4. For Figma: re-authenticate via `/mcp` > figma > Authenticate
+4. For Figma: uses `FIGMA_API_KEY` env var. Check:
+   - `echo $FIGMA_API_KEY` -- should print the token
+   - If empty, ask your lead for the shared key and add to `~/.zshrc`
+   - If set but exports fail with 403, the token may have expired -- ask the designer to regenerate
 
 ### Hooks not firing
 

@@ -22,7 +22,8 @@ All developer skills are namespaced under the `improvs` plugin. Type `/improvs:`
 |-------|-------------|-------------|
 | [/improvs:review](skills/quality/review.md) | Hard-block secrets, dispatch superpowers reviewer with Jira AC + project rules, verify AC coverage | Before commit (also auto-run by /finish) |
 | [/improvs:test](skills/quality/test.md) | Dispatch independent test subagent that writes tests from AC, not from implementation | Before /finish (also auto-run by /finish) |
-| [/improvs:figma-check](skills/quality/figma-check.md) | Verify UI matches Figma design, snap to design tokens, flag designer inconsistencies | After building a screen |
+| [/improvs:figma-export](skills/quality/figma-export.md) | Export Figma design to local JSON + SVG assets in `design/` folder via REST API | Before building a UI screen |
+| [/improvs:figma-check](skills/quality/figma-check.md) | Verify UI matches Figma design (from local `design/` export), snap to design tokens, flag designer inconsistencies | After building a screen |
 
 ### Project setup
 
@@ -48,6 +49,7 @@ These skills are available in the claude.ai web interface, not in Claude Code CL
 
 | Scenario | Skills |
 |----------|--------|
+| New UI screen | `/improvs:figma-export <URL>` -> `/improvs:start PINK-42` -> code -> `/improvs:figma-check` -> `/improvs:finish` |
 | New feature | `/improvs:start PINK-42` -> code -> `/improvs:finish` |
 | Bug fix | `/improvs:start PINK-55` -> Claude investigates and routes to TDD -> `/improvs:finish` |
 | Trivial fix (typo, color, config) | `/improvs:start PINK-50` -> Claude classifies as trivial, auto-skips ceremony -> `/improvs:finish` |

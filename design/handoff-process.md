@@ -5,11 +5,17 @@ How designers hand off work to developers at Improvs.
 ## Overview
 
 ```
-Designer finishes screen  -->  Marks "Ready for dev"  -->  Shares Figma link
+Designer finishes screen  -->  Marks "Ready for dev"  -->  Shares Figma link in Jira
          |                                                        |
-Developer receives link   -->  Opens Claude Code      -->  Generates Flutter code
+Developer runs             /improvs:figma-export <URL>            |
+         |                 (exports JSON + assets to design/)     |
          |                                                        |
-Developer reviews output  -->  Refines & tests        -->  Commits
+Developer builds from      design/screens/*.json                  |
+         |                 (Claude reads local files, no API)     |
+         |                                                        |
+Developer verifies         /improvs:figma-check                   |
+         |                                                        |
+Developer commits          design/ + implementation  -->  PR
 ```
 
 ## Designer checklist (before handoff)
@@ -48,32 +54,45 @@ Complete this checklist before marking a frame as "Ready for dev":
 
 1. Receive the Figma link from designer (via Telegram or Jira ticket)
 2. Open Claude Code in the project directory
-3. Describe the task and paste the Figma link:
+3. Export the design to local files:
 
 ```
-Build the settings screen from this Figma design:
-[Figma URL]
+/improvs:figma-export https://www.figma.com/design/ABC123/File?node-id=12:34
+```
+
+This creates `design/screens/<screen_name>.json`, `design/tokens.json`, and SVG icons in `design/assets/`.
+
+4. Build the screen from the local export:
+
+```
+Build the settings screen from this design:
+See design/screens/settings_screen.json
 
 Follow the feature structure in lib/features/.
 Use design tokens from lib/core/theme/.
 ```
 
-4. Claude reads the design via Figma MCP and generates code
-5. Review the output: compare running app against Figma
-6. Fix mismatches, add business logic, write tests
-7. Commit and create PR
+5. Verify the implementation matches the design:
 
-## What developers can access in Figma Dev Mode
+```
+/improvs:figma-check design/screens/settings_screen.json
+```
+
+6. Fix mismatches, add business logic, write tests
+7. Commit both `design/` files and implementation, create PR
+
+## What the export contains
 
 | Property | Where to find it |
 |----------|-----------------|
-| Dimensions (width, height) | Inspect panel |
-| Spacing (padding, gaps, margins) | Auto Layout properties |
-| Colors (hex + opacity) | Figma Variables |
-| Typography (font, size, weight, line-height) | Text Styles |
-| Shadows (offset, blur, spread, color) | Effect Styles |
-| Border radius | Variables or inspect panel |
-| Assets (icons, images) | Export settings (SVG for icons, PNG for images) |
+| Dimensions (width, height) | `size` field in screen JSON |
+| Spacing (padding, gaps, margins) | `padding`, `itemSpacing` fields |
+| Colors (hex + opacity) | `fills[].hex` and `fills[].opacity` |
+| Typography (font, size, weight, line-height) | `typography` object on TEXT nodes |
+| Shadows, borders | `effects`, `strokes` fields |
+| Border radius | `cornerRadius` field |
+| Assets (icons) | `design/assets/*.svg` (auto-exported) |
+| Design tokens | `design/tokens.json` (colors, spacing, typography, radii) |
 
 ## When designs are unclear
 
