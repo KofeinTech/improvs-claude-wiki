@@ -192,13 +192,13 @@ In the board settings, map statuses to columns:
 
 ### 3. Required ticket fields
 
-The `/start` and `/finish` skills read and write these fields. They must exist and be visible on the ticket screen:
+The `/start` and `/finish` skills store all metadata in ticket fields (no comments). They must exist and be visible on the ticket screen:
 
 | Field | Jira field ID | Set by | Read by | Purpose |
 |-------|--------------|--------|---------|---------|
 | Story Points | `story_points` or `customfield_10016` | /start | /finish | Complexity (1=trivial, 3=simple, 8=complex) |
 | Start date | `startDate` | /start | /finish | When work began |
-| Due date | `dueDate` | /finish | reports | When work ended |
+| Due date | `dueDate` | /finish | reports | When work ended (end date) |
 | Labels | `labels` | /start | /finish, /review | Hotfix detection (`hotfix` label) |
 
 **How to enable these fields on the ticket screen:**
@@ -210,12 +210,31 @@ The `/start` and `/finish` skills read and write these fields. They must exist a
    - If a field is missing, click **+ Add a field** and search for it
 3. Save the layout
 
-### 4. GitHub integration
+### 4. How skills use Jira (no comments)
 
-See the [GitHub for Jira integration](#github-for-jira-integration) section below.
+The skills use **fields and remote links only** -- no comments are added to tickets.
+
+**`/start` writes:**
+- Story points, start date, labels (fields)
+- Remote link to GitHub branch (Web Links section)
+- Reads start time later from transition history (when moved to In Progress)
+
+**`/finish` writes:**
+- Due date as end date (field)
+- Remote link to GitHub PR (Web Links section, both PRs for hotfixes)
+- Worklog entry with calculated duration
+
+**`/finish` reads:**
+- Complexity from story points (1→trivial, 3→simple, 8→complex)
+- Hotfix flag from `hotfix` label
+- Start time from ticket changelog (In Progress transition timestamp)
+
+### 5. GitHub integration
+
+See the [GitHub for Jira integration](#github-for-jira-integration) section above.
 Make sure the project's repository is included in the sync.
 
-### 5. Automation rules
+### 7. Automation rules
 
 Set up these automation rules in **Project Settings** > **Automation**:
 
@@ -226,7 +245,7 @@ Set up these automation rules in **Project Settings** > **Automation**:
 
 These are often configured at the org level. Verify they work for your new project by creating a test ticket and branch.
 
-### 6. Sprint setup (Scrum projects)
+### 8. Sprint setup (Scrum projects)
 
 - Sprint duration: 2 weeks
 - Sprint starts on Monday
