@@ -126,7 +126,7 @@ Commits and PR titles with the key also get linked. The Claude Code branch namin
 
 ## New project setup (admin/lead)
 
-When creating a new Jira project for a client or internal work, configure these settings so that `/start`, `/finish`, `/review`, and GitHub integration work correctly.
+When creating a new Jira project for a client or internal work, configure these settings so that `/improvs:start`, `/improvs:finish`, `/improvs:review`, and GitHub integration work correctly.
 
 ### 1. Create the project
 
@@ -154,7 +154,7 @@ In the board settings, map statuses to columns:
 
 ### 3. Required ticket fields
 
-The `/start` and `/finish` skills store all metadata in ticket fields (no comments). They must exist and be visible on the ticket screen:
+The `/improvs:start` and `/improvs:finish` skills store all metadata in ticket fields (no comments). They must exist and be visible on the ticket screen:
 
 | Field | Jira field ID | Set by | Read by | Purpose |
 |-------|--------------|--------|---------|---------|
@@ -177,16 +177,16 @@ The `/start` and `/finish` skills store all metadata in ticket fields (no commen
 The skills use **ticket fields only** -- no comments are added to tickets.
 Branch and PR links appear in the **Development** section automatically via the GitHub for Jira integration (because branch names contain the ticket key).
 
-**`/start` writes:**
+**`/improvs:start` writes:**
 - Story points, start date, labels (fields)
 - Pushes branch to origin (triggers Development panel link automatically)
 
-**`/finish` writes:**
+**`/improvs:finish` writes:**
 - Due date as end date (field)
 - Worklog entry with calculated duration
 - Creates PR from the ticket branch (triggers Development panel link automatically)
 
-**`/finish` reads:**
+**`/improvs:finish` reads:**
 - Complexity from story points (1→trivial, 3→simple, 8→complex)
 - Hotfix flag from `hotfix` label
 - Start time from ticket changelog (In Progress transition timestamp)

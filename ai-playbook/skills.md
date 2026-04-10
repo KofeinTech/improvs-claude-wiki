@@ -14,7 +14,7 @@ All developer skills are namespaced under the `improvs` plugin. Type `/improvs:`
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
 | [/improvs:start](skills/workflow/start.md) | Read Jira ticket, evaluate complexity, create branch, route to TDD or full pipeline. Handles bugs (investigation), hotfixes (branches from main), and features. | Starting any task -- features, bugs, hotfixes, everything |
-| [/improvs:finish](skills/workflow/finish.md) | Auto-runs /review and /test, push, create PR, update Jira. For hotfixes: dual PRs to main + develop. | Done coding, ready for PR |
+| [/improvs:finish](skills/workflow/finish.md) | Auto-runs /review and /write-tests, push, create PR, update Jira. For hotfixes: dual PRs to main + develop. | Done coding, ready for PR |
 
 ### Quality
 

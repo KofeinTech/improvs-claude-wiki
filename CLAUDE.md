@@ -20,7 +20,7 @@ ai-playbook/        -- Claude Code guides and skills reference
   claude-code-setup.md  -- manual setup instructions, MCP configuration
   best-practices.md     -- effective prompting, plan mode, shortcuts
   skills.md             -- full catalog of /slash-commands
-  skills/               -- individual skill pages (start, finish, review, test, etc.)
+  skills/               -- individual skill pages (start, finish, review, write-tests, etc.)
   tips-and-tricks.md    -- plan mode, permissions, power-user features
   prompt-library.md     -- ready-to-use prompts for common tasks
   figma-to-code.md      -- generating Flutter code from Figma designs
