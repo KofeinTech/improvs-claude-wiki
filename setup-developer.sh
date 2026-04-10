@@ -6,7 +6,7 @@
 #   1. Node.js (if missing)
 #   2. Claude Code CLI + org login
 #   3. Atlassian account (guided signup if needed)
-#   4. GitHub MCP server (with PAT)
+#   4. GitHub CLI (gh) + MCP server (with PAT)
 #   5. Atlassian (Jira) MCP server (OAuth)
 #   6. Superpowers plugin
 #
@@ -226,8 +226,62 @@ setup_atlassian_account() {
 # Step 4: GitHub MCP
 # ---------------------------------------------------------------------------
 setup_github_mcp() {
-    step "Step 4/6: GitHub MCP Server"
+    step "Step 4/6: GitHub CLI + MCP Server"
 
+    # Install gh CLI if missing
+    if command -v gh &>/dev/null; then
+        success "GitHub CLI already installed: $(gh --version | head -1)"
+    else
+        info "Installing GitHub CLI (gh)..."
+        case "$OS" in
+            macos)
+                if command -v brew &>/dev/null; then
+                    brew install gh
+                else
+                    fail "Homebrew required to install gh. Install Homebrew first."
+                fi
+                ;;
+            linux|wsl)
+                if command -v apt-get &>/dev/null; then
+                    (type -p wget >/dev/null || sudo apt-get install wget -y) \
+                    && sudo mkdir -p -m 755 /etc/apt/keyrings \
+                    && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+                    && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+                    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+                    && sudo apt-get update -qq && sudo apt-get install gh -y -qq
+                elif command -v dnf &>/dev/null; then
+                    sudo dnf install -y gh
+                else
+                    warn "Cannot install gh automatically. Install manually: https://cli.github.com"
+                fi
+                ;;
+            windows-git-bash)
+                echo "  Download and install GitHub CLI:"
+                echo "    https://cli.github.com"
+                open_url "https://cli.github.com"
+                wait_for_user "Press Enter after installing gh..."
+                ;;
+        esac
+        if command -v gh &>/dev/null; then
+            success "GitHub CLI installed: $(gh --version | head -1)"
+        else
+            warn "gh CLI not found after install attempt. You can install later: https://cli.github.com"
+        fi
+    fi
+
+    # Authenticate gh if not already
+    if gh auth status &>/dev/null 2>&1; then
+        success "GitHub CLI already authenticated"
+    else
+        info "Authenticating GitHub CLI..."
+        echo "  A browser window will open for GitHub login."
+        echo ""
+        gh auth login -h github.com -p https -w || {
+            warn "gh auth did not complete. You can authenticate later: gh auth login"
+        }
+    fi
+
+    echo ""
     echo "  GitHub MCP lets Claude read repos, create PRs, and manage issues."
     echo ""
     echo "  You need a Personal Access Token (classic). The script will"
@@ -347,6 +401,13 @@ verify_setup() {
         issues=$((issues + 1))
     fi
 
+    if command -v gh &>/dev/null; then
+        success "GitHub CLI: $(gh --version | head -1)"
+    else
+        warn "GitHub CLI: not found"
+        issues=$((issues + 1))
+    fi
+
     echo ""
     info "Configured MCP servers:"
     claude mcp list 2>/dev/null || warn "Could not list MCP servers"
@@ -394,7 +455,7 @@ echo "  This script will set up your machine for development:"
 echo "    - Node.js"
 echo "    - Claude Code CLI + organization login"
 echo "    - Atlassian (Jira) account + MCP"
-echo "    - GitHub MCP"
+echo "    - GitHub CLI (gh) + MCP"
 echo "    - Superpowers plugin"
 echo ""
 echo "  It will open browser windows for login/signup."
