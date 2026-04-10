@@ -154,31 +154,31 @@ In the board settings, map statuses to columns:
 
 ### 3. Required ticket fields
 
-The `/improvs:start` and `/improvs:finish` skills store all metadata in ticket fields (no comments). They must exist and be visible on the ticket screen:
+The `/improvs:start` and `/improvs:finish` skills store metadata in ticket fields and labels (no comments). These fields must exist and be visible on the ticket screen:
 
 | Field | Jira field ID | Set by | Read by | Purpose |
 |-------|--------------|--------|---------|---------|
-| Story Points | `story_points` or `customfield_10016` | /start | /finish | Complexity (1=trivial, 3=simple, 8=complex) |
 | Start date | `startDate` | /start | /finish | When work began |
 | Due date | `dueDate` | /finish | reports | When work ended (end date) |
-| Labels | `labels` | /start | /finish, /review | Hotfix detection (`hotfix` label) |
+| Labels | `labels` | /start | /finish, /review | Complexity (`complexity:trivial`, `complexity:simple`, `complexity:complex`) + hotfix detection (`hotfix`) |
 
 **How to enable these fields on the ticket screen:**
 
 1. Go to **Project Settings** > **Issue Types**
 2. For each issue type (Epic, Task, Bug):
    - Click the issue type name to open its field configuration
-   - Drag **Story Points**, **Start date**, **Due date**, and **Labels** into the layout
+   - Drag **Start date**, **Due date**, and **Labels** into the layout
    - If a field is missing, click **+ Add a field** and search for it
 3. Save the layout
 
 ### 4. How skills use Jira (no comments)
 
-The skills use **ticket fields only** -- no comments are added to tickets.
+The skills use **ticket fields and labels** -- no comments are added to tickets.
 Branch and PR links appear in the **Development** section automatically via the GitHub for Jira integration (because branch names contain the ticket key).
 
 **`/improvs:start` writes:**
-- Story points, start date, labels (fields)
+- Start date (field)
+- Labels: `complexity:trivial` / `complexity:simple` / `complexity:complex` + `hotfix` if applicable
 - Pushes branch to origin (triggers Development panel link automatically)
 
 **`/improvs:finish` writes:**
@@ -187,7 +187,7 @@ Branch and PR links appear in the **Development** section automatically via the 
 - Creates PR from the ticket branch (triggers Development panel link automatically)
 
 **`/improvs:finish` reads:**
-- Complexity from story points (1→trivial, 3→simple, 8→complex)
+- Complexity from `complexity:*` label
 - Hotfix flag from `hotfix` label
 - Start time from ticket changelog (In Progress transition timestamp)
 
@@ -212,7 +212,6 @@ These are often configured at the org level. Verify they work for your new proje
 ```
 - [ ] Project created with correct key and type (Kanban)
 - [ ] Board columns: Backlog / To Do / In Progress / In Review / Done / Blocked
-- [ ] Story Points field visible on all issue types
 - [ ] Start date field visible on all issue types
 - [ ] Due date field visible on all issue types
 - [ ] Labels field visible on all issue types
