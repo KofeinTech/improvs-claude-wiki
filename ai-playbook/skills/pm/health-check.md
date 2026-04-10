@@ -20,8 +20,8 @@ PMs (daily morning check) and leads (weekly review).
 
 - Tickets stuck in "In Progress" for 2+ days
 - Tickets untouched for 7+ days
-- Unassigned tickets in the current sprint
-- Tickets missing acceptance criteria
+- Unassigned tickets in To Do or In Progress
+- Tickets missing acceptance criteria (Tasks/Bugs need testable AC; Epics need high-level success criteria)
 - Blocked tickets
 - Status inconsistencies (e.g., "In Review" with no PR, "Done" with no merged PR)
 
@@ -43,14 +43,15 @@ Date: 2026-04-06
 - PR #47 has merge conflicts, open 4 days
 
 --- WARNINGS (act this week) ---
-- [PINK-38] No acceptance criteria -- in current sprint
-- 2 tickets unassigned in sprint
+- [PINK-38] No acceptance criteria -- in To Do
+- 2 tickets unassigned in active columns
+- To Do has only 2 tickets -- next Epic breakdown due
 
 --- INFO ---
-- Sprint completion: 6/10 tickets done (60%)
+- Active Epic "Profile & settings": 4/7 Tasks done
 - No blockers found
 
-SUMMARY: 2 critical, 2 warnings
+SUMMARY: 2 critical, 3 warnings
 ```
 
 Each issue includes a suggested action (ping reviewer, add AC, delete branch, etc.).

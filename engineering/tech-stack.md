@@ -55,7 +55,7 @@ Both FastAPI and Django are acceptable -- pick whichever fits the project. Green
 | Tool | Purpose |
 |------|---------|
 | GitHub (Team plan) | Source code, PRs, CI/CD via Actions |
-| Jira (Cloud Standard) | Project management, sprint tracking |
+| Jira (Cloud Standard) | Project management, Kanban boards |
 | Claude Code (Team) | AI-assisted development |
 | Azure | Cloud hosting (ACI, ACR) |
 | Figma | Design, prototyping, handoff |

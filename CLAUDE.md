@@ -28,7 +28,7 @@ ai-playbook/        -- Claude Code guides and skills reference
 
 developer-rules/    -- all 11 rules on one page (single README.md)
 engineering/        -- tech stack, git workflow, coding standards, code review
-processes/          -- onboarding, sprint workflow, Jira workflow, PM guide, incidents
+processes/          -- onboarding, team workflow (Kanban), Jira workflow, PM guide, incidents
 design/             -- Figma rules, design system, handoff process
 ```
 

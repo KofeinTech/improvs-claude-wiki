@@ -57,7 +57,7 @@ Flag issues in the PR or Jira ticket.
 | Tool | What for |
 |------|----------|
 | Figma | Design, prototyping, handoff |
-| Jira | Track design tasks, see sprint context |
+| Jira | Track design tasks, see current work in flight |
 | Telegram | Quick communication with devs |
 
 ## Related

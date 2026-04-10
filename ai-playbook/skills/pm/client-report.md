@@ -22,14 +22,14 @@ PMs preparing the weekly update for a client.
    - Tickets completed (moved to Done)
    - Tickets in progress with estimates
    - Blockers and stale tickets (>3 days no update)
-   - Upcoming sprint items
+   - Upcoming work (top To Do items)
 2. **Reads GitHub data**:
    - PRs merged (count and summary)
    - Key changes (features added, bugs fixed)
 3. **Generates a branded HTML report**:
    - Improvs.com branding (logo, colors, fonts)
    - Sections: Completed, In Progress, Blockers, Next Week, Summary
-   - Sprint progress percentage
+   - Epic progress snapshot (Done / Total Tasks per active Epic)
 4. **Outputs the HTML file** for you to review, adjust, and send
 
 ## Report sections
@@ -41,7 +41,7 @@ PMs preparing the weekly update for a client.
 | In Progress | Active tickets with progress and ETA |
 | Blockers | Anything blocking progress, who needs to act |
 | Next Week Plan | Planned tickets |
-| Summary | Sprint progress, health status (On Track / At Risk / Blocked) |
+| Summary | Weekly completed count, Epic progress, health status (On Track / At Risk / Blocked) |
 
 ## Important rules
 

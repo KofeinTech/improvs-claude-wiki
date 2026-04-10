@@ -87,10 +87,10 @@ App crashes immediately
 Every time
 
 Create this ticket in Jira?
-> Yes, add to current sprint
+> Yes, move to To Do
 
 Created PINK-73: App crashes on notification tap (Android 14)
-Critical bug -- added to current sprint
+Critical bug -- moved to To Do
 ```
 
 ## What Claude enforces

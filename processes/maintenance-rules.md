@@ -6,14 +6,14 @@ This system only works if it stays current. These are the rules for keeping ever
 
 | Owner | What they maintain |
 |-------|-------------------|
-| **PM (Darya)** | processes/, Jira boards, sprint reports |
+| **PM (Darya)** | processes/, Jira boards, weekly client reports |
 | **HR (Alina)** | onboarding/offboarding execution |
 | **Developers** | engineering/ standards, ai-playbook/ content, project CLAUDE.md files |
 | **CEO** | Private repo (skills, hooks, settings), monthly + quarterly reviews, wiki overall |
 
 ## Weekly review (PM, 15 min)
 
-- Jira: orphan tickets? stale sprints?
+- Jira: orphan tickets? stale Backlog items? empty To Do columns?
 - Team changes: anyone joined/left? Notify HR
 - GitHub: PRs open > 3 days? Abandoned branches?
 

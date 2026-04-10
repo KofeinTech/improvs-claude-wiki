@@ -7,8 +7,10 @@ How things work at Improvs -- from your first day to daily operations.
 | Guide | Audience | Description |
 |-------|----------|-------------|
 | [Onboarding](onboarding.md) | New hires | Day 1-5 checklist: accounts, tools, wiki, first task |
+| [New Project Setup](new-project-setup.md) | PM | Kickoff playbook when a new project lands: Figma + spec → Jira + backlog, without a dev call |
 | [Jira Workflow](jira-workflow.md) | Everyone | How to use Jira: tickets, boards, statuses, automation |
-| [Sprint Workflow](sprint-workflow.md) | Everyone | 2-week sprints, planning, syncs, reviews |
+| [Team Workflow](team-workflow.md) | Everyone | Continuous Kanban flow, board states, communication norms |
+| [Ticket Templates](ticket-templates.md) | Everyone | Epic, Task, Bug templates, Definition of Ready, sizing rules |
 | [PM Guide](pm-guide.md) | PM (Darya) | Daily/weekly playbook for project management |
 | [Definition of Done](definition-of-done.md) | Developers | Checklist for completing a task |
 | [Incident Response](incident-response.md) | Everyone | What to do when something breaks |

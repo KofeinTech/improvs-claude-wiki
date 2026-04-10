@@ -28,7 +28,7 @@ All developer skills are namespaced under the `improvs` plugin. Type `/improvs:`
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
-| [/improvs:onboard](skills/setup/onboard.md) | Project briefing -- codebase, sprint, team | First time on a project |
+| [/improvs:onboard](skills/setup/onboard.md) | Project briefing -- codebase, active Epics, team | First time on a project |
 | [/improvs:docker-init](skills/setup/docker-init.md) | Generate Dockerfile + docker-compose | Setting up Docker |
 | [/improvs:docs](skills/setup/docs.md) | Generate README, API docs, architecture docs | Docs needed |
 

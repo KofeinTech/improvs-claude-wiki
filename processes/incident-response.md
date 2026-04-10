@@ -18,7 +18,7 @@ What to do when something breaks in production.
 | Critical | App is down or unusable for all users | Immediately | App crashes on launch, API returns 500 for all requests |
 | High | Major feature broken, workaround exists | Within 2 hours | Login fails, payments broken, data loss |
 | Medium | Feature partially broken, affects some users | Within 24 hours | UI glitch on specific devices, slow performance |
-| Low | Minor issue, cosmetic | Next sprint | Wrong icon, alignment issue, typo |
+| Low | Minor issue, cosmetic | Next few days | Wrong icon, alignment issue, typo |
 
 ## Response process
 
@@ -63,4 +63,4 @@ After the fix is deployed, answer these in the Jira ticket:
 | Critical | CEO + PM + all project developers immediately |
 | High | PM + assigned developer |
 | Medium | Assigned developer |
-| Low | Add to backlog, assign in next sprint planning |
+| Low | Add to backlog |
