@@ -212,17 +212,17 @@ The `/start` and `/finish` skills store all metadata in ticket fields (no commen
 
 ### 4. How skills use Jira (no comments)
 
-The skills use **fields and remote links only** -- no comments are added to tickets.
+The skills use **ticket fields only** -- no comments are added to tickets.
+Branch and PR links appear in the **Development** section automatically via the GitHub for Jira integration (because branch names contain the ticket key).
 
 **`/start` writes:**
 - Story points, start date, labels (fields)
-- Remote link to GitHub branch (Web Links section)
-- Reads start time later from transition history (when moved to In Progress)
+- Pushes branch to origin (triggers Development panel link automatically)
 
 **`/finish` writes:**
 - Due date as end date (field)
-- Remote link to GitHub PR (Web Links section, both PRs for hotfixes)
 - Worklog entry with calculated duration
+- Creates PR from the ticket branch (triggers Development panel link automatically)
 
 **`/finish` reads:**
 - Complexity from story points (1→trivial, 3→simple, 8→complex)
