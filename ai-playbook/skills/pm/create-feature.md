@@ -1,20 +1,27 @@
 # /create-feature -- Create Feature Ticket
 
-Guided creation of a Jira ticket. You describe what you need, and Claude decides whether it's an **Epic** (planning container for a multi-Task feature area) or a **Task** (single unit of work) based on the scope, then walks you through the right flow.
+Two modes:
+
+1. **Create mode** (default): describe what you need, Claude auto-classifies as **Epic** or **Task**, walks you through the right flow.
+2. **Breakdown mode**: point at an existing Epic, Claude reads its scope + Figma and drafts all Tasks for it in one session.
 
 ## Usage
 
 ```
 /create-feature <JIRA_PROJECT_KEY>
+/create-feature <JIRA_PROJECT_KEY> breakdown <Epic name or key>
 ```
 
-Example: `/create-feature PINK`
+Examples:
+- `/create-feature PINK` -- create a new Epic or Task
+- `/create-feature PINK breakdown Authentication system` -- break down the auth Epic into Tasks
+- `/create-feature PINK make tasks for PINK-5` -- same, by Epic key
 
 Valid project keys: FANT, PINK, CUE, REW, TRAD, SOL, IMP
 
 ## Who uses this
 
-PMs, CEO, and developers who need to create a ticket in Jira.
+PMs, CEO, and developers who need to create tickets in Jira or break down Epics into Tasks.
 
 ## How Claude decides Epic vs Task
 
@@ -175,7 +182,63 @@ drafted ONLY when the team is ready to start working on it -- not now.
 When you are ready to break it down, ask Claude in free chat:
   "Break down the 'Authentication system' Epic into Tasks"
 
-See processes/new-project-setup.md for the breakdown flow.
+To break it down later, run:
+  /create-feature PINK breakdown Authentication system
+```
+
+## Example: Breakdown mode
+
+```
+> /create-feature PINK breakdown Authentication system
+
+Reading Epic PINK-80: Authentication system...
+
+Scope bullets:
+  - Login screen (email + password)
+  - Register screen with email verification
+  - Password reset flow
+  - Session management
+  - Google OAuth
+
+Figma frames found: 4 (login, register, reset, verify)
+
+TASKS FOR EPIC: PINK-80 Authentication system
+==============================================
+5 Tasks drafted:
+
+  1. [HIGH] Implement login screen
+     AC: email/password input, validation, error state, remember me
+     Figma: login frame found
+
+  2. [HIGH] Implement register screen
+     AC: email input, password rules, trigger verification email
+     Figma: register frame found
+
+  3. [MEDIUM] Add password reset flow
+     AC: request reset, email sent, new password screen
+     Figma: reset frame found
+
+  4. [MEDIUM] Add session management
+     AC: token refresh, auto-logout on expiry, persist across restart
+
+  5. [MEDIUM] Integrate Google OAuth
+     AC: Google sign-in button, OAuth flow, account linking
+
+Create all in Jira?
+> yes
+
+Which Tasks should move to To Do? (numbers, 'all', or 'none')
+> 1, 2
+
+Created:
+  PINK-81  Implement login screen           [To Do]
+  PINK-82  Implement register screen        [To Do]
+  PINK-83  Add password reset flow          [Backlog]
+  PINK-84  Add session management           [Backlog]
+  PINK-85  Integrate Google OAuth           [Backlog]
+
+All linked to Epic PINK-80.
+Developers can now run /improvs:start PINK-81
 ```
 
 ## What Claude enforces
