@@ -39,6 +39,7 @@ These skills are available in the claude.ai web interface, not in Claude Code CL
 
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
+| [/project-kickoff](skills/pm/project-kickoff.md) | Full project setup: read Figma, draft project description + Epics, create in Jira | New project lands, PM needs to set up Jira |
 | [/create-feature](skills/pm/create-feature.md) | Guided Jira feature ticket with AC and scope | New feature idea or requirement |
 | [/create-bug](skills/pm/create-bug.md) | Structured Jira bug report with repro steps | Bug found, needs a ticket |
 | [/health-check](skills/pm/health-check.md) | Audit Jira board + GitHub for stuck work, inconsistencies | Daily morning check or weekly review |
@@ -55,6 +56,7 @@ These skills are available in the claude.ai web interface, not in Claude Code CL
 | Trivial fix (typo, color, config) | `/improvs:start PINK-50` -> Claude classifies as trivial, auto-skips ceremony -> `/improvs:finish` |
 | Production emergency | `/improvs:start PINK-99` -> auto-detects Critical priority, branches from main -> `/improvs:finish` creates dual PRs |
 | Review your own work before commit | `/improvs:review` |
+| New project kickoff | `/project-kickoff REST` -> review Epics -> `/create-feature REST breakdown <Epic>` -> devs start (on claude.ai web) |
 | PM creates work | `/create-feature PINK` or `/create-bug PINK` (on claude.ai web) |
 | New on a project | `/improvs:onboard PINK` |
 | Morning health check | `/health-check PINK` (on claude.ai web) |
