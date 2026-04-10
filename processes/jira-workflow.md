@@ -130,7 +130,7 @@ When creating a new Jira project for a client or internal work, configure these 
 
 ### 1. Create the project
 
-- Type: **Scrum** (or Kanban for internal/support)
+- Type: **Kanban**
 - Key: short uppercase abbreviation (e.g., `PINK`, `CUE`, `ZJDI`)
 - Default assignee: project lead
 
@@ -139,12 +139,13 @@ When creating a new Jira project for a client or internal work, configure these 
 The board must have exactly these columns in order:
 
 ```
-To Do  -->  In Progress  -->  In Review  -->  Done
+Backlog  -->  To Do  -->  In Progress  -->  In Review  -->  Done
 ```
 
 Add **Blocked** as an additional status (can be set from any active status).
 
 In the board settings, map statuses to columns:
+- Backlog = Backlog
 - To Do = To Do
 - In Progress = In Progress
 - In Review = In Review
@@ -165,7 +166,7 @@ The `/start` and `/finish` skills store all metadata in ticket fields (no commen
 **How to enable these fields on the ticket screen:**
 
 1. Go to **Project Settings** > **Issue Types**
-2. For each issue type (Story, Bug, Task):
+2. For each issue type (Epic, Task, Bug):
    - Click the issue type name to open its field configuration
    - Drag **Story Points**, **Start date**, **Due date**, and **Labels** into the layout
    - If a field is missing, click **+ Add a field** and search for it
@@ -206,24 +207,17 @@ Set up these automation rules in **Project Settings** > **Automation**:
 
 These are often configured at the org level. Verify they work for your new project by creating a test ticket and branch.
 
-### 8. Sprint setup (Scrum projects)
-
-- Sprint duration: 2 weeks
-- Sprint starts on Monday
-- Create the first sprint and add initial tickets
-
 ### Checklist
 
 ```
-- [ ] Project created with correct key and type
-- [ ] Board columns: To Do / In Progress / In Review / Done / Blocked
+- [ ] Project created with correct key and type (Kanban)
+- [ ] Board columns: Backlog / To Do / In Progress / In Review / Done / Blocked
 - [ ] Story Points field visible on all issue types
 - [ ] Start date field visible on all issue types
 - [ ] Due date field visible on all issue types
 - [ ] Labels field visible on all issue types
 - [ ] GitHub integration connected and repo synced
 - [ ] Automation rules verified (branch → In Progress, PR → In Review, merge → Done)
-- [ ] First sprint created (Scrum projects)
 - [ ] Project added to the Projects table in this wiki
 ```
 
