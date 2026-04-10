@@ -163,6 +163,90 @@ Commits and PR titles with the key also get linked. The Claude Code branch namin
 - **Status not auto-transitioning:** verify the integration is connected in Jira Settings > Apps > GitHub. If the app shows disconnected, ask your manager to re-authorize.
 - **Commits not linking:** include the ticket key somewhere in the commit message or branch name.
 
+## New project setup (admin/lead)
+
+When creating a new Jira project for a client or internal work, configure these settings so that `/start`, `/finish`, `/review`, and GitHub integration work correctly.
+
+### 1. Create the project
+
+- Type: **Scrum** (or Kanban for internal/support)
+- Key: short uppercase abbreviation (e.g., `PINK`, `CUE`, `ZJDI`)
+- Default assignee: project lead
+
+### 2. Configure statuses
+
+The board must have exactly these columns in order:
+
+```
+To Do  -->  In Progress  -->  In Review  -->  Done
+```
+
+Add **Blocked** as an additional status (can be set from any active status).
+
+In the board settings, map statuses to columns:
+- To Do = To Do
+- In Progress = In Progress
+- In Review = In Review
+- Done = Done
+- Blocked = (no column, or separate column)
+
+### 3. Required ticket fields
+
+The `/start` and `/finish` skills read and write these fields. They must exist and be visible on the ticket screen:
+
+| Field | Jira field ID | Set by | Read by | Purpose |
+|-------|--------------|--------|---------|---------|
+| Story Points | `story_points` or `customfield_10016` | /start | /finish | Complexity (1=trivial, 3=simple, 8=complex) |
+| Start date | `startDate` | /start | /finish | When work began |
+| Due date | `dueDate` | /finish | reports | When work ended |
+| Labels | `labels` | /start | /finish, /review | Hotfix detection (`hotfix` label) |
+
+**How to enable these fields on the ticket screen:**
+
+1. Go to **Project Settings** > **Issue Types**
+2. For each issue type (Story, Bug, Task):
+   - Click the issue type name to open its field configuration
+   - Drag **Story Points**, **Start date**, **Due date**, and **Labels** into the layout
+   - If a field is missing, click **+ Add a field** and search for it
+3. Save the layout
+
+### 4. GitHub integration
+
+See the [GitHub for Jira integration](#github-for-jira-integration) section below.
+Make sure the project's repository is included in the sync.
+
+### 5. Automation rules
+
+Set up these automation rules in **Project Settings** > **Automation**:
+
+- **Branch created** (with ticket key) → move to "In Progress"
+- **PR opened** → move to "In Review"
+- **PR merged** → move to "Done"
+- **PR closed without merge** → move back to "In Progress"
+
+These are often configured at the org level. Verify they work for your new project by creating a test ticket and branch.
+
+### 6. Sprint setup (Scrum projects)
+
+- Sprint duration: 2 weeks
+- Sprint starts on Monday
+- Create the first sprint and add initial tickets
+
+### Checklist
+
+```
+- [ ] Project created with correct key and type
+- [ ] Board columns: To Do / In Progress / In Review / Done / Blocked
+- [ ] Story Points field visible on all issue types
+- [ ] Start date field visible on all issue types
+- [ ] Due date field visible on all issue types
+- [ ] Labels field visible on all issue types
+- [ ] GitHub integration connected and repo synced
+- [ ] Automation rules verified (branch → In Progress, PR → In Review, merge → Done)
+- [ ] First sprint created (Scrum projects)
+- [ ] Project added to the Projects table in this wiki
+```
+
 ## Filters and dashboards
 
 **Useful JQL filters:**
