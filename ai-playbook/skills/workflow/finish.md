@@ -57,7 +57,7 @@ Every developer who has finished coding and is ready for review.
 When `/improvs:start` detects a production emergency (Critical/Blocker priority or `hotfix` label), it records `Hotfix: true` in the Jira comment. `/improvs:finish` reads this flag and:
 
 1. Runs `/improvs:review` in **hotfix mode** -- focuses on correctness and safety, skips style nitpicks
-2. Skips `/improvs:test` verification entirely -- hotfixes ship fast
+2. Skips `/improvs:write-tests` verification entirely -- hotfixes ship fast
 3. Creates **two PRs**: one targeting `main` (the urgent fix) and one targeting `develop` (sync back)
 4. The `main` PR should be reviewed and merged ASAP. The `develop` sync PR is merged after
 
@@ -72,4 +72,4 @@ When `/improvs:start` detects a production emergency (Critical/Blocker priority 
 
 - [/improvs:start](start.md) -- begin a task (run this first)
 - [/improvs:review](../quality/review.md) -- standalone PR review
-- [/improvs:test](../quality/test.md) -- generate tests independently
+- [/improvs:write-tests](../quality/write-tests.md) -- generate tests independently

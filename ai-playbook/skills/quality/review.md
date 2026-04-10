@@ -98,6 +98,6 @@ For trivial tasks, /improvs:finish skips /improvs:review entirely (no AC to comp
 
 ## Related
 
-- [/improvs:test](test.md) -- independent test generation (also auto-invoked by /improvs:finish)
+- [/improvs:write-tests](test.md) -- independent test generation (also auto-invoked by /improvs:finish)
 - [/improvs:start](../workflow/start.md) -- begins the task whose review this is
 - [/improvs:finish](../workflow/finish.md) -- runs /improvs:review automatically

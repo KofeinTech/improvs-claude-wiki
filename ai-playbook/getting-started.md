@@ -73,7 +73,7 @@ Claude never auto-commits. When the changes look right, you commit them. The pre
 > /improvs:finish
 ```
 
-`/improvs:finish` runs `/improvs:review` (which checks the diff against the Jira AC and hard-blocks any hardcoded secrets), runs `/improvs:test` (independent test generation if no test files were added), pushes the branch, creates the PR with a Jira link and AC checklist, moves the ticket to "In Review", and logs your time on the ticket.
+`/improvs:finish` runs `/improvs:review` (which checks the diff against the Jira AC and hard-blocks any hardcoded secrets), runs `/improvs:write-tests` (independent test generation if no test files were added), pushes the branch, creates the PR with a Jira link and AC checklist, moves the ticket to "In Review", and logs your time on the ticket.
 
 If review finds issues or tests fail, `/improvs:finish` stops and tells you what to fix. After fixing, re-run `/improvs:finish`.
 

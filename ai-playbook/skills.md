@@ -21,7 +21,7 @@ All developer skills are namespaced under the `improvs` plugin. Type `/improvs:`
 | Skill | What it does | When to use |
 |-------|-------------|-------------|
 | [/improvs:review](skills/quality/review.md) | Hard-block secrets, dispatch superpowers reviewer with Jira AC + project rules, verify AC coverage | Before commit (also auto-run by /finish) |
-| [/improvs:test](skills/quality/test.md) | Dispatch independent test subagent that writes tests from AC, not from implementation | Before /finish (also auto-run by /finish) |
+| [/improvs:write-tests](skills/quality/write-tests.md) | Dispatch independent test subagent that writes tests from AC, not from implementation | Before /finish (also auto-run by /finish) |
 | [/improvs:figma-export](skills/quality/figma-export.md) | Export Figma design to local JSON + SVG assets in `design/` folder via REST API | Before building a UI screen |
 | [/improvs:figma-check](skills/quality/figma-check.md) | Verify UI matches Figma design (from local `design/` export), snap to design tokens, flag designer inconsistencies | After building a screen |
 

@@ -31,7 +31,7 @@ Every developer starting work on a Jira ticket.
 
 | Level | Signs | What happens next |
 |-------|-------|-------------------|
-| Trivial | 1 file, cosmetic/text/config change, 1 AC, no logic | Direct edit. No TDD, no /improvs:review, no /improvs:test. |
+| Trivial | 1 file, cosmetic/text/config change, 1 AC, no logic | Direct edit. No TDD, no /improvs:review, no /improvs:write-tests. |
 | Simple | 1-2 files, single layer, 1-3 AC | `superpowers:test-driven-development` is invoked automatically (failing test first) |
 | Complex | 3+ files OR multi-layer OR 4+ AC OR new screen / state / integration / migration | `superpowers:brainstorming` is invoked automatically (brainstorm -> plan -> execute) |
 
@@ -88,4 +88,4 @@ Code your task, then run `/improvs:finish` when done. For simple/complex tasks, 
 
 - [/improvs:finish](finish.md) -- complete the task after coding
 - [/improvs:review](../quality/review.md) -- standalone code review (also auto-invoked by /improvs:finish)
-- [/improvs:test](../quality/test.md) -- independent test generation
+- [/improvs:write-tests](../quality/write-tests.md) -- independent test generation

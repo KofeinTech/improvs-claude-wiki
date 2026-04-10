@@ -42,5 +42,5 @@ What not to do: don't try to bypass TDD on simple tasks. The discipline IS the v
 
 ## Related
 
-- [Skills Reference](skills.md) -- the Improvs `/improvs:start`, `/improvs:review`, `/improvs:test` slash commands
+- [Skills Reference](skills.md) -- the Improvs `/improvs:start`, `/improvs:review`, `/improvs:write-tests` slash commands
 - [Getting Started](getting-started.md) -- first session walkthrough
