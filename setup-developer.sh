@@ -36,18 +36,10 @@ step()    { echo -e "\n${BOLD}============================================${NC}"
 
 open_url() {
     local url="$1"
-    if command -v open &>/dev/null; then
-        open "$url"
-    elif command -v xdg-open &>/dev/null; then
-        xdg-open "$url"
-    elif command -v wslview &>/dev/null; then
-        wslview "$url"
-    elif command -v explorer.exe &>/dev/null; then
-        explorer.exe "$url"
-    else
-        warn "Cannot open browser automatically."
-        echo "  Open this URL manually: $url"
-    fi
+    echo ""
+    echo -e "  ${BOLD}Open this URL in your browser:${NC}"
+    echo -e "  ${BLUE}${url}${NC}"
+    echo ""
 }
 
 wait_for_user() {
@@ -165,7 +157,14 @@ setup_claude() {
         success "Claude Code already installed: $(claude --version 2>/dev/null || echo 'installed')"
     else
         info "Installing Claude Code..."
-        npm install -g @anthropic-ai/claude-code
+        if npm install -g @anthropic-ai/claude-code 2>/dev/null; then
+            true
+        elif command -v sudo &>/dev/null; then
+            info "Retrying with sudo..."
+            sudo npm install -g @anthropic-ai/claude-code
+        else
+            fail "Cannot install Claude Code globally. Run: sudo npm install -g @anthropic-ai/claude-code"
+        fi
         success "Claude Code installed"
     fi
 
@@ -179,11 +178,33 @@ setup_claude() {
     echo "  for an invitation to the Claude organization."
     echo ""
 
-    wait_for_user "Press Enter to start Claude login..."
+    local max_attempts=3
+    local attempt=0
 
-    claude login || {
-        warn "Login did not complete. You can log in later by running: claude login"
-    }
+    while [[ $attempt -lt $max_attempts ]]; do
+        attempt=$((attempt + 1))
+
+        wait_for_user "Press Enter to start Claude login..."
+        claude login </dev/tty 2>/dev/null || claude login </dev/null || true
+
+        # Verify login succeeded
+        local auth_json
+        auth_json=$(claude auth status --json 2>/dev/null) || true
+        if echo "$auth_json" | grep -q '"loggedIn": true'; then
+            local email org
+            email=$(echo "$auth_json" | grep '"email"' | sed 's/.*: "//;s/".*//')
+            org=$(echo "$auth_json" | grep '"orgName"' | sed 's/.*: "//;s/".*//')
+            success "Logged in as: $email (org: $org)"
+            return
+        fi
+
+        if [[ $attempt -lt $max_attempts ]]; then
+            warn "Login not detected. Let's try again. (attempt $attempt/$max_attempts)"
+        fi
+    done
+
+    warn "Login did not complete after $max_attempts attempts."
+    echo "  You can log in later by running: claude login"
 }
 
 # ---------------------------------------------------------------------------
@@ -264,12 +285,38 @@ setup_github_mcp() {
 
     wait_for_user "Press Enter once you see the token..."
 
-    prompt_token GITHUB_PAT "Paste your GitHub token here: "
+    local max_attempts=3
+    local attempt=0
 
-    info "Adding GitHub MCP to Claude Code..."
-    claude mcp add-json github "{\"type\":\"http\",\"url\":\"https://api.githubcopilot.com/mcp\",\"headers\":{\"Authorization\":\"Bearer $GITHUB_PAT\"}}" --scope user
+    while [[ $attempt -lt $max_attempts ]]; do
+        attempt=$((attempt + 1))
 
-    success "GitHub MCP configured"
+        prompt_token GITHUB_PAT "Paste your GitHub token here: "
+
+        # Validate token against GitHub API
+        info "Verifying token..."
+        local gh_response
+        gh_response=$(curl -sf -H "Authorization: Bearer $GITHUB_PAT" https://api.github.com/user 2>/dev/null) || true
+
+        if echo "$gh_response" | grep -q '"login"'; then
+            local gh_user
+            gh_user=$(echo "$gh_response" | grep '"login"' | head -1 | sed 's/.*: "//;s/".*//')
+            success "Token valid -- GitHub user: $gh_user"
+
+            info "Adding GitHub MCP to Claude Code..."
+            claude mcp add-json github "{\"type\":\"http\",\"url\":\"https://api.githubcopilot.com/mcp\",\"headers\":{\"Authorization\":\"Bearer $GITHUB_PAT\"}}" --scope user
+
+            success "GitHub MCP configured"
+            return
+        fi
+
+        if [[ $attempt -lt $max_attempts ]]; then
+            warn "Token is invalid or expired. Please generate a new one and try again. (attempt $attempt/$max_attempts)"
+        fi
+    done
+
+    warn "GitHub token validation failed after $max_attempts attempts."
+    echo "  You can set it up later. See: ai-playbook/claude-code-setup.md"
 }
 
 # ---------------------------------------------------------------------------
@@ -289,10 +336,37 @@ setup_atlassian_mcp() {
     info "Adding Atlassian MCP to Claude Code..."
     claude mcp add --transport http --scope user atlassian https://mcp.atlassian.com/v1/mcp
 
-    success "Atlassian MCP configured"
+    success "Atlassian MCP registered"
     echo ""
-    echo "  Authentication happens automatically when Claude"
-    echo "  first tries to use Jira. A browser window will open."
+    echo "  Now let's authenticate. A browser window should open for Atlassian OAuth."
+    echo "  Log in with your account that has access to improvs.atlassian.net."
+    echo ""
+
+    info "Triggering Atlassian OAuth..."
+    local mcp_status
+    mcp_status=$(claude mcp get atlassian 2>&1) || true
+
+    if echo "$mcp_status" | grep -qi "connected\|running\|ok"; then
+        success "Atlassian MCP: authenticated and connected"
+    elif echo "$mcp_status" | grep -qi "needs auth"; then
+        echo ""
+        echo "  Atlassian needs OAuth. Open this URL if no browser appeared:"
+        echo ""
+        # Extract auth URL if present in output
+        echo "$mcp_status" | grep -oE 'https://[^ ]+' | head -1 || true
+        echo ""
+        wait_for_user "Press Enter after completing Atlassian login in your browser..."
+
+        # Check again
+        mcp_status=$(claude mcp get atlassian 2>&1) || true
+        if echo "$mcp_status" | grep -qi "connected\|running\|ok"; then
+            success "Atlassian MCP: authenticated and connected"
+        else
+            warn "Atlassian MCP: auth not confirmed yet. It will prompt again when you first use Jira in Claude Code."
+        fi
+    else
+        warn "Atlassian MCP: could not verify connection. It will prompt OAuth when you first use Jira."
+    fi
 }
 
 # ---------------------------------------------------------------------------
@@ -315,10 +389,14 @@ setup_superpowers() {
         return
     fi
 
+    info "Adding superpowers marketplace..."
+    claude plugin marketplace add obra/superpowers-marketplace 2>/dev/null || true
+
     info "Installing superpowers plugin..."
-    claude plugin install superpowers@claude-plugins-official || {
+    claude plugin install superpowers@superpowers-marketplace || {
         warn "Superpowers install failed. You can install later:"
-        echo "  claude plugin install superpowers@claude-plugins-official"
+        echo "  claude plugin marketplace add obra/superpowers-marketplace"
+        echo "  claude plugin install superpowers@superpowers-marketplace"
         return
     }
 
@@ -348,12 +426,44 @@ verify_setup() {
     fi
 
     echo ""
-    info "Configured MCP servers:"
-    claude mcp list 2>/dev/null || warn "Could not list MCP servers"
+    info "Checking MCP servers..."
+    local mcp_output
+    mcp_output=$(claude mcp list 2>&1) || true
+    echo "$mcp_output"
+
+    if echo "$mcp_output" | grep -q "github"; then
+        success "GitHub MCP: registered"
+    else
+        warn "GitHub MCP: not found"
+        issues=$((issues + 1))
+    fi
+
+    if echo "$mcp_output" | grep -q "atlassian"; then
+        if echo "$mcp_output" | grep "atlassian" | grep -qi "needs auth"; then
+            success "Atlassian MCP: registered (OAuth will complete on first use)"
+        else
+            success "Atlassian MCP: registered"
+        fi
+    else
+        warn "Atlassian MCP: not found"
+        issues=$((issues + 1))
+    fi
+
+    echo ""
+    info "Checking plugins..."
+    local plugin_output
+    plugin_output=$(claude plugin list 2>&1) || true
+
+    if echo "$plugin_output" | grep -q "superpowers"; then
+        success "Superpowers plugin: installed"
+    else
+        warn "Superpowers plugin: not installed"
+        issues=$((issues + 1))
+    fi
 
     echo ""
     if [[ $issues -eq 0 ]]; then
-        success "All tools installed successfully!"
+        success "All tools installed and verified!"
     else
         warn "$issues issue(s) detected. See warnings above."
     fi
@@ -397,7 +507,7 @@ echo "    - Atlassian (Jira) account + MCP"
 echo "    - GitHub MCP"
 echo "    - Superpowers plugin"
 echo ""
-echo "  It will open browser windows for login/signup."
+echo "  It will show URLs to open in your browser for login/signup."
 echo "  Follow the instructions for each step."
 echo ""
 

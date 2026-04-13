@@ -15,13 +15,14 @@ chmod +x setup-developer.sh
 
 What the script does:
 1. Installs Node.js (if missing)
-2. Installs Claude Code CLI
-3. Logs you into the Improvs Claude organization
-4. Sets up GitHub MCP (opens browser to create a Personal Access Token)
-5. Sets up Atlassian/Jira MCP (OAuth login in browser)
-6. Installs Superpowers plugin
+2. Installs Claude Code CLI (falls back to `sudo` if global npm install fails)
+3. Logs you into the Improvs Claude organization (verifies login, retries up to 3 times)
+4. Sets up GitHub MCP (shows URL to create a Personal Access Token, validates the token against GitHub API)
+5. Sets up Atlassian/Jira MCP (registers server, triggers OAuth flow)
+6. Adds superpowers marketplace and installs the plugin
+7. Verifies all MCP servers and plugins are registered
 
-The script guides you through each step interactively -- it opens browser windows and waits for you to complete each action before moving on. Works on macOS, Linux, and Windows (WSL).
+The script guides you through each step interactively -- it shows URLs to open in your browser and validates each authentication step before moving on. Works on macOS, Linux, and Windows (WSL).
 
 ## Manual setup
 
@@ -212,7 +213,7 @@ If pre-commit checks or branch validation aren't running:
 If /review reports that superpowers is unavailable:
 
 1. Check if installed: `claude plugin list`
-2. Reinstall manually: `claude plugin install superpowers@claude-plugins-official`
+2. Reinstall manually: `claude plugin install superpowers@superpowers-marketplace`
 3. Note: /review has an inline fallback and will still produce a structured review without superpowers
 
 ### Common errors

@@ -13,7 +13,7 @@ Checklist for new team members at Improvs. CEO drives onboarding. HR creates acc
 
 ## Day 1: Tools setup
 
-- [ ] Run the [setup script](../setup-developer.sh) -- installs Claude Code, logs you into the org, sets up Jira/GitHub MCPs, and installs the superpowers plugin
+- [ ] Run the [setup script](../setup-developer.sh) -- installs Claude Code, logs you into the org, sets up Jira/GitHub MCPs, installs superpowers plugin, and verifies all connections
 - [ ] Install Docker Desktop / OrbStack (backend projects only -- Python and .NET run in containers)
 - [ ] Clone assigned project repo(s)
 - [ ] Read the project's `CLAUDE.md` -- it lists the actual run/test/build commands for that stack

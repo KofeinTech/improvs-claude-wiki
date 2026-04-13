@@ -1,0 +1,12 @@
+FROM node:20-slim
+
+RUN apt-get update -qq && apt-get install -y -qq curl git bash sudo && rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m -s /bin/bash testdev && echo "testdev ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER testdev
+WORKDIR /home/testdev
+
+COPY setup-developer.sh .
+
+CMD ["bash", "setup-developer.sh"]
