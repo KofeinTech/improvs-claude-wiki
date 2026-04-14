@@ -325,48 +325,74 @@ setup_github_mcp() {
 setup_atlassian_mcp() {
     step "Step 5/6: Atlassian (Jira) MCP Server"
 
-    echo "  Jira MCP lets Claude read tickets and update status."
-    echo "  Uses the official Atlassian Rovo MCP server with OAuth."
+    echo "  Jira MCP lets Claude read and update tickets."
+    echo "  Uses the official Atlassian Rovo MCP server with API token auth."
     echo ""
-    echo "  When you first use it in Claude Code, a browser window will"
-    echo "  open asking you to authorize Atlassian. Log in with the"
-    echo "  account that has access to improvs.atlassian.net."
+    echo "  You need to create a personal API token for your Atlassian account."
     echo ""
-
-    info "Adding Atlassian MCP to Claude Code..."
-    claude mcp add --transport http --scope user atlassian https://mcp.atlassian.com/v1/mcp
-
-    success "Atlassian MCP registered"
-    echo ""
-    echo "  Now let's authenticate. A browser window should open for Atlassian OAuth."
-    echo "  Log in with your account that has access to improvs.atlassian.net."
+    echo "  Steps:"
+    echo "    1. Open the URL below"
+    echo "    2. Click 'Create API token'"
+    echo "    3. Name it 'Claude Code' and click 'Create'"
+    echo "    4. Copy the token"
     echo ""
 
-    info "Triggering Atlassian OAuth..."
-    local mcp_status
-    mcp_status=$(claude mcp get atlassian 2>&1) || true
+    open_url "https://id.atlassian.com/manage-profile/security/api-tokens"
 
-    if echo "$mcp_status" | grep -qi "connected\|running\|ok"; then
-        success "Atlassian MCP: authenticated and connected"
-    elif echo "$mcp_status" | grep -qi "needs auth"; then
-        echo ""
-        echo "  Atlassian needs OAuth. Open this URL if no browser appeared:"
-        echo ""
-        # Extract auth URL if present in output
-        echo "$mcp_status" | grep -oE 'https://[^ ]+' | head -1 || true
-        echo ""
-        wait_for_user "Press Enter after completing Atlassian login in your browser..."
+    wait_for_user "Press Enter once you have the token..."
 
-        # Check again
-        mcp_status=$(claude mcp get atlassian 2>&1) || true
-        if echo "$mcp_status" | grep -qi "connected\|running\|ok"; then
-            success "Atlassian MCP: authenticated and connected"
-        else
-            warn "Atlassian MCP: auth not confirmed yet. It will prompt again when you first use Jira in Claude Code."
+    local max_attempts=3
+    local attempt=0
+
+    while [[ $attempt -lt $max_attempts ]]; do
+        attempt=$((attempt + 1))
+
+        local ATLASSIAN_EMAIL=""
+        prompt_token ATLASSIAN_EMAIL "Your Atlassian email (e.g. name@improvs.com): "
+        local ATLASSIAN_TOKEN=""
+        prompt_token ATLASSIAN_TOKEN "Paste your Atlassian API token: "
+
+        # Base64 encode credentials
+        local BASIC_AUTH
+        BASIC_AUTH=$(printf '%s:%s' "$ATLASSIAN_EMAIL" "$ATLASSIAN_TOKEN" | base64)
+
+        # Validate token against Atlassian API
+        info "Verifying token..."
+        local atlassian_response
+        atlassian_response=$(curl -sf -H "Authorization: Basic $BASIC_AUTH" \
+            "https://improvs.atlassian.net/rest/api/3/myself" 2>/dev/null) || true
+
+        if echo "$atlassian_response" | grep -q '"accountId"'; then
+            local display_name
+            display_name=$(echo "$atlassian_response" | grep '"displayName"' | head -1 | sed 's/.*: "//;s/".*//')
+            success "Token valid -- Atlassian user: $display_name"
+
+            # Remove old server if exists
+            claude mcp remove atlassian 2>/dev/null || true
+
+            info "Adding Atlassian MCP to Claude Code..."
+            claude mcp add-json atlassian "{\"type\":\"http\",\"url\":\"https://mcp.atlassian.com/v1/mcp\",\"headers\":{\"Authorization\":\"Basic $BASIC_AUTH\"}}" --scope user
+
+            # Verify MCP connection
+            info "Verifying MCP connection..."
+            local mcp_status
+            mcp_status=$(claude mcp get atlassian 2>&1) || true
+
+            if echo "$mcp_status" | grep -qi "connected\|running\|ok\|tools"; then
+                success "Atlassian MCP: connected"
+            else
+                success "Atlassian MCP: registered (token validated)"
+            fi
+            return
         fi
-    else
-        warn "Atlassian MCP: could not verify connection. It will prompt OAuth when you first use Jira."
-    fi
+
+        if [[ $attempt -lt $max_attempts ]]; then
+            warn "Token or email is invalid. Check your email and generate a new token. (attempt $attempt/$max_attempts)"
+        fi
+    done
+
+    warn "Atlassian token validation failed after $max_attempts attempts."
+    echo "  You can set it up later. See: ai-playbook/claude-code-setup.md"
 }
 
 # ---------------------------------------------------------------------------
@@ -439,11 +465,7 @@ verify_setup() {
     fi
 
     if echo "$mcp_output" | grep -q "atlassian"; then
-        if echo "$mcp_output" | grep "atlassian" | grep -qi "needs auth"; then
-            success "Atlassian MCP: registered (OAuth will complete on first use)"
-        else
-            success "Atlassian MCP: registered"
-        fi
+        success "Atlassian MCP: registered"
     else
         warn "Atlassian MCP: not found"
         issues=$((issues + 1))
@@ -477,7 +499,7 @@ verify_setup() {
     echo ""
     echo "  2. Verify MCP connections: type /mcp in Claude Code"
     echo "     - github    should show 'connected'"
-    echo "     - atlassian should prompt OAuth on first use"
+    echo "     - atlassian should show 'connected'"
     echo "     - figma     provided separately by your lead (FIGMA_API_KEY env var)"
     echo ""
     echo "  3. Test a skill: type /start <JIRA-KEY>"

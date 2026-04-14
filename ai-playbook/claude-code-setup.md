@@ -18,7 +18,7 @@ What the script does:
 2. Installs Claude Code CLI (falls back to `sudo` if global npm install fails)
 3. Logs you into the Improvs Claude organization (verifies login, retries up to 3 times)
 4. Sets up GitHub MCP (shows URL to create a Personal Access Token, validates the token against GitHub API)
-5. Sets up Atlassian/Jira MCP (registers server, triggers OAuth flow)
+5. Sets up Atlassian/Jira MCP (asks for email + API token, validates against Atlassian API)
 6. Adds superpowers marketplace and installs the plugin
 7. Verifies all MCP servers and plugins are registered
 
@@ -68,12 +68,19 @@ claude mcp add-json github '{"type":"http","url":"https://api.githubcopilot.com/
 
 **Atlassian (Jira) MCP** -- lets Claude read/update tickets:
 
-Run in your terminal:
+Uses API token authentication (OAuth is not supported in Claude Code yet -- see anthropics/claude-code#36374).
+
+1. Create a personal API token at https://id.atlassian.com/manage-profile/security/api-tokens
+2. Base64-encode your credentials:
 ```bash
-claude mcp add --transport http --scope user atlassian https://mcp.atlassian.com/v1/mcp
+echo -n "your.email@improvs.com:YOUR_API_TOKEN" | base64
+```
+3. Add the server:
+```bash
+claude mcp add-json atlassian '{"type":"http","url":"https://mcp.atlassian.com/v1/mcp","headers":{"Authorization":"Basic BASE64_STRING_HERE"}}' --scope user
 ```
 
-When you first use it in Claude Code, a browser window opens for Atlassian OAuth. Log in with your account that has access to improvs.atlassian.net. If you don't have access, ask your manager to invite you at https://improvs.atlassian.net/people.
+If you don't have access to improvs.atlassian.net, ask your manager to invite you at https://improvs.atlassian.net/people.
 
 **Figma API key** -- lets Claude export and read Figma designs via REST API:
 
@@ -190,10 +197,12 @@ If `/mcp` shows a server as disconnected or a skill says "Jira MCP failed":
 
 1. Open `/mcp` in Claude Code and re-authenticate the failing server
 2. For GitHub: your Personal Access Token may have expired -- generate a new one and re-add the server
-3. For Atlassian: re-run the OAuth flow by removing and re-adding:
+3. For Atlassian: generate a new API token and re-add:
    ```bash
    claude mcp remove atlassian
-   claude mcp add --transport http --scope user atlassian https://mcp.atlassian.com/v1/mcp
+   # Create new token at https://id.atlassian.com/manage-profile/security/api-tokens
+   # Base64 encode: echo -n "email:token" | base64
+   claude mcp add-json atlassian '{"type":"http","url":"https://mcp.atlassian.com/v1/mcp","headers":{"Authorization":"Basic BASE64_HERE"}}' --scope user
    ```
 4. For Figma: uses `FIGMA_API_KEY` env var. Check:
    - `echo $FIGMA_API_KEY` -- should print the token
