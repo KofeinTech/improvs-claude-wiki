@@ -99,6 +99,22 @@ Page: Prototypes   -- interactive flows
 - Export photos as PNG/WebP at 1x, 2x, 3x
 - Never export icons as PNG -- they blur when scaled
 
+## Name image layers
+
+Image layers must have descriptive names. The export tool uses layer names for
+filenames. Generic names like `image-13` or `Rectangle` make it impossible for
+developers to know which image goes where.
+
+| Good | Bad |
+|------|-----|
+| `OnboardingHeroPhoto` | `image-13` |
+| `ProfileAvatar` | `Rectangle 5` |
+| `ProductBanner` | `Frame 17` |
+| `StepOneIllustration` | `image` |
+
+If a screen has multiple images (e.g., onboarding carousel), name them with
+the step or position: `OnboardingStep1Image`, `OnboardingStep2Image`, etc.
+
 ## Before handoff
 
 See [Handoff Process](handoff-process.md) for the full checklist.

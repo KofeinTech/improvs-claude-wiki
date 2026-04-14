@@ -119,13 +119,63 @@ The quality of generated code depends entirely on how well the designer structur
 
 See [Figma Structure](../design/figma-structure.md) for the full rules.
 
-## Pixel-perfect tips
+## Pixel-perfect implementation rules
+
+These rules are mandatory when building from exported design JSON. Violating them
+causes the most common rework.
+
+### Spacing must be exact
+
+- Read `padding` and `itemSpacing` from every node in the design JSON
+- Reproduce them exactly in Flutter using `EdgeInsets` and `SizedBox`/gap
+- Never guess or approximate spacing -- the JSON has the exact values
+- If a Figma value doesn't match a design token, use the exact Figma value and flag it
+
+### Alignment must match the design
+
+- `primaryAxisAlignItems` maps to `MainAxisAlignment`:
+  - `MIN` → `MainAxisAlignment.start`
+  - `CENTER` → `MainAxisAlignment.center`
+  - `MAX` → `MainAxisAlignment.end`
+  - `SPACE_BETWEEN` → `MainAxisAlignment.spaceBetween`
+- `counterAxisAlignItems` maps to `CrossAxisAlignment`:
+  - `MIN` → `CrossAxisAlignment.start`
+  - `CENTER` → `CrossAxisAlignment.center`
+  - `MAX` → `CrossAxisAlignment.end`
+  - `STRETCH` → `CrossAxisAlignment.stretch`
+- `textAlignHorizontal` maps to `TextAlign`:
+  - `LEFT` → `TextAlign.left`
+  - `CENTER` → `TextAlign.center`
+  - `RIGHT` → `TextAlign.right`
+  - `JUSTIFIED` → `TextAlign.justify`
+- If the design says CENTER, the code must say center. Do not default to start.
+
+### Components must match exactly
+
+- Buttons: match border radius, padding, background color, text style, and height from the design JSON
+- Do not use Flutter default component styling -- always override with design values
+- Check fills, strokes, cornerRadius, and effects on every interactive element
+- If a component has variants in the design, implement all variants
+
+### Other tips
 
 - Line height in Flutter is a ratio: Figma 24px line height on 16px font = `height: 1.5`
 - Always use exact values from Figma, never approximate
 - Export icons as SVG, use `flutter_svg` to render
 - Use `flutter_screenutil` for responsive scaling across devices
 - Test both light and dark modes if the design supports them
+
+## Common pitfalls
+
+Issues found during real developer testing -- avoid these:
+
+| Pitfall | What goes wrong | Fix |
+|---------|----------------|-----|
+| Ignoring alignment values | Text defaults to `start` instead of `center` | Always read `primaryAxisAlignItems` / `counterAxisAlignItems` / `textAlignHorizontal` |
+| Approximate spacing | 12px used instead of Figma's 16px | Copy exact `padding` and `itemSpacing` values from JSON |
+| Default button styling | Flutter Material defaults override design | Always apply `cornerRadius`, `padding`, `fills` from the design node |
+| Generic image names | `image-13.png` tells dev nothing | Export skill now names by parent/context -- verify names make sense |
+| Missing SizedBox gaps | Items stack with no spacing | Every `itemSpacing` in the JSON = a `SizedBox` between children |
 
 ## When it doesn't work well
 

@@ -35,6 +35,7 @@ Complete this checklist before marking a frame as "Ready for dev":
 - [ ] Touch targets are 48x48 px minimum
 - [ ] Contrast ratios pass (4.5:1 for regular text)
 - [ ] Icons are SVG, outlined, single path
+- [ ] Image layers have descriptive names (not `image-13`, `Rectangle`, `Frame`)
 - [ ] Hidden and unused layers removed
 - [ ] Animations/transitions annotated in comments
 
@@ -91,7 +92,10 @@ Use design tokens from lib/core/theme/.
 | Typography (font, size, weight, line-height) | `typography` object on TEXT nodes |
 | Shadows, borders | `effects`, `strokes` fields |
 | Border radius | `cornerRadius` field |
+| Text alignment | `textAlignHorizontal` on TEXT nodes |
+| Axis alignment | `primaryAxisAlignItems`, `counterAxisAlignItems` on FRAME nodes |
 | Assets (icons) | `design/assets/*.svg` (auto-exported) |
+| Assets (images) | `design/assets/images/*.png` with `imageContext` for context |
 | Design tokens | `design/tokens.json` (colors, spacing, typography, radii) |
 
 ## When designs are unclear

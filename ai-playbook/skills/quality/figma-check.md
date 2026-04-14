@@ -31,12 +31,16 @@ Developers who built a UI screen and want to verify it matches the design before
 ## What it checks
 
 - Layout direction and alignment
-- Padding, margin, gaps (all spacing)
+- **Text alignment** (CENTER/LEFT/RIGHT -- must be exact match)
+- **Axis alignment** (MainAxisAlignment, CrossAxisAlignment -- must match design)
+- Padding, margin, gaps (all spacing -- every `itemSpacing` must have a SizedBox)
 - Colors (hex, opacity)
 - Font family, size, weight, line height
 - Border radius, borders, shadows
+- **Button/component styling** (radius, padding, fills, text style -- not Flutter defaults)
 - Icon sizes
 - Image aspect ratios
+- Image filenames (flags generic names like `image-13`)
 
 ## Related
 

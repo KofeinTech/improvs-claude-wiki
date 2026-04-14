@@ -46,10 +46,19 @@ design/
 The JSON is a simplified, Claude-friendly version of the Figma data:
 - Node hierarchy with `type`, `name`, `children`
 - Layout: `layoutMode` (VERTICAL/HORIZONTAL), `primaryAxisAlignItems`, `counterAxisAlignItems`
+- Text alignment: `textAlignHorizontal` (LEFT/CENTER/RIGHT/JUSTIFIED)
 - Spacing: `padding` (top/right/bottom/left), `itemSpacing`
 - Size: `width`, `height`
 - Visual: `fills` (hex colors), `cornerRadius`, `strokes`, `effects`
 - Text: `characters`, `typography` (fontFamily, fontSize, fontWeight, lineHeight)
+- Images: `asset` path + `imageContext` (parent name, nearby text, position in screen)
+
+### Image naming
+
+Exported images use smart naming based on context -- not raw Figma node names.
+If the Figma layer has a generic name like `image-13`, the export uses the
+parent node name or screen position instead. Each image also gets an
+`imageContext` field in the JSON with parent name and nearby text for clarity.
 
 ## Re-exporting
 
