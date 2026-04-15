@@ -5,12 +5,12 @@
 # Sets up a clean machine with:
 #   1. Node.js (if missing)
 #   2. Claude Code CLI + org login
-#   3. Atlassian account (guided check)
-#   4. GitHub MCP server (PAT token)
-#   5. Atlassian (Jira) MCP server (API token + Basic Auth)
-#   6. Superpowers plugin
+#   3. Improvs plugin (installs skills + GitHub MCP + Atlassian MCP automatically)
+#   4. Superpowers plugin
 #
-# No browser is opened. The script prints instructions and asks for tokens.
+# MCP servers (GitHub, Atlassian) are delivered via the Improvs plugin.
+# GitHub PAT is prompted automatically by the plugin on first use.
+# Atlassian MCP uses browser OAuth on first use.
 #
 # Usage:
 #   ./setup-developer.sh
@@ -43,55 +43,6 @@ wait_for_user() {
     read -r
 }
 
-prompt_yn() {
-    local msg="$1"
-    local answer=""
-    echo -en "${YELLOW}${msg} (y/n): ${NC}"
-    read -r answer
-    [[ "$answer" =~ ^[Yy] ]]
-}
-
-prompt_token() {
-    local var_name="$1"
-    local prompt_text="$2"
-    local token=""
-    while [[ -z "$token" ]]; do
-        echo -en "${YELLOW}$prompt_text${NC}"
-        read -r token
-        if [[ -z "$token" ]]; then
-            warn "Cannot be empty. Try again."
-        fi
-    done
-    printf -v "$var_name" '%s' "$token"
-}
-
-# Write an MCP server entry into ~/.claude.json using jq.
-# Usage: write_mcp_server "server-name" '{"type":"http","url":"...","headers":{...}}'
-write_mcp_server() {
-    local server_name="$1"
-    local server_json="$2"
-    local config_file="$HOME/.claude.json"
-
-    # Create file with empty object if missing
-    if [[ ! -f "$config_file" ]]; then
-        echo '{}' > "$config_file"
-    fi
-
-    # Validate the server JSON
-    if ! echo "$server_json" | jq empty 2>/dev/null; then
-        warn "Invalid JSON for MCP server '$server_name'. Skipping."
-        return 1
-    fi
-
-    # Merge server into mcpServers (creates key if missing)
-    local tmp_file
-    tmp_file=$(mktemp)
-    jq --arg name "$server_name" --argjson srv "$server_json" \
-        '.mcpServers[$name] = $srv' "$config_file" > "$tmp_file" && mv "$tmp_file" "$config_file"
-
-    return 0
-}
-
 # ---------------------------------------------------------------------------
 # Detect OS
 # ---------------------------------------------------------------------------
@@ -115,7 +66,7 @@ detect_os() {
 # Step 1: Node.js
 # ---------------------------------------------------------------------------
 setup_node() {
-    step "Step 1/6: Node.js"
+    step "Step 1/4: Node.js"
 
     if command -v node &>/dev/null; then
         success "Node.js already installed: $(node -v)"
@@ -166,7 +117,7 @@ setup_node() {
 # Step 2: Claude Code CLI + Login
 # ---------------------------------------------------------------------------
 setup_claude() {
-    step "Step 2/6: Claude Code CLI"
+    step "Step 2/4: Claude Code CLI"
 
     if command -v claude &>/dev/null; then
         success "Claude Code already installed: $(claude --version 2>/dev/null || echo 'installed')"
@@ -217,7 +168,6 @@ setup_claude() {
         wait_for_user "Press Enter to start Claude login..."
         claude login </dev/tty 2>/dev/null || claude login </dev/null || true
 
-        # Verify login succeeded
         auth_json=$(claude auth status --json 2>/dev/null) || true
         if echo "$auth_json" | grep -q '"loggedIn": true'; then
             local email org
@@ -237,102 +187,52 @@ setup_claude() {
 }
 
 # ---------------------------------------------------------------------------
-# Step 3: Atlassian account check
+# Step 3: Improvs Plugin (skills + GitHub MCP + Atlassian MCP)
 # ---------------------------------------------------------------------------
-setup_atlassian_account() {
-    step "Step 3/6: Atlassian (Jira) Account"
+setup_improvs_plugin() {
+    step "Step 3/4: Improvs Plugin"
 
-    echo "  You need an Atlassian account with access to improvs.atlassian.net"
+    echo "  The Improvs plugin installs everything in one command:"
+    echo "    - All /slash-command skills (/start, /finish, /review, /test, etc.)"
+    echo "    - GitHub MCP server (prompted for PAT on first use)"
+    echo "    - Atlassian MCP server (browser OAuth on first use)"
     echo ""
 
-    if prompt_yn "Do you already have access to improvs.atlassian.net?"; then
-        success "Atlassian account confirmed"
+    if claude plugin list 2>/dev/null | grep -q "improvs"; then
+        success "Improvs plugin already installed"
+        echo ""
+        echo "  To update or reinstall:"
+        echo "  claude plugin install improvs@improvs-marketplace"
+        echo ""
         return
     fi
 
-    echo ""
-    echo "  To get access to Jira, do the following BEFORE continuing:"
-    echo ""
-    echo "  1. Create an Atlassian account:"
-    echo "     Go to https://id.atlassian.com/signup"
-    echo "     Use your work email (e.g. name@improvs.com)"
-    echo ""
-    echo "  2. Ask your manager to invite you to the Improvs workspace."
-    echo "     They go to: https://improvs.atlassian.net/people"
-    echo "     and add your email address."
-    echo ""
-    echo "  3. Accept the invitation email from Atlassian."
-    echo ""
-    echo "  4. Verify you can open: https://improvs.atlassian.net"
-    echo ""
+    info "Adding Improvs marketplace..."
+    claude plugin marketplace add KofeinTech/claude-plugins 2>/dev/null || true
 
-    wait_for_user "Press Enter once you have access to improvs.atlassian.net..."
-    success "Atlassian account setup done"
-}
-
-# ---------------------------------------------------------------------------
-# Step 4: GitHub MCP
-# ---------------------------------------------------------------------------
-setup_github_mcp() {
-    step "Step 4/6: GitHub MCP Server"
-
-    echo "  GitHub MCP lets Claude read repos, create PRs, and manage issues."
-    echo ""
-
-    local gh_mcp_json
-    gh_mcp_json='{"type":"http","url":"https://api.githubcopilot.com/mcp","headers":{"Authorization":"Bearer YOUR_GITHUB_PAT"}}'
-
-    if write_mcp_server "github" "$gh_mcp_json"; then
-        success "GitHub MCP entry added to ~/.claude.json"
-    else
-        warn "Failed to write GitHub MCP config."
+    info "Installing Improvs plugin..."
+    claude plugin install improvs@improvs-marketplace || {
+        warn "Plugin install failed. You can install later:"
+        echo "  claude plugin marketplace add KofeinTech/claude-plugins"
+        echo "  claude plugin install improvs@improvs-marketplace"
         return
-    fi
+    }
 
+    success "Improvs plugin installed (skills + GitHub MCP + Atlassian MCP)"
     echo ""
-    echo "  ACTION REQUIRED after setup:"
-    echo "  GitHub MCP requires a Personal Access Token to connect."
-    echo "  See: ai-playbook/claude-code-setup.md -- section 'Activate GitHub MCP'"
+    echo "  GitHub PAT: prompted automatically on first use of GitHub MCP."
+    echo "  Atlassian:  browser OAuth opens on first Jira interaction."
     echo ""
 }
 
 # ---------------------------------------------------------------------------
-# Step 5: Atlassian (Jira) MCP
-# ---------------------------------------------------------------------------
-setup_atlassian_mcp() {
-    step "Step 5/6: Atlassian (Jira) MCP Server"
-
-    echo "  Jira MCP lets Claude read and update tickets."
-    echo "  Uses the official Atlassian MCP server with browser-based OAuth."
-    echo ""
-
-    local atlassian_mcp_json
-    atlassian_mcp_json='{"type":"http","url":"https://mcp.atlassian.com/v1/mcp"}'
-
-    if write_mcp_server "atlassian" "$atlassian_mcp_json"; then
-        success "Atlassian MCP entry added to ~/.claude.json"
-    else
-        warn "Failed to write Atlassian MCP config."
-        return
-    fi
-
-    echo ""
-    echo "  ACTION REQUIRED after setup:"
-    echo "  The first time Claude uses Jira, a browser window will open."
-    echo "  Log in with your improvs.atlassian.net account to authorize."
-    echo "  See: ai-playbook/claude-code-setup.md -- section 'Activate Atlassian MCP'"
-    echo ""
-}
-
-# ---------------------------------------------------------------------------
-# Step 6: Superpowers Plugin
+# Step 4: Superpowers Plugin
 # ---------------------------------------------------------------------------
 setup_superpowers() {
-    step "Step 6/6: Superpowers Plugin"
+    step "Step 4/4: Superpowers Plugin"
 
     echo "  Superpowers gives Claude TDD, structured planning, code review,"
-    echo "  and systematic debugging skills. Improvs /start invokes them"
-    echo "  automatically based on task complexity."
+    echo "  and systematic debugging. Improvs /start invokes them automatically."
     echo ""
 
     if claude plugin list 2>/dev/null | grep -q "superpowers"; then
@@ -377,27 +277,16 @@ verify_setup() {
     fi
 
     echo ""
-    info "Checking MCP servers in ~/.claude.json..."
-    local config_file="$HOME/.claude.json"
-
-    if [[ -f "$config_file" ]] && jq -e '.mcpServers.github' "$config_file" &>/dev/null; then
-        success "GitHub MCP: configured"
-    else
-        warn "GitHub MCP: not found in ~/.claude.json"
-        issues=$((issues + 1))
-    fi
-
-    if [[ -f "$config_file" ]] && jq -e '.mcpServers.atlassian' "$config_file" &>/dev/null; then
-        success "Atlassian MCP: configured"
-    else
-        warn "Atlassian MCP: not found in ~/.claude.json"
-        issues=$((issues + 1))
-    fi
-
-    echo ""
     info "Checking plugins..."
     local plugin_output
     plugin_output=$(claude plugin list 2>&1) || true
+
+    if echo "$plugin_output" | grep -q "improvs"; then
+        success "Improvs plugin: installed (skills + GitHub MCP + Atlassian MCP)"
+    else
+        warn "Improvs plugin: not installed"
+        issues=$((issues + 1))
+    fi
 
     if echo "$plugin_output" | grep -q "superpowers"; then
         success "Superpowers plugin: installed"
@@ -421,12 +310,11 @@ verify_setup() {
     echo "  1. Open any project and run: claude"
     echo ""
     echo "  2. Verify MCP connections: type /mcp in Claude Code"
-    echo "     - github    should show 'connected'"
-    echo "     - atlassian should show 'connected'"
+    echo "     - github    prompted for PAT on first use"
+    echo "     - atlassian browser OAuth on first use"
     echo "     - figma     provided separately by your lead (FIGMA_API_KEY env var)"
     echo ""
     echo "  3. Test a skill: type /start <JIRA-KEY>"
-    echo "     Skills are delivered via your Claude org automatically."
     echo ""
     echo "  Useful links:"
     echo "    Jira:   https://improvs.atlassian.net"
@@ -448,40 +336,18 @@ echo ""
 echo "  This script will set up your machine for development:"
 echo "    - Node.js"
 echo "    - Claude Code CLI + organization login"
-echo "    - Atlassian (Jira) account + MCP"
-echo "    - GitHub MCP"
+echo "    - Improvs plugin (skills + GitHub MCP + Atlassian MCP)"
 echo "    - Superpowers plugin"
 echo ""
-echo "  You will need the following tokens BEFORE starting:"
-echo ""
-echo "    1. GitHub Personal Access Token (classic)"
-echo "       Create at: https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP"
-echo ""
-echo "    2. Atlassian API Token"
-echo "       Create at: https://id.atlassian.com/manage-profile/security/api-tokens"
-echo ""
-echo "  The script will guide you through each step."
+echo "  Tokens are prompted automatically by the plugins on first use."
+echo "  Everything is handled automatically."
 echo ""
 
 wait_for_user "Press Enter to start..."
 
 detect_os
-
-# jq is required for writing MCP config to ~/.claude.json
-if ! command -v jq &>/dev/null; then
-    info "Installing jq (required for MCP setup)..."
-    case "$OS" in
-        macos)          brew install jq 2>/dev/null || { warn "Install jq manually: brew install jq"; } ;;
-        linux|wsl)      sudo apt-get install -y jq 2>/dev/null || sudo yum install -y jq 2>/dev/null || { warn "Install jq manually"; } ;;
-        *)              warn "Please install jq before continuing: https://jqlang.github.io/jq/download/" ;;
-    esac
-fi
-command -v jq &>/dev/null || fail "jq is required but could not be installed. Install it and re-run."
-
 setup_node
 setup_claude
-setup_atlassian_account
-setup_github_mcp
-setup_atlassian_mcp
+setup_improvs_plugin
 setup_superpowers
 verify_setup

@@ -16,15 +16,14 @@ chmod +x setup-developer.sh
 What the script does:
 1. Installs Node.js (if missing)
 2. Installs Claude Code CLI and logs you into the Improvs Claude organization
-3. Checks your Atlassian account access
-4. Adds GitHub MCP server entry to your config (placeholder -- activate after setup)
-5. Adds Atlassian MCP server entry to your config (browser OAuth on first use)
-6. Installs the Superpowers plugin
-7. Verifies all MCP entries are present in config
+3. Installs the Improvs plugin (delivers all skills + GitHub MCP + Atlassian MCP)
+4. Installs the Superpowers plugin
 
-**After the script finishes**, activate each MCP server following the instructions below.
+MCP servers are delivered automatically via the Improvs plugin. Tokens are prompted on first use -- no manual configuration needed:
+- **GitHub**: prompted for your Personal Access Token the first time Claude uses the GitHub MCP
+- **Atlassian**: browser OAuth opens the first time Claude uses the Jira MCP
 
-Works on macOS, Linux, and Windows (WSL). No browser windows are opened during setup -- all steps are done in the terminal.
+Works on macOS, Linux, and Windows (WSL).
 
 ## Manual setup
 
@@ -53,80 +52,34 @@ claude login
 
 This opens a browser window. Log in with the account that was invited to the Improvs Claude Team organization. If you don't have an account yet, ask your manager for an invitation.
 
-### 3. Activate MCP servers
+### 3. MCP servers (automatic via plugin)
 
-The setup script adds MCP server entries to `~/.claude.json` automatically. After the script runs, you need to activate each one with your credentials.
+MCP servers are delivered by the Improvs plugin. No manual configuration needed.
 
-All commands below are run in your **regular terminal** (not inside a Claude Code session).
-
----
-
-#### Activate GitHub MCP
+#### GitHub MCP
 
 GitHub MCP lets Claude read repos, create PRs, and manage issues.
 
-**Step 1 -- Create a Personal Access Token:**
+The plugin prompts you for a GitHub Personal Access Token on first use. If you need to create one:
 
-1. Go to: `https://github.com/settings/tokens/new`
-   (GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic))
-2. Fill in:
-   - Note: `Claude Code MCP`
-   - Expiration: 90 days (recommended)
-3. Select these scopes:
-   - `[x] repo` -- full access to private repos
-   - `[x] read:org` -- read org membership
-   - `[x] read:user` -- read profile data
-4. Click **Generate token** and copy it immediately (starts with `ghp_`)
+1. Go to: `https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP`
+2. Set expiration to 90 days
+3. Click **Generate token** and copy it (starts with `ghp_`)
+4. Paste it when Claude prompts you
 
-Quick link with scopes pre-filled:
-`https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP`
+To update your token later, reinstall the plugin: `claude plugin install improvs@improvs-marketplace`
 
-**Step 2 -- Add token to your config:**
-
-```bash
-# Replace YOUR_GITHUB_PAT with the token you just created
-jq --arg t "Bearer YOUR_GITHUB_PAT" \
-  '.mcpServers.github.headers.Authorization = $t' \
-  ~/.claude.json > /tmp/claude.json && mv /tmp/claude.json ~/.claude.json
-```
-
-Or run in terminal:
-```bash
-claude mcp add-json github \
-  '{"type":"http","url":"https://api.githubcopilot.com/mcp","headers":{"Authorization":"Bearer YOUR_GITHUB_PAT"}}' \
-  --scope user
-```
-
-**Step 3 -- Verify:**
-Open Claude Code and run `/mcp` -- `github` should show as **connected**.
-
----
-
-#### Activate Atlassian MCP
+#### Atlassian MCP
 
 Atlassian MCP lets Claude read and update Jira tickets.
 
-Uses the official Atlassian MCP server (`mcp.atlassian.com`) with browser-based OAuth. No token needed -- authentication happens automatically when Claude first uses Jira.
+Uses browser-based OAuth. The first time Claude uses Jira, a browser window opens. Log in with your `improvs.atlassian.net` account and authorize. No token or config changes needed.
 
-**Step 1 -- Make sure you have access:**
+If you don't have access to `improvs.atlassian.net`, ask your manager to invite you at: `https://improvs.atlassian.net/people`
 
-If you don't have access to `improvs.atlassian.net`, ask your manager to invite you at:
-`https://improvs.atlassian.net/people`
+#### Figma API key
 
-**Step 2 -- Trigger authentication:**
-
-Open Claude Code in any project and run:
-```
-/mcp
-```
-
-The `atlassian` server will show as **needs authorization**. Click the authorization link -- a browser window opens. Log in with your `improvs.atlassian.net` account and authorize.
-
-After authorizing, run `/mcp` again -- `atlassian` should show as **connected**.
-
-That's it. No tokens or config changes needed.
-
-**Figma API key** -- lets Claude export and read Figma designs via REST API:
+Figma lets Claude export and read Figma designs via REST API:
 
 The team uses a shared Figma Personal Access Token from a designer who already has a Full seat. No extra cost per developer.
 
@@ -145,15 +98,17 @@ This exports the design to local `design/` folder as JSON + SVG assets. All othe
 
 ### 4. Verify MCP connections
 
-After setting up all three servers, open Claude Code and run:
+Open Claude Code in any project and run:
 
 ```
 /mcp
 ```
 
-Both servers (github, atlassian) should show as **connected** with a green status. If any server shows as disconnected or missing, re-run the setup step for that server.
+- **github** -- prompted for PAT on first use, then shows **connected**
+- **atlassian** -- browser OAuth on first use, then shows **connected**
+- **figma** -- uses `FIGMA_API_KEY` env var (provided by your lead)
 
-Figma uses `FIGMA_API_KEY` env var (provided by your lead). Verify it works by running `/improvs:figma-export` with any Figma URL.
+If any server shows as disconnected, see the Troubleshooting section below.
 
 ## What happens automatically (from the org)
 
@@ -197,7 +152,7 @@ Check MCP connections:
 /mcp
 ```
 
-Both servers (github, atlassian) should show as connected. Figma uses `FIGMA_API_KEY` env var -- verify with `/improvs:figma-export`. If anything is missing, contact your manager.
+Both servers (github, atlassian) should show as connected after first-use authentication. Figma uses `FIGMA_API_KEY` env var -- verify with `/improvs:figma-export`. If anything is missing, contact your manager.
 
 ## Project-level config (CLAUDE.md)
 
@@ -242,7 +197,7 @@ If `/mcp` shows a server as disconnected or a skill says "Jira MCP failed":
 1. Open `/mcp` in Claude Code and re-authenticate the failing server
 2. For GitHub: your Personal Access Token may have expired -- generate a new one at
    `https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP`
-   and re-add it (see "Activate GitHub MCP" above)
+   and reinstall the plugin: `claude plugin install improvs@improvs-marketplace`
 3. For Atlassian: re-run the browser OAuth flow:
    ```
    /mcp

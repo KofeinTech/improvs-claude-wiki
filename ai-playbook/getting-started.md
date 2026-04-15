@@ -13,7 +13,7 @@ chmod +x setup-developer.sh
 ./setup-developer.sh
 ```
 
-The script guides you through each step interactively -- it opens browser windows for login/token creation and waits for you at each step.
+The script installs Node.js, Claude Code CLI, logs you into the org, and installs the Improvs and Superpowers plugins. MCP servers (GitHub, Atlassian) are delivered via the plugin -- tokens are prompted automatically on first use.
 
 If you prefer to set up manually, see the [Setup Guide](claude-code-setup.md) for step-by-step instructions.
 
