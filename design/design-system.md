@@ -1,6 +1,13 @@
 # Design System
 
-Shared design tokens, themes, and component library structure for Improvs projects.
+Shared design tokens, themes, and component library structure for Improvs projects. Built on Material 3.
+
+## Detailed references
+
+| Reference | Description |
+|-----------|-------------|
+| [Color Scheme](color-scheme.md) | All 46 M3 color roles, surface hierarchy, text-color pairings, custom extensions |
+| [Text Theme](text-theme.md) | All 15 M3 text styles, semantic roles, customization constraints |
 
 ## Design token hierarchy
 
@@ -29,21 +36,16 @@ Designers define these in Figma Variables. Developers mirror them in Flutter's `
 
 ## Color system
 
-### Required color tokens
+Material 3 defines **46 semantic color roles** organized into accent groups (Primary, Secondary, Tertiary), error, surface hierarchy, and utility roles.
 
-| Token | Purpose |
-|-------|---------|
-| primary | Main brand color, CTA buttons |
-| secondary | Supporting accent color |
-| background | Screen backgrounds |
-| surface | Card and container backgrounds |
-| error | Error states, destructive actions |
-| text-primary | Main text color |
-| text-secondary | Helper text, subtitles |
-| text-on-primary | Text on primary-colored backgrounds |
-| divider | Lines, separators |
+See [Color Scheme reference](color-scheme.md) for full token list, semantic meanings, and usage rules.
 
-All colors must be defined as Figma Variables. No hardcoded hex values in designs.
+Key principles:
+- Define colors by **role** (what the color does), not by hex value
+- Generate palettes from a seed color using `ColorScheme.fromSeed()`
+- Every `on{X}` / `{X}` pairing must meet **4.5:1** contrast ratio (WCAG AA)
+- Never hardcode hex values in designs or code -- always reference token names
+- Use `surfaceContainer*` levels for depth instead of arbitrary grays
 
 ## Spacing scale
 
@@ -60,19 +62,15 @@ All colors must be defined as Figma Variables. No hardcoded hex values in design
 
 ## Typography
 
-Define text styles for every use case:
+Material 3 defines **15 text styles** organized into 5 semantic roles (Display, Headline, Title, Body, Label) x 3 sizes (Large, Medium, Small).
 
-| Style | Typical values |
-|-------|---------------|
-| Heading / H1 | 24-32px, bold |
-| Heading / H2 | 20-24px, semibold |
-| Heading / H3 | 18-20px, semibold |
-| Body / Regular | 14-16px, regular |
-| Body / Bold | 14-16px, bold |
-| Caption | 12px, regular |
-| Button | 14-16px, medium/semibold |
+See [Text Theme reference](text-theme.md) for full token list, default values, and customization rules.
 
-Each style defines: font family, weight, size, line height, letter spacing.
+Key principles:
+- Use semantic token names (e.g., "Title/Medium" not "Roboto 16 Medium")
+- Keep size and weight values close to M3 defaults -- deviate only with intent
+- Stay within 400-600 font weight range for most roles
+- Verify readability at `bodySmall` (12px) -- minimum legible size
 
 ## Themes
 
@@ -90,19 +88,23 @@ Tokens map to Flutter's `ThemeData`:
 ```dart
 // lib/core/theme/app_theme.dart
 final lightTheme = ThemeData(
-  colorScheme: ColorScheme.light(
-    primary: Color(0xFF0066CC),
-    secondary: Color(0xFF...),
-    surface: Color(0xFF...),
-    error: Color(0xFF...),
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Color(0xFF0066CC),
+    // Override specific roles as needed:
+    // secondary: Color(0xFF...),
+    // error: Color(0xFF...),
   ),
   textTheme: TextTheme(
-    headlineLarge: TextStyle(...),   // H1
-    headlineMedium: TextStyle(...),  // H2
-    bodyLarge: TextStyle(...),       // Body
-    bodySmall: TextStyle(...),       // Caption
+    displayLarge: TextStyle(...),
+    headlineMedium: TextStyle(...),
+    titleMedium: TextStyle(...),
+    bodyLarge: TextStyle(...),
+    bodyMedium: TextStyle(...),
+    labelLarge: TextStyle(...),
   ),
 );
 ```
+
+For custom color roles beyond the 46 built-in tokens, use `ThemeExtension`. See [Color Scheme reference](color-scheme.md#extending-the-color-system-themeextension).
 
 Never use hardcoded colors or font sizes in widgets. Always reference `Theme.of(context)`.

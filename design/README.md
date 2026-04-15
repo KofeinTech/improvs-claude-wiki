@@ -9,6 +9,8 @@ How designers prepare Figma files for AI-powered Flutter development.
 | [Designer Guide](designer-guide.md) | Your role in the workflow, how your Figma files become code |
 | [Figma Structure](figma-structure.md) | Auto-layout, naming, components, tokens, file organization |
 | [Design System](design-system.md) | Design tokens, themes, component library |
+| [Color Scheme](color-scheme.md) | M3 ColorScheme -- all 46 color roles, surface hierarchy, extensions |
+| [Text Theme](text-theme.md) | M3 TextTheme -- all 15 text styles, semantic roles, customization |
 | [Handoff Process](handoff-process.md) | Step-by-step designer-to-developer handoff |
 
 ## Key principle
