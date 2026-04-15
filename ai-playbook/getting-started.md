@@ -13,7 +13,7 @@ chmod +x setup-developer.sh
 ./setup-developer.sh
 ```
 
-The script installs Node.js, Claude Code CLI, logs you into the org, and installs the Improvs and Superpowers plugins. MCP servers (GitHub, Atlassian) are delivered via the plugin -- tokens are prompted automatically on first use.
+The script installs Node.js, Claude Code CLI, GitHub CLI (`gh`), logs you into both the Claude org and GitHub, and installs the Improvs and Superpowers plugins. GitHub access uses `gh` CLI directly. Atlassian MCP uses browser OAuth on first use.
 
 If you prefer to set up manually, see the [Setup Guide](claude-code-setup.md) for step-by-step instructions.
 
@@ -30,7 +30,7 @@ When you start Claude Code in a project directory, several layers of context loa
 | **Project files** | Read access to every file in the working directory. Claude can navigate the codebase, find functions, understand how modules connect. |
 | **CLAUDE.md** | Project-specific instructions: tech stack, run/test/lint commands, base branch, conventions. Every Improvs project has one. |
 | **`.claude/rules/`** | Org-deployed coding rules for your stack (Flutter / .NET / Python / Docker). Loaded automatically -- no setup needed. |
-| **MCP servers** | Live connections to external systems: **Jira** (read/update tickets), **GitHub** (read PRs, create branches), **Figma** (read designs and tokens). Set up by `setup-developer.sh`. |
+| **MCP servers** | Live connections to external systems: **Jira** (read/update tickets via Atlassian MCP), **Figma** (read designs and tokens). **GitHub** access uses `gh` CLI directly. Set up by `setup-developer.sh`. |
 | **Org-wide rules** | Improvs global rules (git workflow, security, behavior) deployed via Claude Organization settings. Loaded into every session. |
 | **Hooks** | Background safety checks that intercept dangerous commands and run quality gates before commits. |
 

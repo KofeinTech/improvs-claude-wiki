@@ -16,12 +16,12 @@ chmod +x setup-developer.sh
 What the script does:
 1. Installs Node.js (if missing)
 2. Installs Claude Code CLI and logs you into the Improvs Claude organization
-3. Installs the Improvs plugin (delivers all skills + GitHub MCP + Atlassian MCP)
-4. Installs the Superpowers plugin
+3. Installs GitHub CLI (`gh`) and authenticates via browser
+4. Installs the Improvs plugin (skills + Atlassian MCP)
+5. Installs the Superpowers plugin
 
-MCP servers are delivered automatically via the Improvs plugin. Tokens are prompted on first use -- no manual configuration needed:
-- **GitHub**: prompted for your Personal Access Token the first time Claude uses the GitHub MCP
-- **Atlassian**: browser OAuth opens the first time Claude uses the Jira MCP
+- **GitHub**: Claude uses `gh` CLI directly (no MCP needed). Authenticated via `gh auth login` during setup.
+- **Atlassian**: MCP delivered via plugin, browser OAuth on first use.
 
 Works on macOS, Linux, and Windows (WSL).
 
@@ -52,24 +52,24 @@ claude login
 
 This opens a browser window. Log in with the account that was invited to the Improvs Claude Team organization. If you don't have an account yet, ask your manager for an invitation.
 
-### 3. MCP servers (automatic via plugin)
+### 3. GitHub CLI
 
-MCP servers are delivered by the Improvs plugin. No manual configuration needed.
+Claude Code uses `gh` CLI for all GitHub operations (repos, PRs, issues). No MCP or PAT needed.
 
-#### GitHub MCP
+```bash
+# macOS
+brew install gh
 
-GitHub MCP lets Claude read repos, create PRs, and manage issues.
+# Linux
+# See https://cli.github.com for install instructions
 
-The plugin prompts you for a GitHub Personal Access Token on first use. If you need to create one:
+# Authenticate
+gh auth login
+```
 
-1. Go to: `https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP`
-2. Set expiration to 90 days
-3. Click **Generate token** and copy it (starts with `ghp_`)
-4. Paste it when Claude prompts you
+Follow the browser prompts to log in with your GitHub account that has access to the KofeinTech org.
 
-To update your token later, reinstall the plugin: `claude plugin install improvs@improvs-marketplace`
-
-#### Atlassian MCP
+### 4. Atlassian MCP (via plugin)
 
 Atlassian MCP lets Claude read and update Jira tickets.
 
@@ -96,19 +96,22 @@ source ~/.zshrc
 
 This exports the design to local `design/` folder as JSON + SVG assets. All other skills (`/improvs:start`, `/improvs:figma-check`) read from these local files automatically.
 
-### 4. Verify MCP connections
+### 5. Verify connections
 
-Open Claude Code in any project and run:
+```bash
+# GitHub (should show authenticated)
+gh auth status
 
+# Atlassian + Figma (open Claude Code and run /mcp)
+claude
+> /mcp
 ```
-/mcp
-```
 
-- **github** -- prompted for PAT on first use, then shows **connected**
+- **github** -- verified via `gh auth status` (no MCP entry in /mcp)
 - **atlassian** -- browser OAuth on first use, then shows **connected**
 - **figma** -- uses `FIGMA_API_KEY` env var (provided by your lead)
 
-If any server shows as disconnected, see the Troubleshooting section below.
+If Atlassian shows as disconnected, see the Troubleshooting section below.
 
 ## What happens automatically (from the org)
 
@@ -152,7 +155,7 @@ Check MCP connections:
 /mcp
 ```
 
-Both servers (github, atlassian) should show as connected after first-use authentication. Figma uses `FIGMA_API_KEY` env var -- verify with `/improvs:figma-export`. If anything is missing, contact your manager.
+GitHub: verify with `gh auth status`. Atlassian: should show as connected in `/mcp` after first-use OAuth. Figma uses `FIGMA_API_KEY` env var -- verify with `/improvs:figma-export`. If anything is missing, contact your manager.
 
 ## Project-level config (CLAUDE.md)
 
@@ -190,19 +193,21 @@ If `/improvs:` doesn't list skills (like /improvs:start, /improvs:finish, /impro
 4. Update the CLI: `npm update -g @anthropic-ai/claude-code`
 5. Restart Claude Code
 
+### GitHub not working
+
+Claude uses `gh` CLI for GitHub, not MCP. Check:
+
+1. `gh auth status` -- should show authenticated
+2. If not: `gh auth login`
+3. If `gh` command not found: install from https://cli.github.com or re-run the setup script
+
 ### MCP server not connecting
 
-If `/mcp` shows a server as disconnected or a skill says "Jira MCP failed":
+If `/mcp` shows Atlassian as disconnected or a skill says "Jira MCP failed":
 
-1. Open `/mcp` in Claude Code and re-authenticate the failing server
-2. For GitHub: your Personal Access Token may have expired -- generate a new one at
-   `https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP`
-   and reinstall the plugin: `claude plugin install improvs@improvs-marketplace`
-3. For Atlassian: re-run the browser OAuth flow:
-   ```
-   /mcp
-   ```
-   Click the authorization link next to the `atlassian` server and log in again.
+1. Open `/mcp` in Claude Code and re-authenticate
+2. Click the authorization link next to the `atlassian` server and log in again
+3. If still failing, reinstall the plugin: `claude plugin install improvs@improvs-marketplace`
 4. For Figma: uses `FIGMA_API_KEY` env var. Check:
    - `echo $FIGMA_API_KEY` -- should print the token
    - If empty, ask your lead for the shared key and add to `~/.zshrc`

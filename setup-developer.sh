@@ -5,12 +5,12 @@
 # Sets up a clean machine with:
 #   1. Node.js (if missing)
 #   2. Claude Code CLI + org login
-#   3. Improvs plugin (installs skills + GitHub MCP + Atlassian MCP automatically)
-#   4. Superpowers plugin
+#   3. GitHub CLI + login (used by Claude Code for all GitHub operations)
+#   4. Improvs plugin (skills + Atlassian MCP)
+#   5. Superpowers plugin
 #
-# MCP servers (GitHub, Atlassian) are delivered via the Improvs plugin.
-# GitHub PAT is prompted automatically by the plugin on first use.
-# Atlassian MCP uses browser OAuth on first use.
+# GitHub access: via gh CLI (no MCP needed -- Claude uses gh commands directly)
+# Atlassian MCP: delivered via Improvs plugin, browser OAuth on first use
 #
 # Usage:
 #   ./setup-developer.sh
@@ -66,7 +66,7 @@ detect_os() {
 # Step 1: Node.js
 # ---------------------------------------------------------------------------
 setup_node() {
-    step "Step 1/4: Node.js"
+    step "Step 1/5: Node.js"
 
     if command -v node &>/dev/null; then
         success "Node.js already installed: $(node -v)"
@@ -117,7 +117,7 @@ setup_node() {
 # Step 2: Claude Code CLI + Login
 # ---------------------------------------------------------------------------
 setup_claude() {
-    step "Step 2/4: Claude Code CLI"
+    step "Step 2/5: Claude Code CLI"
 
     if command -v claude &>/dev/null; then
         success "Claude Code already installed: $(claude --version 2>/dev/null || echo 'installed')"
@@ -187,14 +187,100 @@ setup_claude() {
 }
 
 # ---------------------------------------------------------------------------
-# Step 3: Improvs Plugin (skills + GitHub MCP + Atlassian MCP)
+# Step 3: GitHub CLI + Login
+# ---------------------------------------------------------------------------
+setup_github() {
+    step "Step 3/5: GitHub CLI"
+
+    echo "  GitHub CLI (gh) gives Claude Code full access to repos, PRs, and issues."
+    echo "  No MCP or PAT needed -- Claude uses gh commands directly."
+    echo ""
+
+    # Install gh if missing
+    if command -v gh &>/dev/null; then
+        success "GitHub CLI already installed: $(gh --version 2>/dev/null | head -1)"
+    else
+        info "GitHub CLI not found. Installing..."
+        case "$OS" in
+            macos)
+                if command -v brew &>/dev/null; then
+                    brew install gh
+                else
+                    echo "  Install GitHub CLI from: https://cli.github.com"
+                    echo "  After installing, re-run this script."
+                    exit 1
+                fi
+                ;;
+            linux|wsl)
+                if command -v apt-get &>/dev/null; then
+                    info "Installing via apt..."
+                    (type -p wget >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq wget)) \
+                        && sudo mkdir -p -m 755 /etc/apt/keyrings \
+                        && out=$(mktemp) && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee "$out" > /dev/null \
+                        && sudo chmod go+r "$out" && sudo mv "$out" /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+                        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+                        && sudo apt-get update -qq && sudo apt-get install -y -qq gh
+                elif command -v dnf &>/dev/null; then
+                    sudo dnf install -y gh
+                else
+                    echo "  Install GitHub CLI from: https://cli.github.com"
+                    echo "  After installing, re-run this script."
+                    exit 1
+                fi
+                ;;
+            windows-git-bash)
+                echo "  Install GitHub CLI from: https://cli.github.com"
+                echo "  After installing, restart your terminal and re-run this script."
+                exit 1
+                ;;
+        esac
+
+        if command -v gh &>/dev/null; then
+            success "GitHub CLI installed: $(gh --version 2>/dev/null | head -1)"
+        else
+            warn "GitHub CLI installation failed. Install manually from: https://cli.github.com"
+            return
+        fi
+    fi
+
+    # Check if already authenticated
+    if gh auth status &>/dev/null; then
+        local gh_user
+        gh_user=$(gh api user --jq '.login' 2>/dev/null || echo "authenticated")
+        success "GitHub CLI already authenticated as: $gh_user"
+        return
+    fi
+
+    echo ""
+    info "Logging in to GitHub..."
+    echo ""
+    echo "  A browser will open for GitHub authentication."
+    echo "  Log in with your GitHub account that has access to the KofeinTech org."
+    echo ""
+
+    gh auth login -h github.com -p https -w </dev/tty 2>/dev/null || gh auth login -h github.com -p https -w || {
+        warn "GitHub login did not complete. You can log in later:"
+        echo "  gh auth login"
+        return
+    }
+
+    if gh auth status &>/dev/null; then
+        local gh_user
+        gh_user=$(gh api user --jq '.login' 2>/dev/null || echo "authenticated")
+        success "GitHub authenticated as: $gh_user"
+    else
+        warn "GitHub login not detected. Run later: gh auth login"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Step 4: Improvs Plugin (skills + Atlassian MCP)
 # ---------------------------------------------------------------------------
 setup_improvs_plugin() {
-    step "Step 3/4: Improvs Plugin"
+    step "Step 4/5: Improvs Plugin"
 
-    echo "  The Improvs plugin installs everything in one command:"
+    echo "  The Improvs plugin installs:"
     echo "    - All /slash-command skills (/start, /finish, /review, /test, etc.)"
-    echo "    - GitHub MCP server (prompted for PAT on first use)"
     echo "    - Atlassian MCP server (browser OAuth on first use)"
     echo ""
 
@@ -218,18 +304,17 @@ setup_improvs_plugin() {
         return
     }
 
-    success "Improvs plugin installed (skills + GitHub MCP + Atlassian MCP)"
+    success "Improvs plugin installed (skills + Atlassian MCP)"
     echo ""
-    echo "  GitHub PAT: prompted automatically on first use of GitHub MCP."
-    echo "  Atlassian:  browser OAuth opens on first Jira interaction."
+    echo "  Atlassian: browser OAuth opens on first Jira interaction."
     echo ""
 }
 
 # ---------------------------------------------------------------------------
-# Step 4: Superpowers Plugin
+# Step 5: Superpowers Plugin
 # ---------------------------------------------------------------------------
 setup_superpowers() {
-    step "Step 4/4: Superpowers Plugin"
+    step "Step 5/5: Superpowers Plugin"
 
     echo "  Superpowers gives Claude TDD, structured planning, code review,"
     echo "  and systematic debugging. Improvs /start invokes them automatically."
@@ -276,13 +361,25 @@ verify_setup() {
         issues=$((issues + 1))
     fi
 
+    if command -v gh &>/dev/null; then
+        if gh auth status &>/dev/null; then
+            success "GitHub CLI: authenticated"
+        else
+            warn "GitHub CLI: installed but not authenticated (run: gh auth login)"
+            issues=$((issues + 1))
+        fi
+    else
+        warn "GitHub CLI: not found"
+        issues=$((issues + 1))
+    fi
+
     echo ""
     info "Checking plugins..."
     local plugin_output
     plugin_output=$(claude plugin list 2>&1) || true
 
     if echo "$plugin_output" | grep -q "improvs"; then
-        success "Improvs plugin: installed (skills + GitHub MCP + Atlassian MCP)"
+        success "Improvs plugin: installed (skills + Atlassian MCP)"
     else
         warn "Improvs plugin: not installed"
         issues=$((issues + 1))
@@ -309,10 +406,10 @@ verify_setup() {
     echo ""
     echo "  1. Open any project and run: claude"
     echo ""
-    echo "  2. Verify MCP connections: type /mcp in Claude Code"
-    echo "     - github    prompted for PAT on first use"
-    echo "     - atlassian browser OAuth on first use"
-    echo "     - figma     provided separately by your lead (FIGMA_API_KEY env var)"
+    echo "  2. Verify connections:"
+    echo "     - GitHub:    gh auth status (should show authenticated)"
+    echo "     - Atlassian: type /mcp in Claude Code, browser OAuth on first use"
+    echo "     - Figma:     provided separately by your lead (FIGMA_API_KEY env var)"
     echo ""
     echo "  3. Test a skill: type /start <JIRA-KEY>"
     echo ""
@@ -336,10 +433,10 @@ echo ""
 echo "  This script will set up your machine for development:"
 echo "    - Node.js"
 echo "    - Claude Code CLI + organization login"
-echo "    - Improvs plugin (skills + GitHub MCP + Atlassian MCP)"
+echo "    - GitHub CLI + authentication"
+echo "    - Improvs plugin (skills + Atlassian MCP)"
 echo "    - Superpowers plugin"
 echo ""
-echo "  Tokens are prompted automatically by the plugins on first use."
 echo "  Everything is handled automatically."
 echo ""
 
@@ -348,6 +445,7 @@ wait_for_user "Press Enter to start..."
 detect_os
 setup_node
 setup_claude
+setup_github
 setup_improvs_plugin
 setup_superpowers
 verify_setup
