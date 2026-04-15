@@ -254,11 +254,14 @@ setup_github() {
     echo ""
     info "Logging in to GitHub..."
     echo ""
-    echo "  A browser will open for GitHub authentication."
+    echo "  A browser will open and you'll see a one-time code."
+    echo "  IMPORTANT: Copy the code from the terminal, then paste it in the browser."
     echo "  Log in with your GitHub account that has access to the KofeinTech org."
     echo ""
 
-    gh auth login -h github.com -p https -w </dev/tty 2>/dev/null || gh auth login -h github.com -p https -w || {
+    wait_for_user "Press Enter to start GitHub login..."
+
+    gh auth login -h github.com -p https -w < /dev/tty || {
         warn "GitHub login did not complete. You can log in later:"
         echo "  gh auth login"
         return
