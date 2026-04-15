@@ -15,14 +15,16 @@ chmod +x setup-developer.sh
 
 What the script does:
 1. Installs Node.js (if missing)
-2. Installs Claude Code CLI (falls back to `sudo` if global npm install fails)
-3. Logs you into the Improvs Claude organization (verifies login, retries up to 3 times)
-4. Sets up GitHub MCP (shows URL to create a Personal Access Token, validates the token against GitHub API)
-5. Sets up Atlassian/Jira MCP (asks for email + API token, validates against Atlassian API)
-6. Adds superpowers marketplace and installs the plugin
-7. Verifies all MCP servers and plugins are registered
+2. Installs Claude Code CLI and logs you into the Improvs Claude organization
+3. Checks your Atlassian account access
+4. Adds GitHub MCP server entry to your config (placeholder -- activate after setup)
+5. Adds Atlassian MCP server entry to your config (browser OAuth on first use)
+6. Installs the Superpowers plugin
+7. Verifies all MCP entries are present in config
 
-The script guides you through each step interactively -- it shows URLs to open in your browser and validates each authentication step before moving on. Works on macOS, Linux, and Windows (WSL).
+**After the script finishes**, activate each MCP server following the instructions below.
+
+Works on macOS, Linux, and Windows (WSL). No browser windows are opened during setup -- all steps are done in the terminal.
 
 ## Manual setup
 
@@ -51,36 +53,78 @@ claude login
 
 This opens a browser window. Log in with the account that was invited to the Improvs Claude Team organization. If you don't have an account yet, ask your manager for an invitation.
 
-### 3. Set up MCP servers
+### 3. Activate MCP servers
 
-MCP servers connect Claude Code to Jira, GitHub, and Figma. Each developer must set these up on their own machine.
+The setup script adds MCP server entries to `~/.claude.json` automatically. After the script runs, you need to activate each one with your credentials.
 
-All `claude mcp` and `claude plugin` commands below are run in your **regular terminal** (not inside a Claude Code session).
+All commands below are run in your **regular terminal** (not inside a Claude Code session).
 
-**GitHub MCP** -- lets Claude read repos, create PRs, manage issues:
+---
 
-1. Go to https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP
-2. Generate a Personal Access Token (classic) with scopes: `repo`, `read:org`, `read:user`
-3. Copy the token and run in your terminal:
+#### Activate GitHub MCP
+
+GitHub MCP lets Claude read repos, create PRs, and manage issues.
+
+**Step 1 -- Create a Personal Access Token:**
+
+1. Go to: `https://github.com/settings/tokens/new`
+   (GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic))
+2. Fill in:
+   - Note: `Claude Code MCP`
+   - Expiration: 90 days (recommended)
+3. Select these scopes:
+   - `[x] repo` -- full access to private repos
+   - `[x] read:org` -- read org membership
+   - `[x] read:user` -- read profile data
+4. Click **Generate token** and copy it immediately (starts with `ghp_`)
+
+Quick link with scopes pre-filled:
+`https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP`
+
+**Step 2 -- Add token to your config:**
+
 ```bash
-claude mcp add-json github '{"type":"http","url":"https://api.githubcopilot.com/mcp","headers":{"Authorization":"Bearer YOUR_TOKEN_HERE"}}' --scope user
+# Replace YOUR_GITHUB_PAT with the token you just created
+jq --arg t "Bearer YOUR_GITHUB_PAT" \
+  '.mcpServers.github.headers.Authorization = $t' \
+  ~/.claude.json > /tmp/claude.json && mv /tmp/claude.json ~/.claude.json
 ```
 
-**Atlassian (Jira) MCP** -- lets Claude read/update tickets:
-
-Uses API token authentication (OAuth is not supported in Claude Code yet -- see anthropics/claude-code#36374).
-
-1. Create a personal API token at https://id.atlassian.com/manage-profile/security/api-tokens
-2. Base64-encode your credentials:
+Or run in terminal:
 ```bash
-echo -n "your.email@improvs.com:YOUR_API_TOKEN" | base64
-```
-3. Add the server:
-```bash
-claude mcp add-json atlassian '{"type":"http","url":"https://mcp.atlassian.com/v1/mcp","headers":{"Authorization":"Basic BASE64_STRING_HERE"}}' --scope user
+claude mcp add-json github \
+  '{"type":"http","url":"https://api.githubcopilot.com/mcp","headers":{"Authorization":"Bearer YOUR_GITHUB_PAT"}}' \
+  --scope user
 ```
 
-If you don't have access to improvs.atlassian.net, ask your manager to invite you at https://improvs.atlassian.net/people.
+**Step 3 -- Verify:**
+Open Claude Code and run `/mcp` -- `github` should show as **connected**.
+
+---
+
+#### Activate Atlassian MCP
+
+Atlassian MCP lets Claude read and update Jira tickets.
+
+Uses the official Atlassian MCP server (`mcp.atlassian.com`) with browser-based OAuth. No token needed -- authentication happens automatically when Claude first uses Jira.
+
+**Step 1 -- Make sure you have access:**
+
+If you don't have access to `improvs.atlassian.net`, ask your manager to invite you at:
+`https://improvs.atlassian.net/people`
+
+**Step 2 -- Trigger authentication:**
+
+Open Claude Code in any project and run:
+```
+/mcp
+```
+
+The `atlassian` server will show as **needs authorization**. Click the authorization link -- a browser window opens. Log in with your `improvs.atlassian.net` account and authorize.
+
+After authorizing, run `/mcp` again -- `atlassian` should show as **connected**.
+
+That's it. No tokens or config changes needed.
 
 **Figma API key** -- lets Claude export and read Figma designs via REST API:
 
@@ -196,14 +240,14 @@ If `/improvs:` doesn't list skills (like /improvs:start, /improvs:finish, /impro
 If `/mcp` shows a server as disconnected or a skill says "Jira MCP failed":
 
 1. Open `/mcp` in Claude Code and re-authenticate the failing server
-2. For GitHub: your Personal Access Token may have expired -- generate a new one and re-add the server
-3. For Atlassian: generate a new API token and re-add:
-   ```bash
-   claude mcp remove atlassian
-   # Create new token at https://id.atlassian.com/manage-profile/security/api-tokens
-   # Base64 encode: echo -n "email:token" | base64
-   claude mcp add-json atlassian '{"type":"http","url":"https://mcp.atlassian.com/v1/mcp","headers":{"Authorization":"Basic BASE64_HERE"}}' --scope user
+2. For GitHub: your Personal Access Token may have expired -- generate a new one at
+   `https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP`
+   and re-add it (see "Activate GitHub MCP" above)
+3. For Atlassian: re-run the browser OAuth flow:
    ```
+   /mcp
+   ```
+   Click the authorization link next to the `atlassian` server and log in again.
 4. For Figma: uses `FIGMA_API_KEY` env var. Check:
    - `echo $FIGMA_API_KEY` -- should print the token
    - If empty, ask your lead for the shared key and add to `~/.zshrc`

@@ -5,10 +5,12 @@
 # Sets up a clean machine with:
 #   1. Node.js (if missing)
 #   2. Claude Code CLI + org login
-#   3. Atlassian account (guided signup if needed)
-#   4. GitHub MCP server (with PAT)
-#   5. Atlassian (Jira) MCP server (OAuth)
+#   3. Atlassian account (guided check)
+#   4. GitHub MCP server (PAT token)
+#   5. Atlassian (Jira) MCP server (API token + Basic Auth)
 #   6. Superpowers plugin
+#
+# No browser is opened. The script prints instructions and asks for tokens.
 #
 # Usage:
 #   ./setup-developer.sh
@@ -33,14 +35,6 @@ success() { echo -e "${GREEN}[OK]${NC} $1"; }
 warn()    { echo -e "${YELLOW}[WARN]${NC} $1"; }
 fail()    { echo -e "${RED}[FAIL]${NC} $1"; exit 1; }
 step()    { echo -e "\n${BOLD}============================================${NC}"; info "$1"; echo -e "${BOLD}============================================${NC}\n"; }
-
-open_url() {
-    local url="$1"
-    echo ""
-    echo -e "  ${BOLD}Open this URL in your browser:${NC}"
-    echo -e "  ${BLUE}${url}${NC}"
-    echo ""
-}
 
 wait_for_user() {
     local msg="${1:-Press Enter when ready to continue...}"
@@ -68,7 +62,34 @@ prompt_token() {
             warn "Cannot be empty. Try again."
         fi
     done
-    eval "$var_name='$token'"
+    printf -v "$var_name" '%s' "$token"
+}
+
+# Write an MCP server entry into ~/.claude.json using jq.
+# Usage: write_mcp_server "server-name" '{"type":"http","url":"...","headers":{...}}'
+write_mcp_server() {
+    local server_name="$1"
+    local server_json="$2"
+    local config_file="$HOME/.claude.json"
+
+    # Create file with empty object if missing
+    if [[ ! -f "$config_file" ]]; then
+        echo '{}' > "$config_file"
+    fi
+
+    # Validate the server JSON
+    if ! echo "$server_json" | jq empty 2>/dev/null; then
+        warn "Invalid JSON for MCP server '$server_name'. Skipping."
+        return 1
+    fi
+
+    # Merge server into mcpServers (creates key if missing)
+    local tmp_file
+    tmp_file=$(mktemp)
+    jq --arg name "$server_name" --argjson srv "$server_json" \
+        '.mcpServers[$name] = $srv' "$config_file" > "$tmp_file" && mv "$tmp_file" "$config_file"
+
+    return 0
 }
 
 # ---------------------------------------------------------------------------
@@ -109,12 +130,11 @@ setup_node() {
             else
                 echo "  Node.js is required but Homebrew is not installed."
                 echo ""
-                echo "  Option A: Install Homebrew first, then re-run:"
+                echo "  Option A -- Install Homebrew first, then re-run:"
                 echo "    /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
                 echo "    brew install node"
                 echo ""
-                echo "  Option B: Download Node.js directly:"
-                open_url "https://nodejs.org/en/download"
+                echo "  Option B -- Download Node.js from: https://nodejs.org/en/download"
                 echo ""
                 echo "  After installing Node.js, re-run this script."
                 exit 1
@@ -128,18 +148,13 @@ setup_node() {
             elif command -v dnf &>/dev/null; then
                 sudo dnf install -y nodejs npm
             else
-                echo "  Install Node.js manually:"
-                echo "    https://nodejs.org/en/download"
-                echo ""
+                echo "  Install Node.js manually from: https://nodejs.org/en/download"
                 echo "  After installing, re-run this script."
                 exit 1
             fi
             ;;
         windows-git-bash)
-            echo "  Download and install Node.js:"
-            echo "    https://nodejs.org/en/download"
-            open_url "https://nodejs.org/en/download"
-            echo ""
+            echo "  Download and install Node.js from: https://nodejs.org/en/download"
             echo "  After installing, restart your terminal and re-run this script."
             exit 1
             ;;
@@ -168,14 +183,29 @@ setup_claude() {
         success "Claude Code installed"
     fi
 
+    # Check if already logged in
+    local auth_json
+    auth_json=$(claude auth status --json 2>/dev/null) || true
+    if echo "$auth_json" | grep -q '"loggedIn": true'; then
+        local email org
+        email=$(echo "$auth_json" | grep '"email"' | sed 's/.*: "//;s/".*//')
+        org=$(echo "$auth_json" | grep '"orgName"' | sed 's/.*: "//;s/".*//')
+        success "Already logged in as: $email (org: $org)"
+        return
+    fi
+
     echo ""
-    info "Now you need to log in to your Improvs Claude organization account."
+    info "You need to log in to the Improvs Claude organization."
     echo ""
-    echo "  This will open a browser window. Log in with the account"
-    echo "  that was invited to the Improvs Claude Team organization."
+    echo "  This will open a browser for authentication."
+    echo "  Log in with the account invited to the Improvs Claude Team org."
     echo ""
     echo "  If you don't have an account yet, ask your manager"
     echo "  for an invitation to the Claude organization."
+    echo ""
+    echo "  IMPORTANT: After login completes in the browser,"
+    echo "  come back to this terminal. If Claude opens interactively,"
+    echo "  type /exit or press Ctrl+C to return to the setup."
     echo ""
 
     local max_attempts=3
@@ -188,7 +218,6 @@ setup_claude() {
         claude login </dev/tty 2>/dev/null || claude login </dev/null || true
 
         # Verify login succeeded
-        local auth_json
         auth_json=$(claude auth status --json 2>/dev/null) || true
         if echo "$auth_json" | grep -q '"loggedIn": true'; then
             local email org
@@ -222,22 +251,20 @@ setup_atlassian_account() {
     fi
 
     echo ""
-    echo "  To get access to Jira:"
+    echo "  To get access to Jira, do the following BEFORE continuing:"
     echo ""
-    echo "  1. Go to: https://id.atlassian.com/signup"
-    echo "     Create an account with your work email"
+    echo "  1. Create an Atlassian account:"
+    echo "     Go to https://id.atlassian.com/signup"
+    echo "     Use your work email (e.g. name@improvs.com)"
     echo ""
-    echo "  2. Ask your manager to invite you to improvs.atlassian.net"
-    echo "     They need to go to:"
-    echo "     https://improvs.atlassian.net/people"
-    echo "     and add your email address"
+    echo "  2. Ask your manager to invite you to the Improvs workspace."
+    echo "     They go to: https://improvs.atlassian.net/people"
+    echo "     and add your email address."
     echo ""
-    echo "  3. Accept the invitation email from Atlassian"
+    echo "  3. Accept the invitation email from Atlassian."
     echo ""
     echo "  4. Verify you can open: https://improvs.atlassian.net"
     echo ""
-
-    open_url "https://id.atlassian.com/signup"
 
     wait_for_user "Press Enter once you have access to improvs.atlassian.net..."
     success "Atlassian account setup done"
@@ -251,72 +278,22 @@ setup_github_mcp() {
 
     echo "  GitHub MCP lets Claude read repos, create PRs, and manage issues."
     echo ""
-    echo "  You need a Personal Access Token (classic). The script will"
-    echo "  open GitHub with the right scopes pre-selected."
-    echo ""
-    echo "  Required scopes (pre-filled):"
-    echo "    - repo        (access private repos)"
-    echo "    - read:org    (read org membership)"
-    echo "    - read:user   (read profile data)"
-    echo ""
 
-    if ! prompt_yn "Do you have a GitHub account?"; then
-        echo ""
-        echo "  Create a GitHub account first:"
-        echo "    https://github.com/signup"
-        echo ""
-        echo "  Then ask your manager to add you to the 'kofeintech' org."
-        echo ""
-        open_url "https://github.com/signup"
-        wait_for_user "Press Enter once you have a GitHub account and org access..."
+    local gh_mcp_json
+    gh_mcp_json='{"type":"http","url":"https://api.githubcopilot.com/mcp","headers":{"Authorization":"Bearer YOUR_GITHUB_PAT"}}'
+
+    if write_mcp_server "github" "$gh_mcp_json"; then
+        success "GitHub MCP entry added to ~/.claude.json"
+    else
+        warn "Failed to write GitHub MCP config."
+        return
     fi
 
     echo ""
-    info "Opening GitHub token creation page..."
+    echo "  ACTION REQUIRED after setup:"
+    echo "  GitHub MCP requires a Personal Access Token to connect."
+    echo "  See: ai-playbook/claude-code-setup.md -- section 'Activate GitHub MCP'"
     echo ""
-    echo "  1. Set a name (e.g. 'Claude Code MCP')"
-    echo "  2. Set expiration (recommended: 90 days)"
-    echo "  3. Scopes are pre-selected -- don't change them"
-    echo "  4. Click 'Generate token'"
-    echo "  5. Copy the token (starts with ghp_...)"
-    echo ""
-
-    open_url "https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP"
-
-    wait_for_user "Press Enter once you see the token..."
-
-    local max_attempts=3
-    local attempt=0
-
-    while [[ $attempt -lt $max_attempts ]]; do
-        attempt=$((attempt + 1))
-
-        prompt_token GITHUB_PAT "Paste your GitHub token here: "
-
-        # Validate token against GitHub API
-        info "Verifying token..."
-        local gh_response
-        gh_response=$(curl -sf -H "Authorization: Bearer $GITHUB_PAT" https://api.github.com/user 2>/dev/null) || true
-
-        if echo "$gh_response" | grep -q '"login"'; then
-            local gh_user
-            gh_user=$(echo "$gh_response" | grep '"login"' | head -1 | sed 's/.*: "//;s/".*//')
-            success "Token valid -- GitHub user: $gh_user"
-
-            info "Adding GitHub MCP to Claude Code..."
-            claude mcp add-json github "{\"type\":\"http\",\"url\":\"https://api.githubcopilot.com/mcp\",\"headers\":{\"Authorization\":\"Bearer $GITHUB_PAT\"}}" --scope user
-
-            success "GitHub MCP configured"
-            return
-        fi
-
-        if [[ $attempt -lt $max_attempts ]]; then
-            warn "Token is invalid or expired. Please generate a new one and try again. (attempt $attempt/$max_attempts)"
-        fi
-    done
-
-    warn "GitHub token validation failed after $max_attempts attempts."
-    echo "  You can set it up later. See: ai-playbook/claude-code-setup.md"
 }
 
 # ---------------------------------------------------------------------------
@@ -326,81 +303,29 @@ setup_atlassian_mcp() {
     step "Step 5/6: Atlassian (Jira) MCP Server"
 
     echo "  Jira MCP lets Claude read and update tickets."
-    echo "  Uses the official Atlassian Rovo MCP server with API token auth."
-    echo ""
-    echo "  You need to create a personal API token for your Atlassian account."
-    echo ""
-    echo "  Steps:"
-    echo "    1. Open the URL below"
-    echo "    2. Click 'Create API token'"
-    echo "    3. Name it 'Claude Code' and click 'Create'"
-    echo "    4. Copy the token"
+    echo "  Uses the official Atlassian MCP server with browser-based OAuth."
     echo ""
 
-    open_url "https://id.atlassian.com/manage-profile/security/api-tokens"
+    local atlassian_mcp_json
+    atlassian_mcp_json='{"type":"http","url":"https://mcp.atlassian.com/v1/mcp"}'
 
-    wait_for_user "Press Enter once you have the token..."
+    if write_mcp_server "atlassian" "$atlassian_mcp_json"; then
+        success "Atlassian MCP entry added to ~/.claude.json"
+    else
+        warn "Failed to write Atlassian MCP config."
+        return
+    fi
 
-    local max_attempts=3
-    local attempt=0
-
-    while [[ $attempt -lt $max_attempts ]]; do
-        attempt=$((attempt + 1))
-
-        local ATLASSIAN_EMAIL=""
-        prompt_token ATLASSIAN_EMAIL "Your Atlassian email (e.g. name@improvs.com): "
-        local ATLASSIAN_TOKEN=""
-        prompt_token ATLASSIAN_TOKEN "Paste your Atlassian API token: "
-
-        # Base64 encode credentials
-        local BASIC_AUTH
-        BASIC_AUTH=$(printf '%s:%s' "$ATLASSIAN_EMAIL" "$ATLASSIAN_TOKEN" | base64)
-
-        # Validate token against Atlassian API
-        info "Verifying token..."
-        local atlassian_response
-        atlassian_response=$(curl -sf -H "Authorization: Basic $BASIC_AUTH" \
-            "https://improvs.atlassian.net/rest/api/3/myself" 2>/dev/null) || true
-
-        if echo "$atlassian_response" | grep -q '"accountId"'; then
-            local display_name
-            display_name=$(echo "$atlassian_response" | grep '"displayName"' | head -1 | sed 's/.*: "//;s/".*//')
-            success "Token valid -- Atlassian user: $display_name"
-
-            # Remove old server if exists
-            claude mcp remove atlassian 2>/dev/null || true
-
-            info "Adding Atlassian MCP to Claude Code..."
-            claude mcp add-json atlassian "{\"type\":\"http\",\"url\":\"https://mcp.atlassian.com/v1/mcp\",\"headers\":{\"Authorization\":\"Basic $BASIC_AUTH\"}}" --scope user
-
-            # Verify MCP connection
-            info "Verifying MCP connection..."
-            local mcp_status
-            mcp_status=$(claude mcp get atlassian 2>&1) || true
-
-            if echo "$mcp_status" | grep -qi "connected\|running\|ok\|tools"; then
-                success "Atlassian MCP: connected"
-            else
-                success "Atlassian MCP: registered (token validated)"
-            fi
-            return
-        fi
-
-        if [[ $attempt -lt $max_attempts ]]; then
-            warn "Token or email is invalid. Check your email and generate a new token. (attempt $attempt/$max_attempts)"
-        fi
-    done
-
-    warn "Atlassian token validation failed after $max_attempts attempts."
-    echo "  You can set it up later. See: ai-playbook/claude-code-setup.md"
+    echo ""
+    echo "  ACTION REQUIRED after setup:"
+    echo "  The first time Claude uses Jira, a browser window will open."
+    echo "  Log in with your improvs.atlassian.net account to authorize."
+    echo "  See: ai-playbook/claude-code-setup.md -- section 'Activate Atlassian MCP'"
+    echo ""
 }
 
 # ---------------------------------------------------------------------------
-# Step 6: (reserved -- Figma API key provided manually by lead)
-# ---------------------------------------------------------------------------
-
-# ---------------------------------------------------------------------------
-# Step 7: Superpowers Plugin
+# Step 6: Superpowers Plugin
 # ---------------------------------------------------------------------------
 setup_superpowers() {
     step "Step 6/6: Superpowers Plugin"
@@ -452,22 +377,20 @@ verify_setup() {
     fi
 
     echo ""
-    info "Checking MCP servers..."
-    local mcp_output
-    mcp_output=$(claude mcp list 2>&1) || true
-    echo "$mcp_output"
+    info "Checking MCP servers in ~/.claude.json..."
+    local config_file="$HOME/.claude.json"
 
-    if echo "$mcp_output" | grep -q "github"; then
-        success "GitHub MCP: registered"
+    if [[ -f "$config_file" ]] && jq -e '.mcpServers.github' "$config_file" &>/dev/null; then
+        success "GitHub MCP: configured"
     else
-        warn "GitHub MCP: not found"
+        warn "GitHub MCP: not found in ~/.claude.json"
         issues=$((issues + 1))
     fi
 
-    if echo "$mcp_output" | grep -q "atlassian"; then
-        success "Atlassian MCP: registered"
+    if [[ -f "$config_file" ]] && jq -e '.mcpServers.atlassian' "$config_file" &>/dev/null; then
+        success "Atlassian MCP: configured"
     else
-        warn "Atlassian MCP: not found"
+        warn "Atlassian MCP: not found in ~/.claude.json"
         issues=$((issues + 1))
     fi
 
@@ -529,13 +452,32 @@ echo "    - Atlassian (Jira) account + MCP"
 echo "    - GitHub MCP"
 echo "    - Superpowers plugin"
 echo ""
-echo "  It will show URLs to open in your browser for login/signup."
-echo "  Follow the instructions for each step."
+echo "  You will need the following tokens BEFORE starting:"
+echo ""
+echo "    1. GitHub Personal Access Token (classic)"
+echo "       Create at: https://github.com/settings/tokens/new?scopes=repo,read:org,read:user&description=Claude+Code+MCP"
+echo ""
+echo "    2. Atlassian API Token"
+echo "       Create at: https://id.atlassian.com/manage-profile/security/api-tokens"
+echo ""
+echo "  The script will guide you through each step."
 echo ""
 
 wait_for_user "Press Enter to start..."
 
 detect_os
+
+# jq is required for writing MCP config to ~/.claude.json
+if ! command -v jq &>/dev/null; then
+    info "Installing jq (required for MCP setup)..."
+    case "$OS" in
+        macos)          brew install jq 2>/dev/null || { warn "Install jq manually: brew install jq"; } ;;
+        linux|wsl)      sudo apt-get install -y jq 2>/dev/null || sudo yum install -y jq 2>/dev/null || { warn "Install jq manually"; } ;;
+        *)              warn "Please install jq before continuing: https://jqlang.github.io/jq/download/" ;;
+    esac
+fi
+command -v jq &>/dev/null || fail "jq is required but could not be installed. Install it and re-run."
+
 setup_node
 setup_claude
 setup_atlassian_account
