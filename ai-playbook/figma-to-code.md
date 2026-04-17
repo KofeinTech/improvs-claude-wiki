@@ -150,6 +150,38 @@ causes the most common rework.
   - `JUSTIFIED` → `TextAlign.justify`
 - If the design says CENTER, the code must say center. Do not default to start.
 
+### Child sizing must match the design
+
+- `layoutAlign: STRETCH` on a child means it fills the parent's cross-axis dimension. In Flutter: set `width: double.infinity` (Column child) or `height: double.infinity` (Row child), or use `CrossAxisAlignment.stretch` on parent
+- `layoutGrow: 1` means the child expands to fill remaining space. In Flutter: wrap in `Expanded()`
+- `primaryAxisSizingMode: AUTO` means hug content. In Flutter: `MainAxisSize.min`
+- `primaryAxisSizingMode: FIXED` means fill container. In Flutter: `MainAxisSize.max`
+
+### Text must be pixel-perfect
+
+Line height in Flutter is a ratio: Figma 24px line height on 16px font = `height: 1.5`
+
+**Critical -- the #1 cause of pixel drift:** Flutter distributes line-height leading differently than Figma. Every Text widget with custom `height` MUST have:
+
+```dart
+Text(
+  'Your text',
+  style: TextStyle(fontSize: 16.sp, height: 1.5),
+  textHeightBehavior: const TextHeightBehavior(
+    leadingDistribution: TextLeadingDistribution.even,
+  ),
+)
+```
+
+Without `TextLeadingDistribution.even`, text will be visibly offset by 1-3px vs Figma.
+
+### Absolute positioning (non-auto-layout frames)
+
+If a Figma frame has no `layoutMode`, use `Stack` + `Positioned`:
+- Never force absolute-positioned elements into Row/Column with negative margins
+- `constraints.horizontal: LEFT` maps to `Positioned(left: x)`
+- `constraints.horizontal: STRETCH` maps to `Positioned(left: x, right: offset)`
+
 ### Components must match exactly
 
 - Buttons: match border radius, padding, background color, text style, and height from the design JSON
@@ -157,11 +189,16 @@ causes the most common rework.
 - Check fills, strokes, cornerRadius, and effects on every interactive element
 - If a component has variants in the design, implement all variants
 
+### Shadows and effects
+
+- `DROP_SHADOW` maps to `BoxShadow(offset: Offset(x, y), blurRadius: blur, spreadRadius: spread, color: color)`
+- Multiple shadows render back-to-front in Flutter -- reverse order from Figma
+- `INNER_SHADOW` not natively supported -- requires custom painter
+- Prefer `color.withValues(alpha:)` over `Opacity` widget for performance
+
 ### Other tips
 
-- Line height in Flutter is a ratio: Figma 24px line height on 16px font = `height: 1.5`
-- Always use exact values from Figma, never approximate
-- Export icons as SVG, use `flutter_svg` to render
+- Export icons as SVG, use `flutter_svg` to render. Some icons fall back to PNG @3x (boolean operations)
 - Use `flutter_screenutil` for responsive scaling across devices
 - Test both light and dark modes if the design supports them
 
@@ -171,11 +208,16 @@ Issues found during real developer testing -- avoid these:
 
 | Pitfall | What goes wrong | Fix |
 |---------|----------------|-----|
+| Missing TextHeightBehavior | Text vertically offset from Figma by 1-3px | Add `TextHeightBehavior(leadingDistribution: TextLeadingDistribution.even)` to every Text with custom height |
 | Ignoring alignment values | Text defaults to `start` instead of `center` | Always read `primaryAxisAlignItems` / `counterAxisAlignItems` / `textAlignHorizontal` |
+| Missing Expanded | Child doesn't fill available space | `layoutGrow: 1` in design JSON = wrap in `Expanded()` |
+| Missing stretch | Child doesn't span full cross-axis | `layoutAlign: STRETCH` = `width: double.infinity` or `CrossAxisAlignment.stretch` |
 | Approximate spacing | 12px used instead of Figma's 16px | Copy exact `padding` and `itemSpacing` values from JSON |
 | Default button styling | Flutter Material defaults override design | Always apply `cornerRadius`, `padding`, `fills` from the design node |
-| Generic image names | `image-13.png` tells dev nothing | Export skill now names by parent/context -- verify names make sense |
+| SVG boolean ops fail | Icons exported as empty/broken SVGs | Export skill now falls back to PNG @3x for boolean operations |
+| Generic image names | `image-13.png` tells dev nothing | Export skill names by parent/context -- verify names make sense |
 | Missing SizedBox gaps | Items stack with no spacing | Every `itemSpacing` in the JSON = a `SizedBox` between children |
+| Shadow order reversed | Shadows render in wrong visual order | Flutter renders back-to-front -- reverse from Figma layer order |
 
 ## When it doesn't work well
 
